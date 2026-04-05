@@ -1,0 +1,16 @@
+<footer class="site-footer" role="contentinfo">
+  <p class="footer-copy">© {{ now.Year }} {{ .Site.Title }}</p>
+  {{/* Optional: RSS feed link if configured via site params */}}
+  {{ with .Site.Params.rssURL }}
+  <p class="footer-rss"><a href="{{ . }}">RSS</a></p>
+  {{ end }}
+  {{/* Optional: Social links configured as a list of { name, url } in site.Params.social */}}
+  {{ with .Site.Params.social }}
+  <ul class="footer-social" aria-label="Social links">
+    {{ range . }}
+    <li><a href="{{ .url }}">{{ .name }}</a></li>
+    {{ end }}
+  </ul>
+  {{ end }}
+  <span class="footer-credit">{{ with .Site.Params.themeCredit }}{{ . }}{{ else }}Powered by Hugo{{ end }}</span>
+</footer>

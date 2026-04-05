@@ -1,0 +1,34 @@
+{{/* Hugo head partial with SEO tags and assets pipeline */}}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ .Title }} — {{ .Site.Title }}</title>
+<meta name="description" content="{{ .Params.description | default site.Params.description }}">
+<link rel="canonical" href="{{ .Permalink }}">
+
+{{/* Open Graph */}}
+<meta property="og:title" content="{{ .Title }}">
+<meta property="og:description" content="{{ .Params.description | default site.Params.description }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:type" content="website">
+{{ with .Params.ogImage }}<meta property="og:image" content="{{ . }}">{{ else }}{{ if .Site.Params.defaultOgImage }}<meta property="og:image" content="{{ .Site.Params.defaultOgImage }}">{{ end }}{{ end }}
+
+{{/* Twitter Card */}}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="{{ .Site.Params.twitterSite | default "" }}">
+<meta name="twitter:title" content="{{ .Title }}">
+<meta name="twitter:description" content="{{ .Params.description | default site.Params.description }}">
+
+{{/* RSS */}}
+<link rel="alternate" type="application/rss+xml" href="{{ "index.xml" | absURL }}">
+
+{{/* CSS via Hugo Pipes */}}
+{{ $css := resources.Get "css/main.css" | resources.Minify | resources.Fingerprint }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+
+{{/* Theme color */}}
+<meta name="theme-color" content="{{ with .Site.Params.themeColor }}{{ . }}{{ else }}#ffffff{{ end }}">
+
+{{/* Inline FOUC prevention script */}}
+<script>
+  (function(){var t=localStorage.getItem('theme'); if(t==='dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.setAttribute('data-theme','dark');})();
+</script>
