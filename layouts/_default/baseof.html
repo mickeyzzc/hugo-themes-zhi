@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="{{ site.Language.Locale }}" dir="{{ or site.Language.Direction `ltr` }}">
+<html lang="{{ site.Language.Locale }}" dir="{{ or site.Language.Direction `ltr` }}" 
+      data-video-default="{{ .Site.Params.video.defaultPlatform }}"
+      data-video-show-switch="{{ .Site.Params.video.showSwitch }}">
 <head>
   {{ partial "head.html" . }}
 </head>
@@ -13,10 +15,16 @@
   <footer>
     {{ partial "footer.html" . }}
   </footer>
+  {{/* Lazy-loaded Mermaid: only load JS when feature enabled */}}
+  {{ if site.Params.features.mermaid }}{{ partial "mermaid.html" . }}{{ end }}
   {{/* Load orchestrator JS via Hugo Pipes with fingerprinting */}}
   {{ $js := resources.Get "js/main.js" | minify | fingerprint }}
   <script src="{{ $js.RelPermalink }}" defer></script>
   {{ $codeCopyJs := resources.Get "js/code-copy.js" | minify | fingerprint }}
   <script src="{{ $codeCopyJs.RelPermalink }}" defer></script>
+  {{ $themeToggleJs := resources.Get "js/theme-toggle.js" | minify | fingerprint }}
+  <script src="{{ $themeToggleJs.RelPermalink }}" defer></script>
+  {{ $videoGeoSwitchJs := resources.Get "js/video-geo-switch.js" | minify | fingerprint }}
+  <script src="{{ $videoGeoSwitchJs.RelPermalink }}" defer></script>
 </body>
 </html>
