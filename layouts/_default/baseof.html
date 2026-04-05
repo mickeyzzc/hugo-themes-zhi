@@ -26,5 +26,7 @@
   <script src="{{ $themeToggleJs.RelPermalink }}" defer></script>
   {{ $videoGeoSwitchJs := resources.Get "js/video-geo-switch.js" | minify | fingerprint }}
   <script src="{{ $videoGeoSwitchJs.RelPermalink }}" defer></script>
-</body>
+  {{ $lightboxJs := resources.Get "js/lightbox.js" | minify | fingerprint }}
+  <script src="{{ $lightboxJs.RelPermalink }}" defer></script>
+  </body>
 </html>
