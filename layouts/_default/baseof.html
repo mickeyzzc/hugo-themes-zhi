@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="{{ site.Language.Locale }}" dir="{{ or site.Language.Direction `ltr` }}" 
+<html lang="{{ site.Language.Locale }}" dir="{{ or site.Language.Direction `ltr` }}"
       data-video-default="{{ .Site.Params.video.defaultPlatform }}"
       data-video-show-switch="{{ .Site.Params.video.showSwitch }}">
 <head>
   {{ partial "head.html" . }}
 </head>
-<body>
+<body data-features='{{ partial "features.html" . }}'>
   <header>
     {{ partial "header.html" . }}
   </header>
@@ -15,18 +15,20 @@
   <footer>
     {{ partial "footer.html" . }}
   </footer>
-  {{/* Lazy-loaded Mermaid: only load JS when feature enabled */}}
   {{ if site.Params.features.mermaid }}{{ partial "mermaid.html" . }}{{ end }}
-  {{/* Load orchestrator JS via Hugo Pipes with fingerprinting */}}
-  {{ $js := resources.Get "js/main.js" | minify | fingerprint }}
-  <script src="{{ $js.RelPermalink }}" defer></script>
-  {{ $codeCopyJs := resources.Get "js/code-copy.js" | minify | fingerprint }}
-  <script src="{{ $codeCopyJs.RelPermalink }}" defer></script>
-  {{ $themeToggleJs := resources.Get "js/theme-toggle.js" | minify | fingerprint }}
-  <script src="{{ $themeToggleJs.RelPermalink }}" defer></script>
-  {{ $videoGeoSwitchJs := resources.Get "js/video-geo-switch.js" | minify | fingerprint }}
-  <script src="{{ $videoGeoSwitchJs.RelPermalink }}" defer></script>
-  {{ $lightboxJs := resources.Get "js/lightbox.js" | minify | fingerprint }}
-  <script src="{{ $lightboxJs.RelPermalink }}" defer></script>
-  </body>
+  {{ if site.Params.features.analytics }}{{ partial "analytics.html" . }}
+  {{ $analyticsJS := resources.Get "js/analytics.js" | minify | fingerprint }}
+  <script src="{{ $analyticsJS.RelPermalink }}" defer></script>
+  {{ end }}
+  {{ $themeToggle := resources.Get "js/theme-toggle.js" | minify | fingerprint }}
+  {{ $codeCopy := resources.Get "js/code-copy.js" | minify | fingerprint }}
+  {{ $lightbox := resources.Get "js/lightbox.js" | minify | fingerprint }}
+  {{ $videoSwitch := resources.Get "js/video-geo-switch.js" | minify | fingerprint }}
+  {{ $main := resources.Get "js/main.js" | minify | fingerprint }}
+  <script src="{{ $themeToggle.RelPermalink }}" defer></script>
+  <script src="{{ $codeCopy.RelPermalink }}" defer></script>
+  <script src="{{ $lightbox.RelPermalink }}" defer></script>
+  <script src="{{ $videoSwitch.RelPermalink }}" defer></script>
+  <script src="{{ $main.RelPermalink }}" defer></script>
+</body>
 </html>

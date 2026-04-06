@@ -1,0 +1,10 @@
+{{- $features := site.Params.features -}}
+{{- $featuresMap := dict 
+  "themeSwitch" (default true $features.themeSwitch)
+  "mathJax" (default true $features.mathJax)
+  "mermaid" (default true $features.mermaid)
+  "analytics" (default true $features.analytics)
+  "lightbox" (default true $features.lightbox)
+  "codeHighlight" (default true $features.codeHighlight)
+-}}
+{{- $featuresMap | jsonify -}}

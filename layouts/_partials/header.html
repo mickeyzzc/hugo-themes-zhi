@@ -2,8 +2,8 @@
   <div class="container">
     <div class="header-content">
       <!-- Site Title -->
-      <a href="{{ `{{` }} relLangURL .Site.BaseURL {{ `}}` }}" class="site-title">
-        {{ `{{` }} .Site.Title {{ `}}` }}
+      <a href="{{ site.BaseURL }}" class="site-title">
+        {{ site.Title }}
       </a>
       
       <!-- Nav Toggle (Hamburger) -->
@@ -21,13 +21,13 @@
       
       <!-- Site Navigation -->
       <nav class="site-nav">
-        {{ `{{` }} if .Site.Menus.main {{ `}}` }}
-          {{ `{{` }} partial "menu.html" (dict "menuID" "main" "page" .) {{ `}}` }}
-        {{ `{{` }} end {{ `}}` }}
+        {{ if site.Menus.main }}
+          {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
+        {{ end }}
       </nav>
       
       <!-- Theme Toggle -->
-      <button id="theme-toggle" aria-label="Toggle theme">
+      <button id="theme-toggle" {{ if .Site.Params.features.themeSwitch }}data-feature-theme-switch="true"{{ end }} aria-label="Toggle theme">
         <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="5"></circle>
           <line x1="12" y1="1" x2="12" y2="5"></line>

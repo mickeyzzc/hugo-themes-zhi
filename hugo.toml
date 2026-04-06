@@ -1,0 +1,66 @@
+baseURL = 'https://example.org/'
+locale = 'en-US'
+title = 'Zhi'
+paginate = 10
+
+
+[markup]
+  [markup.highlight]
+    codeFences = true
+    noClasses = false
+    lineNumbersInTable = true
+    style = "github"
+    tabWidth = 4
+
+[outputs]
+  home = ["HTML", "RSS"]
+  section = ["HTML", "RSS"]
+
+[params.features]
+  codeHighlight = true
+  mathJax = true
+  mermaid = true
+  themeSwitch = true
+  lightbox = true
+  analytics = true
+
+[params.analytics]
+  provider = "custom"
+  endpoint = "/metrics"
+  siteId = ""
+  sampleRate = 100
+
+[params.video]
+  defaultPlatform = "bilibili"
+  showSwitch = true
+
+[params.theme]
+  default = "auto"
+
+[minify]
+  minifyOutput = true
+  [minify.html]
+    keepWhitespace = false
+  [minify.css]
+  [minify.js]
+  [minify.svg]
+
+[[menus.main]]
+  name = 'Home'
+  pageRef = '/'
+  weight = 10
+
+[[menus.main]]
+  name = 'Posts'
+  pageRef = '/posts'
+  weight = 20
+
+[[menus.main]]
+  name = 'Tags'
+  pageRef = '/tags'
+  weight = 30
+
+[module]
+  [module.hugoVersion]
+    extended = false
+    min = '0.146.0'

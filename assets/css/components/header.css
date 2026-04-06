@@ -1,5 +1,146 @@
+/* Header layout and styles */
+
 header {
   color: var(--text);
   border-bottom: 1px solid var(--border);
   margin-bottom: 1rem;
+}
+
+.container {
+  max-width: 768px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+/* Site title */
+.site-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.site-title:hover {
+  color: var(--link);
+}
+
+/* Navigation */
+.site-nav ul {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-nav a {
+  padding: 0.5rem 0.75rem;
+  color: var(--link);
+  text-decoration: none;
+  border-radius: var(--radius);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.site-nav a:hover {
+  background-color: var(--bg-muted);
+  color: var(--link-hover);
+}
+
+.site-nav a.active,
+.site-nav a[aria-current="page"] {
+  color: var(--accent);
+}
+
+/* Nav toggle (hamburger menu) */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: var(--text);
+}
+
+.nav-toggle .close-icon {
+  display: none;
+}
+
+.nav-toggle[aria-expanded="true"] .menu-icon {
+  display: none;
+}
+
+.nav-toggle[aria-expanded="true"] .close-icon {
+  display: block;
+}
+
+/* Theme toggle button */
+#theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: var(--text);
+  border-radius: var(--radius);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+#theme-toggle:hover {
+  background-color: var(--bg-muted);
+}
+
+#theme-toggle .sun-icon {
+  display: none;
+}
+
+#theme-toggle .moon-icon {
+  display: none;
+}
+
+/* Theme toggle icons controlled by data-theme attribute */
+[data-theme="light"] #theme-toggle .sun-icon,
+[data-theme="dark"] #theme-toggle .moon-icon {
+  display: block;
+}
+
+/* Mobile styles (< 768px) */
+@media (max-width: 767px) {
+  .nav-toggle {
+    display: flex;
+  }
+
+  .site-nav {
+    display: none;
+    width: 100%;
+  }
+
+  .nav-toggle[aria-expanded="true"] + .site-nav {
+    display: block;
+  }
+
+  .site-nav ul {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .site-nav a {
+    display: block;
+    padding: 0.75rem 0.5rem;
+    border-radius: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .site-nav a:last-child {
+    border-bottom: none;
+  }
 }

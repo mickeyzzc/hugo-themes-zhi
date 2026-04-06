@@ -1,0 +1,22 @@
+/* Mermaid diagram styles */
+
+.mermaid {
+  display: flex;
+  justify-content: center;
+  margin: 1.5em 0;
+  padding: 1em;
+  background: var(--code-bg);
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+/* Mermaid container for responsive diagrams */
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Dark mode - Mermaid re-initializes with dark theme via JS */
+[data-theme="dark"] .mermaid {
+  background: var(--code-bg);
+}

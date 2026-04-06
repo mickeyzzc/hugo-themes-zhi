@@ -4,6 +4,8 @@
 @import "components/code.css";
 @import "components/video.css";
 @import "components/lightbox.css";
+@import "components/mermaid.css";
+@import "components/math.css";
 
 /* Fallback CSS variables (will be overridden by theme.css at runtime) */
 :root {
@@ -23,5 +25,4 @@ body {
 }
 
 a { color: var(--link); text-decoration: none; }
- a { color: var(--link); text-decoration: none; }
- a:hover { color: var(--link-hover); }
+a:hover { color: var(--link-hover); }

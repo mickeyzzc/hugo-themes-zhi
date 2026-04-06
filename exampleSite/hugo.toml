@@ -1,0 +1,70 @@
+baseURL = 'https://example.org/'
+locale = 'en-US'
+title = 'Zhi Theme Demo'
+paginate = 10
+theme = 'zhi'
+
+[markup]
+  [markup.highlight]
+    codeFences = true
+    noClasses = false
+    lineNumbersInTable = true
+    style = "github"
+    tabWidth = 4
+
+[outputs]
+  home = ["HTML", "RSS"]
+  section = ["HTML", "RSS"]
+
+[params]
+  [params.features]
+    codeHighlight = true
+    mathJax = true
+    mermaid = true
+    themeSwitch = true
+    lightbox = true
+    analytics = false
+
+  [params.analytics]
+    provider = "custom"
+    endpoint = "/metrics"
+    siteId = "demo"
+    sampleRate = 100
+
+  [params.video]
+    defaultPlatform = "bilibili"
+    showSwitch = true
+
+  [params.theme]
+  default = "auto"
+
+  [[params.social]]
+  name = "GitHub"
+  url = "https://github.com/yourusername"
+
+  [[params.social]]
+  name = "Twitter"
+  url = "https://twitter.com/yourusername"
+
+[minify]
+  minifyOutput = true
+  [minify.html]
+    keepWhitespace = false
+  [minify.css]
+  [minify.js]
+  [minify.svg]
+
+[[menus.main]]
+  name = 'Home'
+  pageRef = '/'
+  weight = 10
+
+[[menus.main]]
+  name = 'Posts'
+  pageRef = '/posts'
+  weight = 20
+
+[[menus.main]]
+  name = 'Tags'
+  pageRef = '/tags'
+  weight = 30
