@@ -7,14 +7,6 @@
 @import "components/mermaid.css";
 @import "components/math.css";
 
-/* Fallback CSS variables (will be overridden by theme.css at runtime) */
-:root {
-  --bg: #ffffff;
-  --text: #222222;
-  --link: #0066cc;
-  --link-hover: #004499;
-}
-
 body {
   color: var(--text);
   background-color: var(--bg);

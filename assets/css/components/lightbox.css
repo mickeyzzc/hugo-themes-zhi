@@ -38,7 +38,7 @@
   border: none;
   border-radius: 4px;
   background: rgba(255,255,255,0.15);
-  color: #fff;
+  color: var(--bg);
   font-size: 1.5rem;
   line-height: 2.5rem;
   cursor: pointer;
@@ -48,6 +48,14 @@
 
 .lb-close:hover {
   background: rgba(255,255,255,0.3);
+}
+
+[data-theme="dark"] .lb-close {
+  background: rgba(0,0,0,0.15);
+}
+
+[data-theme="dark"] .lb-close:hover {
+  background: rgba(0,0,0,0.3);
 }
 
 body.lightbox-open {
