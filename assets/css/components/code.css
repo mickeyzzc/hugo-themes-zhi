@@ -1,102 +1,260 @@
-/* Code block styles with Chroma syntax highlighting */
+/* Code block styles — modern, clean design */
 
 /* ========================================
-   Inline code styling
+   Inline code styling (PRESERVED — DO NOT MODIFY)
    ======================================== */
 :not(pre) > code {
   font-family: var(--font-mono, 'SF Mono', Menlo, Monaco, Consolas, monospace);
   background: var(--code-bg);
-  color: var(--code-text);
-  padding: 0.2em 0.4em;
-  border-radius: 4px;
-  font-size: 0.9em;
+  color: var(--accent);
+  padding: 0.15em 0.4em;
+  border-radius: 6px;
+  font-size: 0.875em;
+  border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
 }
 
 /* ========================================
-   Code block container
+   Standalone pre (not inside wrapper) — keep basic styling
    ======================================== */
 pre {
   background: var(--code-bg);
   color: var(--code-text);
-  padding: 1em;
+  padding: 1rem;
   border-radius: 8px;
   overflow-x: auto;
-  margin: 1em 0;
+  margin: 1.5em 0;
   font-family: var(--font-mono, 'SF Mono', Menlo, Monaco, Consolas, monospace);
-  font-size: 0.9rem;
-  line-height: 1.5;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  border: 1px solid var(--border);
 }
 
-/* Code block wrapper with header */
+/* ========================================
+   Code block wrapper
+   ======================================== */
 .code-block-wrapper {
   position: relative;
-  margin: 1em 0;
+  margin: 1.25em 0;
   border-radius: 8px;
   overflow: hidden;
   background: var(--code-bg);
+  border: 1px solid var(--border);
 }
 
-/* Code block header */
+/* ========================================
+   Code block header bar
+   ======================================== */
 .code-block-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5em 1em;
-  background: rgba(0, 0, 0, 0.05);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 0.4rem 1rem;
+  min-height: 36px;
+  background: var(--code-header-bg);
+  border-bottom: 1px solid var(--code-header-border);
+}
+
+.code-block-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.code-block-filename {
+  font-family: var(--font-mono, 'SF Mono', Menlo, Monaco, Consolas, monospace);
   font-size: 0.75rem;
   color: var(--code-text);
   opacity: 0.7;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-[data-theme="dark"] .code-block-header {
-  background: rgba(255, 255, 255, 0.05);
-  border-bottom-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Language label */
+/* Language label — clean small text, NO pill */
 .code-language {
   font-family: var(--font-mono, 'SF Mono', Menlo, Monaco, Consolas, monospace);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-weight: 500;
+  font-size: 0.75rem;
+  color: var(--code-lang-color);
+  opacity: 0.6;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
-/* Copy button */
+/* ========================================
+   Copy button — SVG icon, hover-show
+   ======================================== */
 .copy-button {
-  background: transparent;
-  border: 1px solid currentColor;
-  color: inherit;
-  padding: 0.25em 0.75em;
-  border-radius: 4px;
-  font-size: 0.75rem;
+  position: relative;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: var(--code-copy-btn-bg);
+  border: 1px solid var(--code-copy-btn-border);
+  border-radius: 6px;
+  color: var(--code-lang-color);
   cursor: pointer;
-  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif);
-  transition: all 0.2s ease;
-  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  opacity: 0;
+  flex-shrink: 0;
+}
+
+/* Show on hover (desktop) */
+.code-block-wrapper:hover .copy-button {
+  opacity: 1;
+}
+
+/* Always show on touch devices */
+@media (hover: none) {
+  .copy-button {
+    opacity: 1 !important;
+  }
 }
 
 .copy-button:hover {
-  opacity: 1;
-  background: rgba(0, 0, 0, 0.1);
+  background: var(--code-copy-btn-hover-bg);
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
-[data-theme="dark"] .copy-button:hover {
-  background: rgba(255, 255, 255, 0.1);
+.copy-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  opacity: 1;
+}
+
+/* SVG icon states */
+.copy-button .check-icon {
+  display: none;
 }
 
 .copy-button.copied {
   background: #22c55e;
   border-color: #22c55e;
   color: white;
+  opacity: 1;
+}
+
+.copy-button.copied .copy-icon {
+  display: none;
+}
+
+.copy-button.copied .check-icon {
+  display: block;
 }
 
 /* ========================================
+   Code block body
+   ======================================== */
+.code-block-body {
+  padding: 0.5rem;
+}
+
+.code-block-wrapper pre {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  overflow-x: auto;
+  white-space: pre;
+  word-break: normal;
+}
+
+/* Chroma inside wrapper inherits wrapper background */
+.code-block-wrapper .chroma {
+  background-color: transparent;
+}
+
+/* ========================================
+   Line numbers — tabular-nums for alignment
+   ======================================== */
+
+/* Line number table: two-column fixed layout */
+.code-block-wrapper .chroma .lntable {
+  display: table;
+  width: 100%;
+  border-spacing: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  table-layout: fixed;
+}
+
+/* Line number column: fixed width, right-aligned */
+.code-block-wrapper .chroma .lntd:first-child {
+  width: 2.5em;
+  min-width: 2.5em;
+  padding: 0 0.5em 0 0.5em;
+  border-right: 1px solid var(--code-linenumber-border);
+  text-align: right;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+/* Code column: left padding only */
+.code-block-wrapper .chroma .lntd:last-child {
+  padding: 0 0.5rem 0 0.5rem;
+  vertical-align: top;
+  overflow: hidden;
+}
+
+/* Remove double padding when lntable is inside pre */
+.code-block-wrapper .lntable pre {
+  padding: 0;
+  margin: 0;
+}
+
+/* Ensure line numbers and code are properly aligned */
+.code-block-wrapper .chroma .lnt,
+.code-block-wrapper .chroma .ln {
+  line-height: inherit;
+  display: inline-block;
+  width: 100%;
+}
+
+/* Fix scrollbar issue for line numbers */
+.code-block-wrapper .chroma .lntd:first-child {
+  overflow: hidden;
+}
+
+
+
+/* Line number text */
+.chroma .lnt,
+.chroma .ln {
+  font-variant-numeric: tabular-nums;
+  color: var(--code-linenumber-color);
+  -webkit-user-select: none;
+  user-select: none;
+  line-height: inherit;
+}
+
+/* Hide line numbers on empty lines */
+.code-block-wrapper .chroma tr:has(> td:last-child > pre:not(:has(*))) > td:first-child .lnt {
+  visibility: hidden;
+}
+
+/* Line highlight */
+.chroma .hl {
+  background-color: var(--code-highlight-bg);
+}
+
+/* Non-table code blocks (no line numbers) */
+.code-block-wrapper pre:not(.chroma) {
+  padding: 0.75rem;
+  overflow-x: auto;
+}
+
    Chroma Syntax Highlighting - Light Mode (GitHub)
    ======================================== */
 
-/* Background */ .bg { background-color:#f7f7f7; }
-/* PreWrapper */ .chroma { background-color:#f7f7f7;-webkit-text-size-adjust:none; }
+/* Background */ .bg { background-color: transparent; }
+/* PreWrapper */ .chroma { background-color: transparent;-webkit-text-size-adjust:none; }
 /* Error */ .chroma .err { color:#f6f8fa;background-color:#82071e }
 /* LineLink */ .chroma .lnlinks { outline:none;text-decoration:none;color:inherit }
 /* LineTableTD */ .chroma .lntd { vertical-align:top;padding:0;margin:0;border:0; }
@@ -136,7 +294,7 @@ pre {
 /* LiteralStringChar */ .chroma .sc { color:#0a3069 }
 /* LiteralStringDelimiter */ .chroma .dl { color:#0a3069 }
 /* LiteralStringDoc */ .chroma .sd { color:#0a3069 }
-/* LiteralStringDouble */ .chroma .s2 { color:#0a3069 }
+/* LiteralStringDouble */ .chroma .s2 { color:#0b6f8a }
 /* LiteralStringEscape */ .chroma .se { color:#0a3069 }
 /* LiteralStringHeredoc */ .chroma .sh { color:#0a3069 }
 /* LiteralStringInterpol */ .chroma .si { color:#0a3069 }
@@ -148,7 +306,7 @@ pre {
 /* LiteralNumberBin */ .chroma .mb { color:#0550ae }
 /* LiteralNumberFloat */ .chroma .mf { color:#0550ae }
 /* LiteralNumberHex */ .chroma .mh { color:#0550ae }
-/* LiteralNumberInteger */ .chroma .mi { color:#0550ae }
+/* LiteralNumberInteger */ .chroma .mi { color:#b56205 }
 /* LiteralNumberIntegerLong */ .chroma .il { color:#0550ae }
 /* LiteralNumberOct */ .chroma .mo { color:#0550ae }
 /* Operator */ .chroma .o { color:#0550ae }
@@ -169,79 +327,113 @@ pre {
 /* TextWhitespace */ .chroma .w { color:#fff }
 
 /* ========================================
-   Chroma Syntax Highlighting - Dark Mode (Monokai)
+   Chroma Syntax Highlighting - Dark Mode (Catppuccin Mocha)
    ======================================== */
 
-[data-theme="dark"] .bg { color:#f8f8f2;background-color:#272822; }
-[data-theme="dark"] .chroma { color:#f8f8f2;background-color:#272822;-webkit-text-size-adjust:none; }
-[data-theme="dark"] .chroma .err { color:#960050;background-color:#1e0010 }
+/* Background */ [data-theme="dark"] .bg { color:#cdd6f4;background-color:transparent; }
+/* PreWrapper */ [data-theme="dark"] .chroma { color:#cdd6f4;background-color:transparent;-webkit-text-size-adjust:none; }
+[data-theme="dark"] .chroma .err { color:#f38ba8;background-color:#1e1e2e }
 [data-theme="dark"] .chroma .lnlinks { outline:none;text-decoration:none;color:inherit }
 [data-theme="dark"] .chroma .lntd { vertical-align:top;padding:0;margin:0;border:0; }
 [data-theme="dark"] .chroma .lntable { border-spacing:0;padding:0;margin:0;border:0; }
-[data-theme="dark"] .chroma .hl { background-color:#3c3d38 }
-[data-theme="dark"] .chroma .lnt { white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f }
-[data-theme="dark"] .chroma .ln { white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f }
+[data-theme="dark"] .chroma .hl { background-color:rgba(49, 50, 68, 0.5) }
+[data-theme="dark"] .chroma .lnt { white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#585b70 }
+[data-theme="dark"] .chroma .ln { white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#585b70 }
 [data-theme="dark"] .chroma .line { display:flex; }
-[data-theme="dark"] .chroma .k { color:#66d9ef }
-[data-theme="dark"] .chroma .kc { color:#66d9ef }
-[data-theme="dark"] .chroma .kd { color:#66d9ef }
-[data-theme="dark"] .chroma .kn { color:#f92672 }
-[data-theme="dark"] .chroma .kp { color:#66d9ef }
-[data-theme="dark"] .chroma .kr { color:#66d9ef }
-[data-theme="dark"] .chroma .kt { color:#66d9ef }
-[data-theme="dark"] .chroma .na { color:#a6e22e }
-[data-theme="dark"] .chroma .nc { color:#a6e22e }
-[data-theme="dark"] .chroma .no { color:#66d9ef }
-[data-theme="dark"] .chroma .nd { color:#a6e22e }
-[data-theme="dark"] .chroma .ne { color:#a6e22e }
-[data-theme="dark"] .chroma .nx { color:#a6e22e }
-[data-theme="dark"] .chroma .nt { color:#f92672 }
-[data-theme="dark"] .chroma .nf { color:#a6e22e }
-[data-theme="dark"] .chroma .fm { color:#a6e22e }
-[data-theme="dark"] .chroma .l { color:#ae81ff }
-[data-theme="dark"] .chroma .ld { color:#e6db74 }
-[data-theme="dark"] .chroma .s { color:#e6db74 }
-[data-theme="dark"] .chroma .sa { color:#e6db74 }
-[data-theme="dark"] .chroma .sb { color:#e6db74 }
-[data-theme="dark"] .chroma .sc { color:#e6db74 }
-[data-theme="dark"] .chroma .dl { color:#e6db74 }
-[data-theme="dark"] .chroma .sd { color:#e6db74 }
-[data-theme="dark"] .chroma .s2 { color:#e6db74 }
-[data-theme="dark"] .chroma .se { color:#ae81ff }
-[data-theme="dark"] .chroma .sh { color:#e6db74 }
-[data-theme="dark"] .chroma .si { color:#e6db74 }
-[data-theme="dark"] .chroma .sx { color:#e6db74 }
-[data-theme="dark"] .chroma .sr { color:#e6db74 }
-[data-theme="dark"] .chroma .s1 { color:#e6db74 }
-[data-theme="dark"] .chroma .ss { color:#e6db74 }
-[data-theme="dark"] .chroma .m { color:#ae81ff }
-[data-theme="dark"] .chroma .mb { color:#ae81ff }
-[data-theme="dark"] .chroma .mf { color:#ae81ff }
-[data-theme="dark"] .chroma .mh { color:#ae81ff }
-[data-theme="dark"] .chroma .mi { color:#ae81ff }
-[data-theme="dark"] .chroma .il { color:#ae81ff }
-[data-theme="dark"] .chroma .mo { color:#ae81ff }
-[data-theme="dark"] .chroma .o { color:#f92672 }
-[data-theme="dark"] .chroma .ow { color:#f92672 }
-[data-theme="dark"] .chroma .c { color:#75715e }
-[data-theme="dark"] .chroma .ch { color:#75715e }
-[data-theme="dark"] .chroma .cm { color:#75715e }
-[data-theme="dark"] .chroma .c1 { color:#75715e }
-[data-theme="dark"] .chroma .cs { color:#75715e }
-[data-theme="dark"] .chroma .cp { color:#75715e }
-[data-theme="dark"] .chroma .cpf { color:#75715e }
-[data-theme="dark"] .chroma .gd { color:#f92672 }
+[data-theme="dark"] .chroma .k { color:#cba6f7 }
+[data-theme="dark"] .chroma .kc { color:#cba6f7 }
+[data-theme="dark"] .chroma .kd { color:#cba6f7 }
+[data-theme="dark"] .chroma .kn { color:#f38ba8 }
+[data-theme="dark"] .chroma .kp { color:#cba6f7 }
+[data-theme="dark"] .chroma .kr { color:#cba6f7 }
+[data-theme="dark"] .chroma .kt { color:#cba6f7 }
+[data-theme="dark"] .chroma .na { color:#89dceb }
+[data-theme="dark"] .chroma .nc { color:#f9e2af }
+[data-theme="dark"] .chroma .no { color:#fab387 }
+[data-theme="dark"] .chroma .nd { color:#89b4fa }
+[data-theme="dark"] .chroma .ni { color:#94e2d5 }
+[data-theme="dark"] .chroma .nl { color:#f9e2af;font-weight:bold }
+[data-theme="dark"] .chroma .nt { color:#cba6f7 }
+[data-theme="dark"] .chroma .nb { color:#94e2d5 }
+[data-theme="dark"] .chroma .nv { color:#f5c2e7 }
+[data-theme="dark"] .chroma .vc { color:#f5c2e7 }
+[data-theme="dark"] .chroma .vg { color:#f5c2e7 }
+[data-theme="dark"] .chroma .vi { color:#f5c2e7 }
+[data-theme="dark"] .chroma .vm { color:#f5c2e7 }
+[data-theme="dark"] .chroma .nf { color:#89b4fa }
+[data-theme="dark"] .chroma .fm { color:#89b4fa }
+[data-theme="dark"] .chroma .nx { color:#a6e3a1 }
+[data-theme="dark"] .chroma .l { color:#fab387 }
+[data-theme="dark"] .chroma .ld { color:#a6e3a1 }
+[data-theme="dark"] .chroma .s { color:#a6e3a1 }
+[data-theme="dark"] .chroma .sa { color:#a6e3a1 }
+[data-theme="dark"] .chroma .sb { color:#a6e3a1 }
+[data-theme="dark"] .chroma .sc { color:#a6e3a1 }
+[data-theme="dark"] .chroma .dl { color:#a6e3a1 }
+[data-theme="dark"] .chroma .sd { color:#a6e3a1 }
+[data-theme="dark"] .chroma .s2 { color:#a6e3a1 }
+[data-theme="dark"] .chroma .se { color:#fab387 }
+[data-theme="dark"] .chroma .sh { color:#a6e3a1 }
+[data-theme="dark"] .chroma .si { color:#a6e3a1 }
+[data-theme="dark"] .chroma .sx { color:#a6e3a1 }
+[data-theme="dark"] .chroma .sr { color:#a6e3a1 }
+[data-theme="dark"] .chroma .s1 { color:#a6e3a1 }
+[data-theme="dark"] .chroma .ss { color:#a6e3a1 }
+[data-theme="dark"] .chroma .m { color:#fab387 }
+[data-theme="dark"] .chroma .mb { color:#fab387 }
+[data-theme="dark"] .chroma .mf { color:#fab387 }
+[data-theme="dark"] .chroma .mh { color:#fab387 }
+[data-theme="dark"] .chroma .mi { color:#fab387 }
+[data-theme="dark"] .chroma .il { color:#fab387 }
+[data-theme="dark"] .chroma .mo { color:#fab387 }
+[data-theme="dark"] .chroma .o { color:#89dceb }
+[data-theme="dark"] .chroma .ow { color:#89dceb }
+[data-theme="dark"] .chroma .p { color:#cdd6f4 }
+[data-theme="dark"] .chroma .c { color:#6c7086;font-style:italic }
+[data-theme="dark"] .chroma .ch { color:#6c7086;font-style:italic }
+[data-theme="dark"] .chroma .cm { color:#6c7086;font-style:italic }
+[data-theme="dark"] .chroma .c1 { color:#6c7086;font-style:italic }
+[data-theme="dark"] .chroma .cs { color:#6c7086;font-style:italic }
+[data-theme="dark"] .chroma .cp { color:#6c7086;font-style:italic }
+[data-theme="dark"] .chroma .cpf { color:#6c7086;font-style:italic }
+[data-theme="dark"] .chroma .gd { color:#f38ba8 }
 [data-theme="dark"] .chroma .ge { font-style:italic }
-[data-theme="dark"] .chroma .gi { color:#a6e22e }
+[data-theme="dark"] .chroma .gi { color:#a6e3a1 }
 [data-theme="dark"] .chroma .gs { font-weight:bold }
-[data-theme="dark"] .chroma .gu { color:#75715e }
+[data-theme="dark"] .chroma .gl { text-decoration:underline }
+[data-theme="dark"] .chroma .gu { color:#6c7086 }
 
-/* Override code-bg in dark mode for Chroma */
-[data-theme="dark"] pre,
+/* Dark mode code background is handled by wrapper's --code-bg variable */
+[data-theme="dark"] pre {
+  background: var(--code-bg);
+}
+
 [data-theme="dark"] .chroma {
-  background: #272822;
+  background: transparent;
 }
 
 [data-theme="dark"] :not(pre) > code {
   background: rgba(255, 255, 255, 0.1);
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+/* Dark mode wrapper border/shadow adjustments */
+[data-theme="dark"] .code-block-wrapper {
+  border-color: var(--border);
+  box-shadow: 0 2px 16px var(--shadow);
+}
+
+[data-theme="dark"] .code-block-wrapper pre {
+  background: transparent;
+}
+
+[data-theme="dark"] .code-block-wrapper .chroma {
+  background: transparent;
+}
+
+[data-theme="dark"] .copy-button:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
 }

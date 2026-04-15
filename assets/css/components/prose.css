@@ -1,0 +1,493 @@
+/**
+ * Prose - Article Typography Styles
+ * Comprehensive styling for markdown-rendered content
+ * Purple-accent reading experience with generous whitespace
+ */
+
+/* ============================================
+   Content Container
+   ============================================ */
+.Content {
+  max-width: min(840px, 90vw);
+  margin: 0 auto;
+  padding: var(--spacing-xl) var(--spacing-md);
+}
+
+/* ============================================
+   Headings
+   ============================================ */
+.Content h1,
+.Content h2,
+.Content h3,
+.Content h4 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: var(--leading-heading);
+  color: var(--text);
+  margin-top: var(--spacing-2xl);
+  margin-bottom: var(--spacing-md);
+  letter-spacing: -0.02em;
+}
+
+.Content h1 {
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  letter-spacing: -0.02em;
+}
+
+.Content h2 {
+  font-size: clamp(1.5rem, 4vw, 1.875rem);
+  letter-spacing: -0.015em;
+  padding-bottom: var(--spacing-sm);
+  margin-top: 2.5rem;
+  margin-bottom: var(--spacing-lg);
+  border-bottom: none;
+  position: relative;
+}
+
+.Content h2::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  border-radius: 2px;
+  margin-top: var(--spacing-sm);
+}
+
+.Content h3 {
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  letter-spacing: -0.01em;
+  margin-top: 2rem;
+  color: var(--text);
+}
+
+.Content h3::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  margin-right: var(--spacing-sm);
+  vertical-align: middle;
+  opacity: 0.6;
+}
+
+.Content h4 {
+  font-size: clamp(1.125rem, 2.5vw, 1.25rem);
+  margin-top: 2rem;
+}
+
+/* First heading after title should have less margin */
+.Content > h1:first-child,
+.Content > h2:first-child,
+.Content > h3:first-child,
+.Content > h4:first-child {
+  margin-top: 0;
+}
+
+/* ============================================
+   Paragraphs
+   ============================================ */
+.Content p {
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
+  margin-bottom: 1.5rem;
+  color: var(--text);
+}
+
+/* CJK text gets taller line-height */
+.Content p:lang(zh),
+.Content p:lang(ja),
+.Content p:lang(ko) {
+  line-height: 1.9;
+  text-align: justify;
+  text-justify: inter-ideograph;
+  hyphens: auto;
+}
+
+/* ============================================
+   Links
+   ============================================ */
+.Content a {
+  color: var(--link);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.Content a:hover {
+  color: var(--link-hover);
+  border-bottom-color: var(--link-hover);
+}
+
+/* External link indicator */
+.Content a[href^="http"]:not([href*="{{ .Site.URL }}"])::after {
+  content: " ↗";
+  font-size: 0.85em;
+  opacity: 0.7;
+}
+
+/* ============================================
+   Lists
+   ============================================ */
+.Content ul,
+.Content ol {
+  margin-bottom: 1.5rem;
+  padding-left: var(--spacing-lg);
+}
+
+.Content li {
+  line-height: var(--leading-body);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* CJK lists */
+.Content ul li:lang(zh),
+.Content ul li:lang(ja),
+.Content ul li:lang(ko),
+.Content ol li:lang(zh),
+.Content ol li:lang(ja),
+.Content ol li:lang(ko) {
+  line-height: 1.9;
+}
+
+/* Unordered list — purple markers */
+.Content ul {
+  list-style-type: none;
+}
+
+.Content ul > li {
+  position: relative;
+}
+
+.Content ul > li::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  position: absolute;
+  left: -1.25rem;
+  top: 0.6em;
+}
+
+.Content ul ul {
+  list-style-type: none;
+  margin-top: var(--spacing-sm);
+  margin-bottom: 0;
+}
+
+.Content ul ul > li::before {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  opacity: 0.5;
+}
+
+.Content ul ul ul {
+  list-style-type: none;
+}
+
+.Content ul ul ul > li::before {
+  width: 4px;
+  height: 4px;
+  border-radius: 1px;
+  background-color: var(--accent);
+  opacity: 0.35;
+}
+
+/* Ordered list */
+.Content ol {
+  list-style-type: decimal;
+}
+
+.Content ol::marker {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.Content ol ol {
+  list-style-type: lower-alpha;
+  margin-top: var(--spacing-sm);
+  margin-bottom: 0;
+}
+
+.Content ol ol ol {
+  list-style-type: lower-roman;
+}
+
+/* Description lists */
+.Content dl {
+  margin-bottom: 1.5rem;
+}
+
+.Content dt {
+  font-weight: 600;
+  margin-top: var(--spacing-md);
+  color: var(--accent);
+}
+
+.Content dd {
+  margin-left: var(--spacing-lg);
+  margin-bottom: var(--spacing-sm);
+  line-height: var(--leading-body);
+}
+
+/* ============================================
+   Blockquotes
+   ============================================ */
+.Content blockquote {
+  margin: var(--spacing-lg) 0;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: var(--blockquote-bg);
+  border-left: 4px solid var(--blockquote-border);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-style: normal;
+  color: var(--text);
+}
+
+.Content blockquote p {
+  margin-bottom: var(--spacing-sm);
+}
+
+.Content blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* Nested blockquotes */
+.Content blockquote blockquote {
+  margin: var(--spacing-sm) 0;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.95em;
+  opacity: 0.9;
+}
+
+/* Cite styling */
+.Content blockquote cite {
+  display: block;
+  margin-top: var(--spacing-sm);
+  font-style: normal;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+/* ============================================
+   Inline Elements
+   ============================================ */
+.Content strong {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.Content em {
+  font-style: italic;
+}
+
+.Content code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  padding: 0.15em 0.4em;
+  background-color: var(--code-bg);
+  border-radius: var(--radius-sm);
+  color: var(--accent);
+}
+
+/* ============================================
+   Horizontal Rule
+   ============================================ */
+.Content hr {
+  margin: var(--spacing-2xl) auto;
+  width: 60%;
+  border: none;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--accent),
+    transparent
+  );
+  opacity: 0.6;
+}
+
+/* ============================================
+   Tables
+   ============================================ */
+.Content table {
+  width: 100%;
+  margin: var(--spacing-lg) 0;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  line-height: var(--leading-body);
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-md);
+  box-shadow: 0 1px 3px var(--shadow);
+}
+
+.Content th,
+.Content td {
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: left;
+  border: var(--border-width) solid var(--table-border);
+}
+
+.Content th {
+  font-weight: 600;
+  background-color: var(--accent);
+  color: #ffffff;
+}
+
+.Content tr:nth-child(even) {
+  background-color: var(--bg-muted);
+}
+
+.Content tr:hover {
+  background-color: var(--blockquote-bg);
+  transition: background-color var(--transition-fast);
+}
+
+.Content td {
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.Content caption {
+  margin-bottom: var(--spacing-sm);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  caption-side: bottom;
+}
+
+/* ============================================
+   Images
+   ============================================ */
+.Content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: var(--spacing-lg) auto;
+  border-radius: var(--radius-md);
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+/* Image with caption */
+.Content figure {
+  margin: var(--spacing-xl) 0;
+}
+
+.Content figcaption {
+  margin-top: var(--spacing-sm);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+/* Responsive images in lists */
+.Content li img {
+  margin: var(--spacing-sm) 0;
+}
+
+/* ============================================
+   Code Blocks (fenced)
+   ============================================ */
+.Content pre {
+  margin: var(--spacing-lg) 0;
+  padding: var(--spacing-lg);
+  background-color: var(--code-bg);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: 0 2px 12px var(--shadow);
+  border: 1px solid var(--border);
+}
+
+/* Code blocks inside wrapper are fully handled by code.css */
+.Content .code-block-wrapper pre {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  white-space: pre;
+  word-break: normal;
+}
+
+
+.Content .code-block-wrapper pre code {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  white-space: pre;
+  word-break: normal;
+}
+
+
+.Content pre code {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  padding: 0;
+  background: none;
+  color: var(--code-text);
+  border-radius: 0;
+}
+
+/* ============================================
+   Responsive Adjustments
+   ============================================ */
+@media (max-width: 640px) {
+  .Content {
+    padding: var(--spacing-md) var(--spacing-sm);
+    max-width: 95vw;
+  }
+
+  .Content h1 {
+    font-size: 1.75rem;
+  }
+
+  .Content h2 {
+    font-size: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .Content h3 {
+    font-size: 1.25rem;
+  }
+
+  .Content p {
+    margin-bottom: 1.25rem;
+  }
+
+  .Content blockquote {
+    padding: var(--spacing-sm) var(--spacing-md);
+    margin: var(--spacing-md) 0;
+  }
+
+  .Content pre {
+    padding: var(--spacing-sm);
+    font-size: 0.75rem;
+    border-radius: 8px;
+  }
+
+  .Content .code-block-wrapper {
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+    border-radius: 8px;
+  }
+
+  .Content table {
+    font-size: var(--text-xs);
+  }
+
+  .Content th,
+  .Content td {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .Content ul > li::before {
+    left: -1.1rem;
+  }
+}
