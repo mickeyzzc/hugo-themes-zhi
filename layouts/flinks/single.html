@@ -1,0 +1,29 @@
+{{ define "main" }}
+<div class="flinks-page">
+  <header class="flinks-header">
+    <h1>{{ .Title }}</h1>
+    {{ with .Content }}
+    <div class="Content">{{ . }}</div>
+    {{ end }}
+  </header>
+  <div class="flinks-grid">
+    {{ range .Site.Params.links }}
+    <a href="{{ .url }}" class="flink-card" target="_blank" rel="noopener noreferrer">
+      {{ with .avatar }}
+      <img class="flink-card__avatar" src="{{ . }}" alt="{{ $.name }}" loading="lazy">
+      {{ else }}
+      <div class="flink-card__avatar flink-card__avatar--placeholder">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+      </div>
+      {{ end }}
+      <div class="flink-card__info">
+        <span class="flink-card__name">{{ .name }}</span>
+        {{ with .desc }}
+        <span class="flink-card__desc">{{ . }}</span>
+        {{ end }}
+      </div>
+    </a>
+    {{ end }}
+  </div>
+</div>
+{{ end }}

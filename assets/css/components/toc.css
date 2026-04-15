@@ -1,0 +1,162 @@
+/* Table of Contents */
+.toc {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  position: sticky;
+  top: var(--spacing-md);
+}
+
+.toc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--border);
+}
+
+.toc-title {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.toc-toggle {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+  padding: 4px;
+  transition: transform var(--transition-fast);
+  display: flex;
+  align-items: center;
+}
+
+.toc-toggle.collapsed {
+  transform: rotate(-90deg);
+}
+
+.toc-body {
+  transition: max-height var(--transition);
+  overflow: hidden;
+}
+
+.toc-body.collapsed {
+  max-height: 0 !important;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Override Hugo's generated TOC HTML */
+#TableOfContents ul {
+  list-style: none;
+  padding-left: var(--spacing-md);
+  margin: 0;
+}
+
+#TableOfContents > ul {
+  padding-left: 0;
+}
+
+#TableOfContents li {
+  margin-bottom: 2px;
+}
+
+#TableOfContents a {
+  display: block;
+  padding: 4px var(--spacing-sm);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  line-height: 1.5;
+}
+
+#TableOfContents a:hover {
+  color: var(--accent);
+  background: var(--bg-muted);
+}
+
+#TableOfContents a.active {
+  color: var(--accent);
+  font-weight: 500;
+  background: var(--bg-muted);
+  border-left: 2px solid var(--accent);
+}
+
+/* Nested level indentation */
+#TableOfContents ul ul {
+  padding-left: var(--spacing-md);
+}
+
+/* Numbering variant */
+.toc--numbered #TableOfContents {
+  counter-reset: toc-counter;
+}
+
+.toc--numbered #TableOfContents ul ul {
+  counter-reset: toc-counter;
+}
+
+.toc--numbered #TableOfContents li {
+  counter-increment: toc-counter;
+}
+
+.toc--numbered #TableOfContents li > a::before {
+  content: counters(toc-counter, ".") ". ";
+  color: var(--text-secondary);
+  margin-right: var(--spacing-xs);
+}
+
+/* Collapsible variant */
+.toc--collapsible #TableOfContents ul ul {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--transition);
+}
+
+.toc--collapsible #TableOfContents li.expanded > ul {
+  max-height: 500px;
+}
+
+.toc--collapsible #TableOfContents li > a::after {
+  content: "+";
+  float: right;
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+.toc--collapsible #TableOfContents li.expanded > a::after {
+  content: "\2212";
+}
+
+/* ========================================
+   Sidebar-embedded TOC overrides
+   Remove standalone card styles when TOC
+   lives inside the sidebar
+   ======================================== */
+.sidebar-toc .toc {
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin-bottom: 0;
+  position: static;
+}
+
+.sidebar-toc .toc-header {
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-toc #TableOfContents a.active {
+  color: var(--accent);
+  font-weight: 500;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  border-left: 2px solid var(--accent);
+}

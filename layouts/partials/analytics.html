@@ -1,9 +1,0 @@
-{{- with site.Params.analytics }}
-<script>
-  window.ANALYTICS_CONFIG = {
-    endpoint: "{{ .endpoint }}",
-    siteId: "{{ .siteId }}",
-    sampleRate: {{ .sampleRate | default 100 }}
-  };
-</script>
-{{- end }}

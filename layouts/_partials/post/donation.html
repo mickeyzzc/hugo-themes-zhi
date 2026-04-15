@@ -1,0 +1,46 @@
+{{- /* Donation button and modal */ -}}
+{{- $donation := site.Params.donation -}}
+{{- if $donation.enable -}}
+<div class="donation-section">
+  <button class="donation-btn" id="donation-btn" type="button">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    {{ with $donation.comment }}{{ . }}{{ else }}Sponsor{{ end }}
+  </button>
+</div>
+
+{{- $hasWechat := and $donation.wechatPay (ne $donation.wechatPay "") -}}
+{{- $hasAlipay := and $donation.alipay (ne $donation.alipay "") -}}
+{{- if or $hasWechat $hasAlipay -}}
+<div class="donation-modal" id="donation-modal" aria-hidden="true">
+  <div class="donation-modal__overlay" id="donation-modal-overlay"></div>
+  <div class="donation-modal__content">
+    <button class="donation-modal__close" id="donation-modal-close" aria-label="Close">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    {{- if and $hasWechat $hasAlipay -}}
+    <div class="donation-modal__tabs">
+      <button class="donation-modal__tab active" data-tab="wechat">WeChat Pay</button>
+      <button class="donation-modal__tab" data-tab="alipay">Alipay</button>
+    </div>
+    {{- end -}}
+    <div class="donation-modal__qr" id="donation-qr">
+      {{- if $hasWechat -}}
+      <div class="donation-modal__qr-item" id="donation-qr-wechat">
+        <img src="{{ $donation.wechatPay }}" alt="WeChat Pay" loading="lazy">
+        <span>WeChat Pay</span>
+      </div>
+      {{- end -}}
+      {{- if $hasAlipay -}}
+      <div class="donation-modal__qr-item{{ if $hasWechat }} hidden{{ end }}" id="donation-qr-alipay">
+        <img src="{{ $donation.alipay }}" alt="Alipay" loading="lazy">
+        <span>Alipay</span>
+      </div>
+      {{- end -}}
+    </div>
+  </div>
+</div>
+{{- end -}}
+{{- end -}}

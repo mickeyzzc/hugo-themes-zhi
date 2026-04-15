@@ -1,0 +1,5 @@
+{{ if default false .Site.Params.features.analytics }}
+{{ if .Site.Params.analytics.endpoint }}
+<script src="{{ .Site.Params.analytics.endpoint }}" data-site-id="{{ .Site.Params.analytics.siteId }}" data-sample-rate="{{ .Site.Params.analytics.sampleRate }}" defer></script>
+{{ end }}
+{{ end }}

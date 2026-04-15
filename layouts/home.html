@@ -1,9 +1,9 @@
 {{ define "main" }}
-  {{ .Content }}
-  {{ range site.RegularPages }}
-    <section>
-      <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
-      {{ .Summary }}
-    </section>
-  {{ end }}
+  {{ $p := .Paginate (where site.RegularPages "Type" "==" "posts") }}
+  <div class="post-list">
+    {{ range $p.Pages }}
+      {{ partial "post/card.html" (dict "page" .) }}
+    {{ end }}
+  </div>
+  {{ partial "pagination.html" (dict "Paginator" $p) }}
 {{ end }}

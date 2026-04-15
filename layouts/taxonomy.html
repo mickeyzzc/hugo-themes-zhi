@@ -1,7 +1,18 @@
 {{ define "main" }}
-  <h1>{{ .Title }}</h1>
-  {{ .Content }}
-  {{ range .Pages }}
-    <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
-  {{ end }}
+  <div class="list-page">
+    <header class="list-header">
+      <h1>{{ .Title }}</h1>
+      {{ with .Content }}
+      <div class="Content">{{ . }}</div>
+      {{ end }}
+    </header>
+    <div class="taxonomy-terms">
+      {{ range .Pages }}
+      <a href="{{ .RelPermalink }}" class="taxonomy-term">
+        <span class="taxonomy-term__name">{{ .LinkTitle }}</span>
+        <span class="taxonomy-term__count">{{ len .Pages }}</span>
+      </a>
+      {{ end }}
+    </div>
+  </div>
 {{ end }}

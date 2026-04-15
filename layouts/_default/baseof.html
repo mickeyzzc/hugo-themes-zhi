@@ -6,9 +6,12 @@
   {{ partial "head.html" . }}
 </head>
 <body data-features='{{ partial "features.html" . }}'>
+  {{ partial "busuanzi.html" . }}
+  {{ partial "reading-progress.html" . }}
   <header>
     {{ partial "header.html" . }}
   </header>
+  {{ partial "sidebar.html" . }}
   <main>
     {{ block "main" . }}{{ end }}
   </main>
@@ -16,7 +19,7 @@
     {{ partial "footer.html" . }}
   </footer>
   {{ if site.Params.features.mermaid }}{{ partial "mermaid.html" . }}{{ end }}
-  {{ if site.Params.features.analytics }}{{ partial "analytics.html" . }}
+  {{ if site.Params.features.analytics }}
   {{ $analyticsJS := resources.Get "js/analytics.js" | minify | fingerprint }}
   <script src="{{ $analyticsJS.RelPermalink }}" defer></script>
   {{ end }}
@@ -30,5 +33,31 @@
   <script src="{{ $lightbox.RelPermalink }}" defer></script>
   <script src="{{ $videoSwitch.RelPermalink }}" defer></script>
   <script src="{{ $main.RelPermalink }}" defer></script>
+  {{ if default true .Site.Params.features.sidebar }}
+  {{ $sidebarJS := resources.Get "js/sidebar.js" | minify | fingerprint }}
+  <script src="{{ $sidebarJS.RelPermalink }}" defer></script>
+  {{ end }}
+  {{ if default true .Site.Params.features.readingProgress }}
+  {{ $progressJS := resources.Get "js/reading-progress.js" | minify | fingerprint }}
+  <script src="{{ $progressJS.RelPermalink }}" defer></script>
+  {{ end }}
+  {{ partial "search.html" . }}
+  {{ partial "back-to-top.html" . }}
+  {{ if default true .Site.Params.features.backToTop }}
+  {{ $backToTopJS := resources.Get "js/back-to-top.js" | minify | fingerprint }}
+  <script src="{{ $backToTopJS.RelPermalink }}" defer></script>
+  {{ end }}
+  {{ if default true .Site.Params.features.search }}
+  {{ $searchJS := resources.Get "js/search.js" | minify | fingerprint }}
+  <script src="{{ $searchJS.RelPermalink }}" defer></script>
+  {{ end }}
+  {{ if default true .Site.Params.features.toc }}
+  {{ $tocJS := resources.Get "js/toc.js" | minify | fingerprint }}
+  <script src="{{ $tocJS.RelPermalink }}" defer></script>
+  {{ end }}
+  {{ if site.Params.donation.enable }}
+  {{ $donationJS := resources.Get "js/donation.js" | minify | fingerprint }}
+  <script src="{{ $donationJS.RelPermalink }}" defer></script>
+  {{ end }}
 </body>
 </html>

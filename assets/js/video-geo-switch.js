@@ -1,7 +1,5 @@
-/**
- * Video Geo Switch - Handles Bilibili/YouTube video switching based on timezone
- * and user preference stored in localStorage
- */
+(function() {
+  'use strict';
 class VideoGeoSwitch {
   constructor() {
     this.init();
@@ -138,14 +136,14 @@ class VideoGeoSwitch {
     if (platform === 'bilibili' && bilibiliId) {
       iframeUrl = `https://player.bilibili.com/player.html?bvid=${bilibiliId}&autoplay=0`;
     } else if (platform === 'youtube' && youtubeId) {
-      iframeUrl = `https://www.youtube.com/embed/${youtubeId}?rel=0`;
+      iframeUrl = `https://www.youtube.com/embed/${youtubeId}?rel=0&autoplay=0`;
     }
     
     if (iframeUrl) {
       const iframe = document.createElement('iframe');
       iframe.src = iframeUrl;
       iframe.frameBorder = '0';
-      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      iframe.allow = 'accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
       iframe.allowFullscreen = true;
       iframe.loading = 'lazy';
       
@@ -196,8 +194,8 @@ class VideoGeoSwitch {
     container.appendChild(switchButton);
   }
 }
+  document.addEventListener('DOMContentLoaded', function() {
+    new VideoGeoSwitch();
+  });
 
-// Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-  new VideoGeoSwitch();
-});
+})();

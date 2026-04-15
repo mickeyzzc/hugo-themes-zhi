@@ -1,0 +1,177 @@
+/**
+ * Donation modal and Creative Commons badge styles
+ */
+
+/* ============================================
+   Donation Button
+   ============================================ */
+.donation-section {
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+.donation-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-lg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  transition: all var(--transition);
+}
+
+.donation-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.donation-btn svg {
+  stroke: currentColor;
+}
+
+/* ============================================
+   Donation Modal
+   ============================================ */
+.donation-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.donation-modal.active {
+  display: flex;
+}
+
+.donation-modal__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 301;
+}
+
+.donation-modal__content {
+  position: relative;
+  z-index: 302;
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 8px 32px var(--shadow);
+  text-align: center;
+}
+
+.donation-modal__close {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  border: none;
+  background: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  transition: color var(--transition-fast);
+}
+
+.donation-modal__close:hover {
+  color: var(--text);
+}
+
+.donation-modal__tabs {
+  display: flex;
+  margin-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--border);
+}
+
+.donation-modal__tab {
+  flex: 1;
+  padding: var(--spacing-sm);
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.donation-modal__tab:hover {
+  color: var(--text);
+}
+
+.donation-modal__tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.donation-modal__qr-item {
+  text-align: center;
+}
+
+.donation-modal__qr-item img {
+  max-width: 256px;
+  max-height: 256px;
+  margin: 0 auto;
+  display: block;
+  border-radius: var(--radius-md);
+}
+
+.donation-modal__qr-item span {
+  display: block;
+  margin-top: var(--spacing-sm);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.hidden {
+  display: none;
+}
+
+/* ============================================
+   Creative Commons Badge
+   ============================================ */
+.cc-badge {
+  margin-bottom: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border);
+}
+
+.cc-badge--big .cc-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.cc-badge__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  transition: color var(--transition-fast);
+}
+
+.cc-badge__link:hover {
+  color: var(--accent);
+}
+
+.cc-badge__text strong {
+  color: var(--text);
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 640px) {
+  .donation-modal__content {
+    padding: var(--spacing-md);
+  }
+}

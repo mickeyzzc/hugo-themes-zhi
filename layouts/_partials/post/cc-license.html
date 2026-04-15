@@ -1,0 +1,20 @@
+{{- /* Creative Commons license badge */ -}}
+{{- $cc := site.Params.creativeCommons -}}
+{{- if $cc.enable -}}
+  {{- $license := $cc.license | default "by-nc-sa" -}}
+  {{- $size := $cc.size | default "normal" -}}
+  {{- $baseUrl := "https://creativecommons.org/licenses/" -}}
+  {{- $licenseUrl := printf "%s%s/4.0/" $baseUrl $license -}}
+  <div class="cc-badge cc-badge--{{ $size }}">
+    <a href="{{ $licenseUrl }}" target="_blank" rel="noopener noreferrer" class="cc-badge__link">
+      <svg class="cc-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+        <text x="12" y="16" text-anchor="middle" font-size="10" font-weight="bold" fill="currentColor">CC</text>
+      </svg>
+      <span class="cc-badge__text">
+        This work is licensed under
+        <strong>{{ replace $license "-" " " | upper }}</strong> 4.0
+      </span>
+    </a>
+  </div>
+{{- end -}}

@@ -1,0 +1,15 @@
+{{ if and (default true .Site.Params.features.toc) .TableOfContents }}
+<nav class="toc{{ if default true .Site.Params.toc.numbering }} toc--numbered{{ end }}{{ if default true .Site.Params.toc.collapse }} toc--collapsible{{ end }}" id="toc" aria-label="{{ i18n `tableOfContents` }}">
+  <div class="toc-header">
+    <span class="toc-title">{{ i18n `tableOfContents` }}</span>
+    <button class="toc-toggle" id="toc-toggle" aria-label="{{ i18n `tableOfContents` }}" aria-expanded="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </button>
+  </div>
+  <div class="toc-body" id="toc-body">
+    {{ .TableOfContents }}
+  </div>
+</nav>
+{{ end }}

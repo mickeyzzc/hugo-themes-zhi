@@ -1,0 +1,67 @@
+.note {
+  padding: var(--spacing-md) var(--spacing-lg);
+  margin: var(--spacing-md) 0;
+  border-radius: var(--radius-sm);
+  border-left: 4px solid;
+}
+
+.note--info { border-color: #2563eb; background: rgba(37, 99, 235, 0.06); }
+.note--tip { border-color: var(--accent); background: rgba(124, 58, 237, 0.06); }
+.note--success { border-color: #1a7f37; background: rgba(26, 127, 55, 0.06); }
+.note--warning { border-color: #9a6700; background: rgba(154, 103, 0, 0.06); }
+.note--danger { border-color: #cf222e; background: rgba(207, 34, 46, 0.06); }
+
+.note__header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
+  font-weight: 600;
+}
+
+.note--info .note__header { color: #2563eb; }
+.note--tip .note__header { color: var(--accent); }
+.note--success .note__header { color: #1a7f37; }
+.note--warning .note__header { color: #9a6700; }
+.note--danger .note__header { color: #cf222e; }
+
+.note__content {
+  font-size: var(--text-sm);
+  line-height: var(--leading-body);
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .note--info { background: rgba(37, 99, 235, 0.12); }
+[data-theme="dark"] .note--tip { background: rgba(124, 58, 237, 0.12); }
+[data-theme="dark"] .note--success { background: rgba(26, 127, 55, 0.12); }
+[data-theme="dark"] .note--warning { background: rgba(154, 103, 0, 0.12); }
+[data-theme="dark"] .note--danger { background: rgba(207, 34, 46, 0.12); }
+
+.quote-shortcode {
+  margin: var(--spacing-md) 0;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-left: 4px solid var(--accent);
+  background: var(--blockquote-bg);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-style: italic;
+}
+
+.quote-shortcode__content {
+  color: var(--text);
+  line-height: var(--leading-body);
+}
+
+.quote-shortcode__footer {
+  margin-top: var(--spacing-sm);
+  font-style: normal;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.quote-shortcode__author {
+  font-weight: 600;
+}
+
+.quote-shortcode__source::before {
+  content: ", ";
+}

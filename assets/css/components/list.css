@@ -1,0 +1,54 @@
+/* List page and taxonomy styles */
+
+.list-page {
+  max-width: 768px;
+  margin: 0 auto;
+  padding: var(--spacing-md);
+}
+
+.list-header {
+  margin-bottom: var(--spacing-xl);
+}
+
+.list-header h1 {
+  font-size: var(--text-3xl);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Taxonomy term listing */
+
+.taxonomy-terms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.taxonomy-term {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--bg-surface);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--text);
+  transition: all var(--transition);
+}
+
+.taxonomy-term:hover {
+  border-color: var(--accent);
+  background: var(--bg-muted);
+}
+
+.taxonomy-term__name {
+  font-weight: 500;
+}
+
+.taxonomy-term__count {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  background: var(--bg-muted);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+}

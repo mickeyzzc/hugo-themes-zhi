@@ -1,0 +1,23 @@
+/* Reading Progress Bar Component */
+.reading-progress {
+  position: fixed;
+  left: 0;
+  z-index: 50;
+  width: 100%;
+  pointer-events: none;
+}
+
+.reading-progress[data-position="top"] {
+  top: 0;
+}
+
+.reading-progress[data-position="bottom"] {
+  bottom: 0;
+}
+
+.reading-progress__bar {
+  height: var(--reading-progress-height, 3px);
+  width: 0%;
+  background: var(--reading-progress-color, var(--accent));
+  transition: width 100ms linear;
+}

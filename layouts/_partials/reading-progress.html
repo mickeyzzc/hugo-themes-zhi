@@ -1,0 +1,10 @@
+{{ if and (default true .Site.Params.features.readingProgress) (eq .Kind "page") }}
+<div class="reading-progress" id="reading-progress"
+     data-position="{{ .Site.Params.readingProgress.position | default "top" }}"
+     role="progressbar"
+     aria-valuenow="0"
+     aria-valuemin="0"
+     aria-valuemax="100">
+  <div class="reading-progress__bar" id="reading-progress-bar"></div>
+</div>
+{{ end }}

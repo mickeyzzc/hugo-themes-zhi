@@ -1,0 +1,11 @@
+{{- $author := .Get 0 | default "" -}}
+{{- $source := .Get 1 | default "" -}}
+<blockquote class="quote-shortcode">
+  <div class="quote-shortcode__content">{{ .Inner }}</div>
+  {{ if or $author $source }}
+  <footer class="quote-shortcode__footer">
+    {{ if $author }}<cite class="quote-shortcode__author">{{ $author }}</cite>{{ end }}
+    {{ if $source }}<span class="quote-shortcode__source">{{ $source }}</span>{{ end }}
+  </footer>
+  {{ end }}
+</blockquote>

@@ -1,16 +1,54 @@
 <footer class="site-footer" role="contentinfo">
-  <p class="footer-copy">© {{ now.Year }} {{ .Site.Title }}</p>
-  {{/* Optional: RSS feed link if configured via site params */}}
-  {{ with .Site.Params.rssURL }}
-  <p class="footer-rss"><a href="{{ . }}">RSS</a></p>
-  {{ end }}
-  {{/* Optional: Social links configured as a list of { name, url } in site.Params.social */}}
-  {{ with .Site.Params.social }}
-  <ul class="footer-social" aria-label="Social links">
-    {{ range . }}
-    <li><a href="{{ .url }}">{{ .name }}</a></li>
+  <div class="footer-inner">
+
+    {{/* -- Copyright line -- */}}
+    <div class="footer-copyright">
+      {{ $since := site.Params.since }}
+      {{ $author := site.Params.author | default site.Title }}
+      {{ $year := now.Year }}
+      {{ if $since }}
+        {{ if and (gt $since 0) (ne (int $since) $year) }}
+          <span>© {{ $since }}-{{ $year }} {{ $author }}</span>
+        {{ else }}
+          <span>© {{ $year }} {{ $author }}</span>
+        {{ end }}
+      {{ else }}
+        <span>© {{ $year }} {{ $author }}</span>
+      {{ end }}
+      {{ with site.Params.footer.copyright }}
+        <span class="footer-custom-copyright">{{ . }}</span>
+      {{ end }}
+    </div>
+
+    {{/* -- Social links in footer -- */}}
+    {{ $socialLinks := site.Params.footer.socialLinks | default site.Params.social }}
+    {{ with $socialLinks }}
+    <div class="footer-social">
+      {{ range . }}
+      <a href="{{ .url }}" class="footer-social-link" aria-label="{{ .name }}"{{ if hasPrefix .url "http" }} target="_blank" rel="noopener noreferrer"{{ end }}>
+        {{ .name }}
+      </a>
+      {{ end }}
+    </div>
     {{ end }}
-  </ul>
-  {{ end }}
-  <span class="footer-credit">{{ with .Site.Params.themeCredit }}{{ . }}{{ else }}Powered by Hugo{{ end }}</span>
+
+    {{/* -- Beian + Powered by line -- */}}
+    <div class="footer-meta">
+      {{ with site.Params.footer.beian }}
+      <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" class="footer-beian">{{ . }}</a>
+      {{ end }}
+      {{ with site.Params.footer.gongan }}
+      <a href="http://www.beian.gov.cn/" target="_blank" rel="noopener noreferrer" class="footer-gongan">{{ . }}</a>
+      {{ end }}
+      {{ if default true site.Params.footer.poweredBy }}
+      <span class="footer-powered">{{ i18n `poweredBy` }} (<a href="https://gohugo.io" target="_blank" rel="noopener noreferrer">Hugo</a>)</span>
+      {{ end }}
+    </div>
+
+    {{/* -- RSS link -- */}}
+    {{ with .OutputFormats.Get "RSS" }}
+    <a href="{{ .RelPermalink }}" class="footer-rss" target="_blank" rel="noopener noreferrer">RSS</a>
+    {{ end }}
+
+  </div>
 </footer>

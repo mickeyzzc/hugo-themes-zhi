@@ -1,0 +1,55 @@
+{{ if default true .Site.Params.features.sidebar }}
+{{ $position := .Site.Params.sidebar.position | default "left" }}
+<aside class="sidebar" id="sidebar" data-position="{{ $position }}">
+  <div class="sidebar-inner">
+    {{/* Avatar */}}
+    {{ with .Site.Params.avatar }}
+    <div class="sidebar-avatar">
+      <img src="{{ . }}" alt="{{ $.Site.Params.author | default $.Site.Title }}" loading="lazy">
+    </div>
+    {{ end }}
+
+    {{/* Author */}}
+    <div class="sidebar-author">
+      <h2 class="sidebar-author__name">{{ .Site.Params.author | default .Site.Title }}</h2>
+      {{ with .Site.Params.description }}
+      <p class="sidebar-author__desc">{{ . }}</p>
+      {{ end }}
+    </div>
+
+    {{/* Social Links */}}
+    {{ $socialLinks := .Site.Params.sidebar.socialLinks | default .Site.Params.social }}
+    {{ with $socialLinks }}
+    <nav class="sidebar-social" aria-label="Social links">
+      {{ range . }}
+      <a href="{{ .url }}" class="sidebar-social-link" aria-label="{{ .name }}"{{ if hasPrefix .url "http" }} target="_blank" rel="noopener noreferrer"{{ end }}>
+        {{ .name }}
+      </a>
+      {{ end }}
+    </nav>
+    {{ end }}
+
+    {{/* Smart sidebar content: TOC on article pages, Categories elsewhere */}}
+    {{ if and (eq .Kind "page") (default true .Site.Params.features.toc) .TableOfContents }}
+    <div class="sidebar-toc">
+      {{ partial "toc.html" . }}
+    </div>
+    {{ else }}
+    <div class="sidebar-categories">
+      <h3 class="sidebar-categories__title">分类</h3>
+      <nav class="sidebar-categories__list">
+        {{ range where site.Sections "Type" "==" "posts" }}
+        {{ range .Sections }}
+        <a href="{{ .RelPermalink }}" class="sidebar-category-btn{{ if eq $.RelPermalink .RelPermalink }} active{{ end }}">
+          <span>{{ .LinkTitle }}</span>
+          <span class="sidebar-category-btn__count">{{ len .Pages }}</span>
+        </a>
+        {{ end }}
+        {{ end }}
+      </nav>
+    </div>
+    {{ end }}
+  </div>
+</aside>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+{{ end }}

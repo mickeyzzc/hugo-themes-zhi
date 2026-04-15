@@ -1,7 +1,26 @@
 {{ define "main" }}
-  <h1>{{ .Title }}</h1>
-  {{ .Content }}
-  {{ range .Pages }}
-    <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
-  {{ end }}
+  <div class="list-page">
+    <header class="list-header">
+      <h1>{{ .Title }}</h1>
+      {{ with .Content }}
+      <div class="Content">{{ . }}</div>
+      {{ end }}
+    </header>
+    {{ $p := .Paginate .Pages }}
+    <div class="post-list">
+      {{ range $p.Pages }}
+      <article class="post-card">
+        <h2 class="post-card__title">
+          <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        </h2>
+        <div class="post-card__meta">
+          <time datetime='{{ .Date | time.Format "2006-01-02" }}'>{{ .Date | time.Format ":date_long" }}</time>
+        </div>
+        <p class="post-card__summary">{{ .Summary }}</p>
+        <a href="{{ .RelPermalink }}" class="post-card__read-more">Continue reading →</a>
+      </article>
+      {{ end }}
+    </div>
+    {{ partial "pagination.html" (dict "Paginator" $p) }}
+  </div>
 {{ end }}

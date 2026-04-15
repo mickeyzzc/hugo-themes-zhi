@@ -1,0 +1,91 @@
+/* Friend links page styles */
+.flinks-page {
+  max-width: 768px;
+  margin: 0 auto;
+  padding: var(--spacing-md);
+}
+
+.flinks-header {
+  margin-bottom: var(--spacing-xl);
+}
+
+.flinks-header h1 {
+  font-size: var(--text-2xl);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.flinks-header .Content {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: var(--leading-body);
+}
+
+.flinks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.flink-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--text);
+  transition: all var(--transition);
+}
+
+.flink-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 12px var(--shadow);
+  transform: translateY(-2px);
+}
+
+.flink-card__avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.flink-card__avatar--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-muted);
+  color: var(--text-secondary);
+}
+
+.flink-card__info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.flink-card__name {
+  font-weight: 600;
+  font-size: var(--text-sm);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.flink-card__desc {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+
+@media (max-width: 640px) {
+  .flinks-grid {
+    grid-template-columns: 1fr;
+  }
+}

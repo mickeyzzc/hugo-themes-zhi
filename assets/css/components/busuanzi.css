@@ -1,0 +1,11 @@
+/* Busuanzi page view count styling */
+
+.busuanzi-container {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+#busuanzi_value_page_pv {
+  font-variant-numeric: tabular-nums;
+}

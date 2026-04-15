@@ -1,0 +1,98 @@
+[search]
+  other = "Search"
+
+[search_placeholder]
+  other = "Search posts..."
+
+[search_noResults]
+  other = "No results found"
+
+[tableOfContents]
+  other = "Table of Contents"
+
+[backToTop]
+  other = "Back to top"
+
+[readMore]
+  other = "Continue reading"
+
+[readingTime]
+  other = "{{ .Count }} min read"
+
+[words]
+  other = "{{ .Count }} words"
+
+[views]
+  other = "views"
+
+[previous]
+  other = "← Previous"
+
+[next]
+  other = "Next →"
+
+[pageNotFound]
+  other = "Page Not Found"
+
+[pageNotFoundDesc]
+  other = "The page you are looking for does not exist or has been moved."
+
+[goHome]
+  other = "Go Home"
+
+[categories]
+  other = "Categories"
+
+[tags]
+  other = "Tags"
+
+[archives]
+  other = "Archives"
+
+[friendLinks]
+  other = "Friend Links"
+
+[about]
+  other = "About"
+
+[posts]
+  other = "Posts"
+
+[poweredBy]
+  other = "Powered by Hugo"
+
+[sponsor]
+  other = "Sponsor"
+
+[publishedOn]
+  other = "Published"
+
+[updatedOn]
+  other = "Updated"
+
+[toggleTheme]
+  other = "Toggle theme"
+
+[toggleNav]
+  other = "Toggle navigation"
+
+[closeSearch]
+  other = "Close search"
+
+[ccLicense]
+  other = "This work is licensed under"
+
+[ccLicenseEnd]
+  other = ""
+
+[toggleSidebar]
+  other = "Toggle sidebar"
+
+[end]
+  other = "~ end ~"
+
+[wordCount]
+  other = "{{ .Count }} words"
+
+[minRead]
+  other = "min read"

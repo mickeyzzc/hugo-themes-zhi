@@ -1,0 +1,3 @@
+{{ if .Site.Params.favicon | default "/favicon.ico" }}
+<link rel="icon" href="{{ .Site.Params.favicon | default "/favicon.ico" }}">
+{{ end }}

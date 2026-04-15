@@ -1,85 +1,106 @@
-# PROJECT KNOWLEDGE BASE
+# AGENTS.md — Hugo Theme Zhi
 
-**Generated:** 2026-04-06
-**Commit:** 651a9fa
-**Branch:** main
+## What This Is
 
-## OVERVIEW
+Hugo blog theme (Zhi). Pure Hugo + Hugo Pipes — no webpack, rollup, vite, or npm build step. Features: dark/light theme, MathJax, Mermaid, Bilibili/YouTube video shortcodes, image lightbox, code copy, sidebar, search, TOC, reading progress, back-to-top, busuanzi, donation, friend links, CC license, archives.
 
-Hugo blog theme (Zhi) — pure Hugo + Hugo Pipes, no external build tools. Features: dark/light theme, MathJax, Mermaid diagrams, Bilibili/YouTube video shortcodes, image lightbox, code copy, custom analytics.
+Hugo ≥ **0.146.0** (non-extended is fine).
 
-## STRUCTURE
+## Commands
 
-```
-.
-├── layouts/              # Hugo templates (Go template language)
-│   ├── _default/         # baseof.html (base), single.html, list.html, _markup/
-│   ├── _partials/        # Hugo 0.120+ convention (ACTIVE)
-│   ├── partials/         # Legacy partials (mathjax.html, mermaid.html only used here)
-│   └── shortcodes/       # video.html (bilibili/youtube embed)
-├── assets/               # Hugo Pipes source assets
-│   ├── css/              # main.css → @import components/*.css
-│   └── js/               # Individual feature scripts (no bundler)
-├── content/              # Example site content (used for dev/testing)
-├── archetypes/           # Content scaffolds (default.md, post.md)
-├── static/               # Pass-through files (favicon.ico only)
-├── i18n/                 # Empty — i18n not yet implemented
-├── data/                 # Empty — no data files
-├── tests/                # Playwright E2E tests (2 specs)
-├── public/               # Hugo build output (gitignored)
-└── hugo.toml             # Site config (NOT pure theme config — has baseURL, menus)
+```bash
+hugo server                  # Dev server with live reload
+hugo --minify                # Production build
+npx playwright test          # E2E tests (see Tests caveat below)
 ```
 
-## WHERE TO LOOK
+## Structure
+
+```
+layouts/
+├── _default/           # baseof.html, single.html, list.html, 404.html, _markup/
+├── _partials/          # ALL partials live here (Hugo 0.120+ convention)
+│   ├── head/           # css.html, seo.html, favicons.html, analytics.html
+│   ├── post/           # card.html, meta.html, footer.html, cc-license.html
+│   └── inline/menu/    # walk.html — recursive menu builder
+├── shortcodes/         # video.html, note.html, quote.html
+├── archives/           # list.html
+├── flinks/             # single.html (friend links page)
+├── home.html, section.html, taxonomy.html, term.html
+
+assets/
+├── css/
+│   ├── main.css        # Aggregator — @import "components/X.css"
+│   └── components/     # 24 per-feature CSS modules (theme.css has CSS vars)
+└── js/                 # 12 individual scripts, no bundler
+    ├── main.js         # Orchestrator: MathJax + Mermaid lazy-load
+    ├── theme-toggle.js, code-copy.js, lightbox.js
+    ├── video-geo-switch.js, sidebar.js, search.js, toc.js
+    ├── reading-progress.js, back-to-top.js, donation.js, analytics.js
+
+i18n/                   # en.toml, zh.toml — translations via {{ i18n "key" }}
+exampleSite/            # Self-contained demo site with full config schema
+```
+
+## Key Architecture
+
+- **Asset pipeline**: CSS via `css.Build` (source maps in dev, fingerprint in prod). JS via `resources.Get | minify | fingerprint`. No external build tools.
+- **Feature flags**: `site.Params.features.*` toggles which JS/CSS/partial components load. The `features.html` partial serializes these as JSON into `<body data-features='...'>`; JS reads this to conditionally initialize (MathJax, Mermaid, etc.).
+- **CSS theme system**: CSS variables in `components/theme.css` — `:root` (light) and `[data-theme="dark"]` overrides. FOUC prevention via inline `<script>` in `head.html`.
+- **Conditional loading**: MathJax only if `$...$`/`$$...$$` detected. Mermaid only if `code.language-mermaid` elements exist.
+- **CSS layout**: body max-width `1200px`, sidebar via `params.sidebar`.
+
+## Feature Flags
+
+Controlled via `hugo.toml` → `[params.features]`. All default to `true` except `analytics`.
+
+| Flag | Controls |
+|------|----------|
+| `codeHighlight` | Hugo Chroma syntax highlighting |
+| `themeSwitch` | Dark/light toggle button |
+| `mathJax` | MathJax 3 lazy-load |
+| `mermaid` | Mermaid diagram lazy-load |
+| `lightbox` | Click-to-zoom images |
+| `search` | Local search (XML index + search.js) |
+| `sidebar` | Sidebar with avatar + social links |
+| `toc` | Table of contents on post pages |
+| `readingProgress` | Thin progress bar |
+| `backToTop` | Floating scroll-to-top button |
+| `analytics` | Custom analytics endpoint |
+
+Additional toggles outside `features`: `params.donation.enable`, `params.analytics.busuanzi`, `params.creativeCommons.enable`.
+
+## Where to Look
 
 | Task | Location | Notes |
 |------|----------|-------|
-| Add a page layout | `layouts/_default/` | Must define `{{ define "main" }}` block |
-| Add/modify a partial | `layouts/_partials/` | Hugo 0.120+ `_partials/` takes priority over `partials/` |
-| Add a shortcode | `layouts/shortcodes/` | Access params via `.Get "name"` |
-| Add CSS styling | `assets/css/components/` | Import new file in `assets/css/main.css` |
-| Add JS feature | `assets/js/` | Must also add `<script>` in `layouts/_default/baseof.html` |
-| Toggle features | `hugo.toml` → `[params.features]` | Feature flags: codeHighlight, mathJax, mermaid, themeSwitch, lightbox, analytics |
-| Modify code block rendering | `layouts/_default/_markup/render-codeblock.html` | Hugo render hook |
-| E2E testing | `tests/*.spec.ts` | Playwright, spawns `hugo server` per test file |
-| Video embedding | `layouts/shortcodes/video.html` + `assets/js/video-geo-switch.js` | Default platform: bilibili, configurable per-shortcode |
+| Add page layout | `layouts/_default/` | Must define `{{ define "main" }}` block |
+| Add/modify partial | `layouts/_partials/` | ONLY location for partials |
+| Add shortcode | `layouts/shortcodes/` | Access params via `.Get "name"` |
+| Add CSS | `assets/css/components/` | Must add `@import` in `assets/css/main.css` |
+| Add JS | `assets/js/` | Must add `<script>` in `layouts/_default/baseof.html` |
+| Toggle features | `hugo.toml` → `[params.features]` | Also update `features.html` partial if adding new flags |
+| Code block rendering | `layouts/_default/_markup/render-codeblock.html` | Hugo render hook |
+| Video embedding | `layouts/shortcodes/video.html` + `assets/js/video-geo-switch.js` | Default platform: bilibili |
+| Translations | `i18n/en.toml`, `i18n/zh.toml` | Use `{{ i18n "key" }}` in templates |
+| Full config schema | `exampleSite/hugo.toml` | Documented reference with all params |
 
-## CONVENTIONS
+## Conventions
 
-- **Asset pipeline**: All CSS/JS processed via Hugo Pipes (`resources.Get` → `minify` → `fingerprint`). No webpack/rollup/vite.
-- **CSS architecture**: `main.css` aggregates via `@import "components/X.css"`. Each component is self-contained with CSS variables.
-- **Theme system**: CSS variables in `components/theme.css` — `:root` (light) and `[data-theme="dark"]` overrides. No CSS framework.
-- **Feature flags**: Controlled via `site.Params.features.*` in `hugo.toml`. Templates check these before loading resources.
-- **Conditional loading**: MathJax loads only if `$...$` or `$$...$$` detected in page content. Mermaid loads only if `code.language-mermaid` elements exist.
-- **JS loading**: Scripts loaded in `baseof.html` via Hugo Pipes with `defer`. Some also loaded via `_partials/head/js.html` (dual path — see ANTI-PATTERNS).
-- **Menu system**: Recursive nested menu via `inline/menu/walk.html` partial. Supports `aria-current` and active class.
+- **Partials**: ALWAYS use `layouts/_partials/`. The `layouts/partials/` directory no longer exists.
+- **Adding a new feature flag**: Must update THREE places: (1) `hugo.toml [params.features]`, (2) `features.html` partial to include it in the JSON map, (3) `baseof.html` to conditionally load the JS.
+- **Adding CSS**: Create `components/X.css`, add `@import "components/X.css"` in `main.css` (order matters for cascade).
+- **Adding JS**: Create `assets/js/X.js`, add Hugo Pipes block + `<script>` in `baseof.html` (with feature flag guard if applicable).
+- **Config schema reference**: `exampleSite/hugo.toml` is the documented schema with 17 sections — consult it before adding params.
 
-## ANTI-PATTERNS (THIS PROJECT)
+## Tests
 
-- **DO NOT** add files to `layouts/partials/` — use `layouts/_partials/` (Hugo 0.120+ convention). `partials/` is legacy and lower priority.
-- **DO NOT** modify `hugo.toml` baseURL/title/menus as theme defaults — these are site-level config that should be overridden by the user's site.
-- **header.html uses escaped Hugo syntax** (`{{ \`{{\` }}`) — this is likely a bug/leftover from code generation. The nav/menu does not render properly.
-- **JS dual-loading risk**: `baseof.html` loads all JS via `resources.Get | minify | fingerprint`, AND `_partials/head/js.html` also processes `main.js` and `code-copy.js`. This causes duplicate script loading.
-- **404.html is standalone** — does NOT inherit `baseof.html`. Any style changes to baseof won't affect the 404 page.
+Playwright E2E tests in `tests/`. **Caveat**: `video.spec.ts` has a hardcoded Mac path (`/Users/mickey/...`). Tests won't run on other machines without updating that path. `footer.spec.ts` may have similar issues.
 
-## COMMANDS
+## Gotchas
 
-```bash
-# Dev server
-hugo server
-
-# Production build
-hugo --minify
-
-# Run E2E tests (requires @playwright/test installed globally or via npx)
-npx playwright test
-```
-
-## NOTES
-
-- Hugo minimum version: **0.146.0** (non-extended is fine)
-- `public/` contains build artifacts — do not edit directly
-- No `theme.toml` — this theme lacks standard Hugo theme metadata
-- `i18n/` and `data/` directories exist but are empty (stubs for future use)
-- No CI/CD pipeline configured
-- No linter/formatter configured (no ESLint, Stylelint, Prettier, EditorConfig)
+- **`hugo.toml` is a site config, not a theme config**: It has `baseURL`, menus, and content settings. When used as a theme module, the user's site config overrides everything. Do not modify `baseURL`/`title`/menus as theme defaults.
+- **`exampleSite/` has its own `hugo.toml`**: That's the comprehensive reference config (282 lines). The root `hugo.toml` is a simpler working config.
+- **No linter/formatter configured**: No ESLint, Stylelint, Prettier, or EditorConfig.
+- **No CI/CD pipeline**.
+- **No `theme.toml`**: This theme lacks standard Hugo theme metadata.

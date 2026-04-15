@@ -34,7 +34,7 @@ pre {
    ======================================== */
 .code-block-wrapper {
   position: relative;
-  margin: 1.25em 0;
+  margin: 1.5em 0;
   border-radius: 8px;
   overflow: hidden;
   background: var(--code-bg);
@@ -151,7 +151,7 @@ pre {
    Code block body
    ======================================== */
 .code-block-body {
-  padding: 0.5rem;
+  padding: 0.75rem;
 }
 
 .code-block-wrapper pre {
@@ -160,7 +160,7 @@ pre {
   border-radius: 0;
   padding: 0;
   background: transparent;
-  overflow-x: auto;
+  overflow-x: visible;
   white-space: pre;
   word-break: normal;
 }
@@ -187,18 +187,17 @@ pre {
 
 /* Line number column: fixed width, right-aligned */
 .code-block-wrapper .chroma .lntd:first-child {
-  width: 2.5em;
-  min-width: 2.5em;
-  padding: 0 0.5em 0 0.5em;
+  width: 3em;
+  min-width: 3em;
+  padding: 0 0.5em 0 0;
   border-right: 1px solid var(--code-linenumber-border);
   text-align: right;
   vertical-align: top;
-  white-space: nowrap;
 }
 
 /* Code column: left padding only */
 .code-block-wrapper .chroma .lntd:last-child {
-  padding: 0 0.5rem 0 0.5rem;
+  padding: 0 0 0 0.75rem;
   vertical-align: top;
   overflow: hidden;
 }
@@ -206,23 +205,7 @@ pre {
 /* Remove double padding when lntable is inside pre */
 .code-block-wrapper .lntable pre {
   padding: 0;
-  margin: 0;
 }
-
-/* Ensure line numbers and code are properly aligned */
-.code-block-wrapper .chroma .lnt,
-.code-block-wrapper .chroma .ln {
-  line-height: inherit;
-  display: inline-block;
-  width: 100%;
-}
-
-/* Fix scrollbar issue for line numbers */
-.code-block-wrapper .chroma .lntd:first-child {
-  overflow: hidden;
-}
-
-
 
 /* Line number text */
 .chroma .lnt,
@@ -250,7 +233,7 @@ pre {
   overflow-x: auto;
 }
 
-   Chroma Syntax Highlighting - Light Mode (GitHub)
+/*   Chroma Syntax Highlighting - Light Mode (GitHub)
    ======================================== */
 
 /* Background */ .bg { background-color: transparent; }
