@@ -149,10 +149,39 @@
     border: 2px solid var(--accent);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
     transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+    position: relative;
+    z-index: 1;
   }
 
   .sidebar-avatar img:hover {
     box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 25%, transparent);
+  }
+
+  /* Avatar halo ring — sci-fi rotating gradient */
+  .sidebar-avatar {
+    position: relative;
+  }
+
+  .sidebar-avatar::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 108px;
+    height: 108px;
+    margin-top: -54px;
+    margin-left: -54px;
+    border-radius: 50%;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0%,
+      var(--accent) 15%,
+      var(--accent) 40%,
+      transparent 65%
+    );
+    animation: avatar-halo-spin 8s linear infinite;
+    z-index: 0;
+    opacity: 0.75;
   }
 
   /* Author name — clean, slightly spaced */
@@ -290,6 +319,34 @@
     object-fit: cover;
     border: 2px solid var(--accent);
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
+    position: relative;
+    z-index: 1;
+  }
+
+  .sidebar-avatar {
+    position: relative;
+  }
+
+  .sidebar-avatar::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    margin-top: -50px;
+    margin-left: -50px;
+    border-radius: 50%;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0%,
+      var(--accent) 15%,
+      var(--accent) 40%,
+      transparent 65%
+    );
+    animation: avatar-halo-spin 8s linear infinite;
+    z-index: 0;
+    opacity: 0.75;
   }
 
   .sidebar-author__name {

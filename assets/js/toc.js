@@ -28,12 +28,39 @@
     var tocLinks = toc.querySelectorAll('a');
     var observerOptions = { rootMargin: '-80px 0px -80% 0px', threshold: 1 };
 
+    // Auto-expand ancestor TOC items for active heading
+    function expandAncestors(activeLink) {
+      if (!activeLink) return;
+      var li = activeLink.closest('li');
+      while (li) {
+        var parentLi = li.parentElement ? li.parentElement.closest('li') : null;
+        if (parentLi && parentLi.querySelector(':scope > ul')) {
+          parentLi.classList.add('expanded');
+        }
+        li = parentLi;
+      }
+    }
+
+    // Collapse TOC items that don't contain the active link
+    function collapseInactive(toc, activeLink) {
+      var expandedItems = toc.querySelectorAll('#TableOfContents li.expanded');
+      expandedItems.forEach(function(li) {
+        if (!li.contains(activeLink)) {
+          li.classList.remove('expanded');
+        }
+      });
+    }
+
     var observer = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         if (entry.isIntersecting) {
           tocLinks.forEach(function(link) { link.classList.remove('active'); });
           var activeLink = toc.querySelector('a[href="#' + entry.target.id + '"]');
-          if (activeLink) { activeLink.classList.add('active'); }
+          if (activeLink) {
+            activeLink.classList.add('active');
+            expandAncestors(activeLink);
+            collapseInactive(toc, activeLink);
+          }
         }
       });
     }, observerOptions);

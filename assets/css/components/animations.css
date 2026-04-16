@@ -67,3 +67,9 @@ main .post {
 }
 
 /* Respect reduced motion preference — already handled in theme.css */
+
+/* Avatar halo ring — slow rotating conic-gradient sweep */
+@keyframes avatar-halo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
