@@ -8,7 +8,7 @@
     <span class="post-card__reading-time">{{ i18n "readingTime" .page.ReadingTime }}</span>
     {{ end }}
   </div>
-  <p class="post-card__summary">{{ .page.Summary }}</p>
+  <div class="post-card__summary">{{ .page.Summary | plainify }}</div>
   {{ with .page.GetTerms "tags" }}
   <div class="post-card__tags">
     {{ range . }}

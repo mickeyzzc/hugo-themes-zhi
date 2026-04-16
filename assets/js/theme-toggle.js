@@ -4,13 +4,22 @@
   var THEME_KEY = 'theme';
   var DARK_THEME = 'dark';
   var LIGHT_THEME = 'light';
+  var THEME_MANUAL_KEY = 'theme-manual';
 
   function getCurrentTheme() {
     var saved = localStorage.getItem(THEME_KEY);
     if (saved) {
       return saved;
     }
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? DARK_THEME : LIGHT_THEME;
+    var manual = localStorage.getItem(THEME_MANUAL_KEY);
+    if (manual) {
+      return LIGHT_THEME;
+    }
+    var hour = new Date().getHours();
+    if (hour >= 18 || hour < 6) {
+      return DARK_THEME;
+    }
+    return LIGHT_THEME;
   }
 
   function applyTheme(theme) {
@@ -42,8 +51,8 @@
   function toggleTheme() {
     var current = getCurrentTheme();
     var newTheme = current === DARK_THEME ? LIGHT_THEME : DARK_THEME;
-
     localStorage.setItem(THEME_KEY, newTheme);
+    localStorage.setItem(THEME_MANUAL_KEY, 'true');
     applyTheme(newTheme);
   }
 

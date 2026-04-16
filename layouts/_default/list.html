@@ -16,7 +16,7 @@
         <div class="post-card__meta">
           <time datetime='{{ .Date | time.Format "2006-01-02" }}'>{{ .Date | time.Format ":date_long" }}</time>
         </div>
-        <p class="post-card__summary">{{ .Summary }}</p>
+        <p class="post-card__summary">{{ .Summary | plainify }}</p>
         <a href="{{ .RelPermalink }}" class="post-card__read-more">Continue reading →</a>
       </article>
       {{ end }}

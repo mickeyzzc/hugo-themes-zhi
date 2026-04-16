@@ -56,6 +56,15 @@
   text-decoration: none;
   font-size: var(--text-sm);
   transition: color var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-social-link svg {
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
 }
 
 .footer-social-link:hover {

@@ -13,8 +13,13 @@ paginate = 10
     tabWidth = 4
 
 [outputs]
-  home = ["HTML", "RSS"]
+  home = ["HTML", "RSS", "SearchIndexes"]
   section = ["HTML", "RSS"]
+
+[outputFormats.SearchIndexes]
+  mediatype = "application/json"
+  baseName = "searchindexes"
+  isPlainText = true
 
 [params.features]
   codeHighlight = true

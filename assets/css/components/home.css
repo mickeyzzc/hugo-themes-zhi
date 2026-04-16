@@ -2,9 +2,10 @@
 
 /* Post list container */
 .post-list {
-  display: grid;
-  grid-template-columns: 1fr;
+display: grid;
+grid-template-columns: 1fr;
   gap: var(--spacing-xl);
+  min-width: 0;
 }
 
 @media (min-width: 768px) {
@@ -16,12 +17,13 @@
 
 /* Card base */
 .post-card {
-  background: var(--bg-surface);
-  border: none;
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-xl);
-  box-shadow: 0 1px 3px var(--shadow);
+background: var(--bg-surface);
+border: none;
+border-radius: var(--radius-lg);
+padding: var(--spacing-xl);
+box-shadow: 0 1px 3px var(--shadow);
   transition: transform var(--transition), box-shadow var(--transition);
+  min-width: 0;
 }
 
 .post-card:hover {
@@ -57,17 +59,22 @@
 
 /* Card summary */
 .post-card__summary {
-  color: var(--text-secondary);
-  margin-top: var(--spacing-md);
-  margin-bottom: 0;
-  font-size: var(--text-base);
-  line-height: var(--leading-body);
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+color: var(--text-secondary);
+margin-top: var(--spacing-md);
+margin-bottom: 0;
+font-size: var(--text-base);
+line-height: var(--leading-body);
+display: -webkit-box;
+-webkit-line-clamp: 3;
+-webkit-box-orient: vertical;
   overflow: hidden;
+  min-width: 0;
 }
-
+/* Prevent images from overflowing cards */
+.post-card img {
+  max-width: 100%;
+  height: auto;
+}
 /* Tags container */
 .post-card__tags {
   display: flex;

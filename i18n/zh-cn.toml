@@ -96,3 +96,15 @@
 
 [minRead]
   other = "分钟阅读"
+
+[goodMorning]
+  other = "早上好"
+
+[goodNoon]
+  other = "中午好"
+
+[goodAfternoon]
+  other = "下午好"
+
+[goodEvening]
+  other = "晚上好"

@@ -96,3 +96,15 @@
 
 [minRead]
   other = "min read"
+
+[goodMorning]
+  other = "Good morning"
+
+[goodNoon]
+  other = "Good noon"
+
+[goodAfternoon]
+  other = "Good afternoon"
+
+[goodEvening]
+  other = "Good evening"

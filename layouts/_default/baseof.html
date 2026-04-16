@@ -36,6 +36,8 @@
   {{ if default true .Site.Params.features.sidebar }}
   {{ $sidebarJS := resources.Get "js/sidebar.js" | minify | fingerprint }}
   <script src="{{ $sidebarJS.RelPermalink }}" defer></script>
+  {{ $greetingJS := resources.Get "js/greeting.js" | minify | fingerprint }}
+  <script src="{{ $greetingJS.RelPermalink }}" defer></script>
   {{ end }}
   {{ if default true .Site.Params.features.readingProgress }}
   {{ $progressJS := resources.Get "js/reading-progress.js" | minify | fingerprint }}

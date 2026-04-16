@@ -13,27 +13,17 @@
       return;
     }
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/searchindexes.xml', true);
-    xhr.responseType = 'document';
+    xhr.open('GET', '/searchindexes.json', true);
+    xhr.responseType = 'text';
     xhr.onload = function() {
       if (xhr.status !== 200) return;
-      var entries = xhr.responseXML.querySelectorAll('entry');
-      index = [];
-      entries.forEach(function(entry) {
-        var cats = [];
-        entry.querySelectorAll('category').forEach(function(c) { cats.push(c.textContent); });
-        var tags = [];
-        entry.querySelectorAll('tag').forEach(function(t) { tags.push(t.textContent); });
-        index.push({
-          title: entry.querySelector('title').textContent,
-          url: entry.querySelector('url').textContent,
-          categories: cats,
-          tags: tags,
-          content: entry.querySelector('content').textContent.replace(/^\s+|\s+$/g, '')
-        });
-      });
-      indexLoaded = true;
-      callback();
+      try {
+        index = JSON.parse(xhr.responseText);
+        indexLoaded = true;
+        callback();
+      } catch (e) {
+        return;
+      }
     };
     xhr.send();
   }

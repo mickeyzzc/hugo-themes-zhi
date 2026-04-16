@@ -1,0 +1,13 @@
+{{ $limit := .Site.Params.localSearch.limit | default 1000 }}
+{{ $entries := slice }}
+{{ range where .Site.RegularPages "Kind" "page" }}
+  {{ $content := "" }}
+  {{ if gt .WordCount $limit }}
+    {{ $content = .Plain | truncate $limit }}
+  {{ else }}
+    {{ $content = .Plain }}
+  {{ end }}
+  {{ $entry := dict "title" .Title "url" .RelPermalink "content" $content "categories" (or .Params.categories (slice)) "tags" (or .Params.tags (slice)) }}
+  {{ $entries = $entries | append $entry }}
+{{ end }}
+{{ $entries | jsonify }}
