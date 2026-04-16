@@ -5,6 +5,20 @@
 {{- if .Attributes -}}
   {{- $filename = .Attributes.Get "filename" | default (.Attributes.Get "title" | default "") -}}
 {{- end -}}
+
+{{- /* Mermaid: output raw code so main.js can detect and render it */ -}}
+{{- if eq $language "mermaid" -}}
+<div class="code-block-wrapper" data-lang="mermaid">
+  <div class="code-block-header">
+    <div class="code-block-meta">
+      <span class="code-language">mermaid</span>
+    </div>
+  </div>
+  <div class="code-block-body">
+    <pre class="chroma"><code class="language-mermaid">{{ $inner }}</code></pre>
+  </div>
+</div>
+{{- else -}}
 {{- $highlighted := highlight $inner $language (dict "lineNos" true) -}}
 <div class="code-block-wrapper" data-lang="{{ $language }}">
   <div class="code-block-header">
@@ -25,3 +39,4 @@
     {{- $highlighted | safeHTML -}}
   </div>
 </div>
+{{- end -}}

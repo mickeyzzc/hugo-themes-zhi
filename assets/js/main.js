@@ -15,7 +15,25 @@
     window.mermaid.initialize({
       startOnLoad: false,
       securityLevel: 'loose',
-      theme: isDark ? 'dark' : 'default'
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: isDark ? {
+        darkMode: true,
+        background: '#1e1e2e',
+        primaryColor: '#45475a',
+        primaryTextColor: '#cdd6f4',
+        primaryBorderColor: '#585b70',
+        lineColor: '#a6adc8',
+        secondaryColor: '#313244',
+        tertiaryColor: '#181825',
+        nodeTextColor: '#cdd6f4',
+        mainBkg: '#313244',
+        nodeBorder: '#585b70',
+        clusterBkg: '#181825',
+        clusterBorder: '#45475a',
+        titleColor: '#cdd6f4',
+        edgeLabelBackground: '#1e1e2e',
+        textColor: '#cdd6f4'
+      } : {}
     });
 
     document.querySelectorAll('code.language-mermaid').forEach(function(block) {
@@ -35,7 +53,9 @@
         setTimeout(function() {
           if (!window.mermaid) return;
           var dark = document.querySelector('[data-theme="dark"]');
-          window.mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: dark ? 'dark' : 'default' });
+          window.mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: dark ? 'dark' : 'default', themeVariables: dark ? {
+            darkMode: true, background: '#1e1e2e', primaryColor: '#45475a', primaryTextColor: '#cdd6f4', primaryBorderColor: '#585b70', lineColor: '#a6adc8', secondaryColor: '#313244', tertiaryColor: '#181825', nodeTextColor: '#cdd6f4', mainBkg: '#313244', nodeBorder: '#585b70', clusterBkg: '#181825', clusterBorder: '#45475a', titleColor: '#cdd6f4', edgeLabelBackground: '#1e1e2e', textColor: '#cdd6f4'
+          } : {} });
           window.mermaid.run();
         }, 100);
       });
