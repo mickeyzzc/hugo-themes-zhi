@@ -6,14 +6,14 @@
 
 ## 功能特性
 
-- **深色 / 浅色主题** — 系统偏好检测 + `localStorage` 持久化 → [文档](docs/zh-cn/theme-switch.md)
-- **语法高亮** — Hugo 内置 Chroma，支持复制按钮和语言标签 → [文档](docs/zh-cn/code-highlight.md)
-- **MathJax 3** — 检测到 `$...$` 或 `$$...$$` 时自动加载 → [文档](docs/zh-cn/mathjax.md)
-- **Mermaid 图表** — 检测到 ` ```mermaid ` 代码块时自动加载，自适应深色/浅色 → [文档](docs/zh-cn/mermaid.md)
-- **视频短代码** — 嵌入哔哩哔哩或 YouTube，基于时区自动切换，支持手动切换 → [文档](docs/zh-cn/video.md)
-- **图片灯箱** — 点击文章图片查看大图 → [文档](docs/zh-cn/lightbox.md)
+- **深色 / 浅色主题** — 系统偏好检测 + `localStorage` 持久化 → [文档](docs/zh-cn/features.md#主题切换)
+- **语法高亮** — Hugo 内置 Chroma，支持复制按钮和语言标签 → [文档](docs/zh-cn/content.md#代码高亮)
+- **MathJax 3** — 检测到 `$...$` 或 `$$...$$` 时自动加载 → [文档](docs/zh-cn/content.md#mathjax)
+- **Mermaid 图表** — 检测到 ` ```mermaid ` 代码块时自动加载，自适应深色/浅色 → [文档](docs/zh-cn/content.md#mermaid-图表)
+- **视频短代码** — 嵌入哔哩哔哩或 YouTube，基于时区自动切换，支持手动切换 → [文档](docs/zh-cn/content.md#视频嵌入)
+- **图片灯箱** — 点击文章图片查看大图 → [文档](docs/zh-cn/features.md#图片灯箱)
 - **响应式设计** — 移动优先，内容区最大宽度 `768px`
-- **网站分析** — 可配置端点，支持采样率 → [文档](docs/zh-cn/analytics.md)
+- **网站分析** — 可配置端点，支持采样率 → [文档](docs/zh-cn/configuration.md#网站分析)
 - **Hugo Pipes** — 所有 CSS/JS 通过 `resources.Get` → `minify` → `fingerprint` 处理，无需 webpack/vite
 
 ## 环境要求
@@ -73,32 +73,11 @@ theme = 'zhi'
 
 所有功能的完整双语文档：
 
-| 功能 | English | 中文 |
+| 分类 | English | 中文 |
 |------|---------|------|
-| 网站分析 | [docs](docs/en/analytics.md) | [文档](docs/zh-cn/analytics.md) |
-| 归档 | [docs](docs/en/archives.md) | [文档](docs/zh-cn/archives.md) |
-| 回到顶部 | [docs](docs/en/back-to-top.md) | [文档](docs/zh-cn/back-to-top.md) |
-| 代码高亮 | [docs](docs/en/code-highlight.md) | [文档](docs/zh-cn/code-highlight.md) |
-| 知识共享 | [docs](docs/en/creative-commons.md) | [文档](docs/zh-cn/creative-commons.md) |
-| 打赏 | [docs](docs/en/donation.md) | [文档](docs/zh-cn/donation.md) |
-| 页脚 | [docs](docs/en/footer.md) | [文档](docs/zh-cn/footer.md) |
-| 友链 | [docs](docs/en/friend-links.md) | [文档](docs/zh-cn/friend-links.md) |
-| 问候语 | [docs](docs/en/greeting.md) | [文档](docs/zh-cn/greeting.md) |
-| 灯箱 | [docs](docs/en/lightbox.md) | [文档](docs/zh-cn/lightbox.md) |
-| MathJax | [docs](docs/en/mathjax.md) | [文档](docs/zh-cn/mathjax.md) |
-| Mermaid | [docs](docs/en/mermaid.md) | [文档](docs/zh-cn/mermaid.md) |
-| 分页 | [docs](docs/en/pagination.md) | [文档](docs/zh-cn/pagination.md) |
-| 阅读进度 | [docs](docs/en/reading-progress.md) | [文档](docs/zh-cn/reading-progress.md) |
-| 搜索 | [docs](docs/en/search.md) | [文档](docs/zh-cn/search.md) |
-| SEO | [docs](docs/en/seo.md) | [文档](docs/zh-cn/seo.md) |
-| Note 短代码 | [docs](docs/en/shortcodes-note.md) | [文档](docs/zh-cn/shortcodes-note.md) |
-| Quote 短代码 | [docs](docs/en/shortcodes-quote.md) | [文档](docs/zh-cn/shortcodes-quote.md) |
-| 侧边栏 | [docs](docs/en/sidebar.md) | [文档](docs/zh-cn/sidebar.md) |
-| 标签云 | [docs](docs/en/tag-cloud.md) | [文档](docs/zh-cn/tag-cloud.md) |
-| 主题切换 | [docs](docs/en/theme-switch.md) | [文档](docs/zh-cn/theme-switch.md) |
-| 目录 | [docs](docs/en/toc.md) | [文档](docs/zh-cn/toc.md) |
-| 字体 | [docs](docs/en/typography.md) | [文档](docs/zh-cn/typography.md) |
-| 视频 | [docs](docs/en/video.md) | [文档](docs/zh-cn/video.md) |
+| 功能 | [docs](docs/en/features.md) | [文档](docs/zh-cn/features.md) |
+| 内容 | [docs](docs/en/content.md) | [文档](docs/zh-cn/content.md) |
+| 配置 | [docs](docs/en/configuration.md) | [文档](docs/zh-cn/configuration.md) |
 
 ## 用法
 

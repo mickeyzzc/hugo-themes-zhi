@@ -6,14 +6,14 @@ A minimal Hugo blog theme with dark/light mode, MathJax, Mermaid diagrams, Bilib
 
 ## Features
 
-- **Dark / Light Theme** — Toggle with system preference detection and \`localStorage\` persistence → [docs](docs/en/theme-switch.md)
-- **Syntax Highlighting** — Hugo's built-in Chroma with copy button and language label → [docs](docs/en/code-highlight.md)
-- **MathJax 3** — Auto-loaded when \`$...$\$ or \`$$...$$\$ detected in page content → [docs](docs/en/mathjax.md)
-- **Mermaid Diagrams** — Auto-loaded when \` ```mermaid \` code blocks exist; theme-aware (dark/light) → [docs](docs/en/mermaid.md)
-- **Video Shortcode** — Embed Bilibili or YouTube with automatic geo-switching (timezone-based) and manual toggle → [docs](docs/en/video.md)
-- **Image Lightbox** — Click any article image to view full-size overlay → [docs](docs/en/lightbox.md)
+- **Dark / Light Theme** — Toggle with system preference detection and \`localStorage\` persistence → [docs](docs/en/features.md#theme-switch)
+- **Syntax Highlighting** — Hugo's built-in Chroma with copy button and language label → [docs](docs/en/content.md#code-highlight)
+- **MathJax 3** — Auto-loaded when \`$...$\$ or \`$$...$$\$ detected in page content → [docs](docs/en/content.md#mathjax)
+- **Mermaid Diagrams** — Auto-loaded when \` ```mermaid \` code blocks exist; theme-aware (dark/light) → [docs](docs/en/content.md#mermaid)
+- **Video Shortcode** — Embed Bilibili or YouTube with automatic geo-switching (timezone-based) and manual toggle → [docs](docs/en/content.md#video)
+- **Image Lightbox** — Click any article image to view full-size overlay → [docs](docs/en/features.md#image-lightbox)
 - **Responsive Design** — Mobile-first, max-width `768px` content area
-- **Custom Analytics** — Configurable endpoint with sampling support → [docs](docs/en/analytics.md)
+- **Custom Analytics** — Configurable endpoint with sampling support → [docs](docs/en/configuration.md#analytics)
 - **Hugo Pipes** — All CSS/JS processed via `resources.Get` → `minify` → `fingerprint`, no webpack/vite
 
 ## Requirements
@@ -73,32 +73,11 @@ theme = 'zhi'
 
 Comprehensive bilingual documentation for all features:
 
-| Feature | English | 中文 |
-|---------|---------|------|
-| Analytics | [docs](docs/en/analytics.md) | [文档](docs/zh-cn/analytics.md) |
-| Archives | [docs](docs/en/archives.md) | [文档](docs/zh-cn/archives.md) |
-| Back to Top | [docs](docs/en/back-to-top.md) | [文档](docs/zh-cn/back-to-top.md) |
-| Code Highlight | [docs](docs/en/code-highlight.md) | [文档](docs/zh-cn/code-highlight.md) |
-| Creative Commons | [docs](docs/en/creative-commons.md) | [文档](docs/zh-cn/creative-commons.md) |
-| Donation | [docs](docs/en/donation.md) | [文档](docs/zh-cn/donation.md) |
-| Footer | [docs](docs/en/footer.md) | [文档](docs/zh-cn/footer.md) |
-| Friend Links | [docs](docs/en/friend-links.md) | [文档](docs/zh-cn/friend-links.md) |
-| Greeting | [docs](docs/en/greeting.md) | [文档](docs/zh-cn/greeting.md) |
-| Lightbox | [docs](docs/en/lightbox.md) | [文档](docs/zh-cn/lightbox.md) |
-| MathJax | [docs](docs/en/mathjax.md) | [文档](docs/zh-cn/mathjax.md) |
-| Mermaid | [docs](docs/en/mermaid.md) | [文档](docs/zh-cn/mermaid.md) |
-| Pagination | [docs](docs/en/pagination.md) | [文档](docs/zh-cn/pagination.md) |
-| Reading Progress | [docs](docs/en/reading-progress.md) | [文档](docs/zh-cn/reading-progress.md) |
-| Search | [docs](docs/en/search.md) | [文档](docs/zh-cn/search.md) |
-| SEO | [docs](docs/en/seo.md) | [文档](docs/zh-cn/seo.md) |
-| Shortcodes Note | [docs](docs/en/shortcodes-note.md) | [文档](docs/zh-cn/shortcodes-note.md) |
-| Shortcodes Quote | [docs](docs/en/shortcodes-quote.md) | [文档](docs/zh-cn/shortcodes-quote.md) |
-| Sidebar | [docs](docs/en/sidebar.md) | [文档](docs/zh-cn/sidebar.md) |
-| Tag Cloud | [docs](docs/en/tag-cloud.md) | [文档](docs/zh-cn/tag-cloud.md) |
-| Theme Switch | [docs](docs/en/theme-switch.md) | [文档](docs/zh-cn/theme-switch.md) |
-| TOC | [docs](docs/en/toc.md) | [文档](docs/zh-cn/toc.md) |
-| Typography | [docs](docs/en/typography.md) | [文档](docs/zh-cn/typography.md) |
-| Video | [docs](docs/en/video.md) | [文档](docs/zh-cn/video.md) |
+| Category | English | 中文 |
+|----------|---------|------|
+| Features | [docs](docs/en/features.md) | [文档](docs/zh-cn/features.md) |
+| Content | [docs](docs/en/content.md) | [文档](docs/zh-cn/content.md) |
+| Configuration | [docs](docs/en/configuration.md) | [文档](docs/zh-cn/configuration.md) |
 
 ## Usage
 
