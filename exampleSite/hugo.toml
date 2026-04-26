@@ -236,6 +236,8 @@ theme        = 'hugo-themes-zhi'
     siteId     = ""                 # Site identifier for analytics service
     sampleRate = 100                # Sampling rate percentage (1–100)
     busuanzi   = false              # Enable busuanzi page views (https://busuanzi.ibruce.info)
+    cloudflareToken   = ""                 # Cloudflare Web Analytics beacon token
+    clarityProjectId  = ""                 # Microsoft Clarity project ID
 
   # ==========================================================================
   # 14. Social Links (global fallback)
