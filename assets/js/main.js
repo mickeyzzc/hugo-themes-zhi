@@ -78,8 +78,12 @@
     var toggle = document.querySelector('#theme-toggle');
     if (toggle) {
       toggle.addEventListener('click', function() {
+        var containers = document.querySelectorAll('.mermaid');
+        if (!containers.length || !window.mermaid) return;
+
+        containers.forEach(function(c) { c.classList.add('re-rendering'); });
+
         setTimeout(function() {
-          if (!window.mermaid) return;
           var dark = document.querySelector('[data-theme="dark"]');
           window.mermaid.initialize({
             startOnLoad: false,
@@ -94,7 +98,8 @@
             }
           });
           window.mermaid.run();
-        }, 100);
+          containers.forEach(function(c) { c.classList.remove('re-rendering'); });
+        }, 200);
       });
     }
   }

@@ -13,5 +13,9 @@
 .mermaid svg {
   max-width: none;
   height: auto;
-  transition: color 300ms ease, fill 300ms ease;
+  transition: opacity 200ms ease;
+}
+
+.mermaid.re-rendering svg {
+  opacity: 0;
 }
