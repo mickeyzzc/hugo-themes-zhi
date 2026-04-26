@@ -7,18 +7,18 @@
       {{ end }}
     </header>
     {{ $p := .Paginate .Pages }}
-    <div class="post-list">
-      {{ range $p.Pages }}
-      <article class="post-card">
-        <h2 class="post-card__title">
-          <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-        </h2>
-        <div class="post-card__meta">
-          <time datetime='{{ .Date | time.Format "2006-01-02" }}'>{{ .Date | time.Format ":date_long" }}</time>
-        </div>
-        <p class="post-card__summary">{{ .Summary | plainify }}</p>
-        <a href="{{ .RelPermalink }}" class="post-card__read-more">Continue reading →</a>
-      </article>
+    <div class="timeline">
+      {{ range $p.Pages.GroupByDate "2006" }}
+      <h2 class="timeline__year">{{ .Key }}</h2>
+      {{ range .Pages.GroupByDate "01" }}
+      <h3 class="timeline__month">{{ .Key }}月</h3>
+      {{ range .Pages }}
+      <div class="timeline__item">
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format ":date_long" }}</time>
+      </div>
+      {{ end }}
+      {{ end }}
       {{ end }}
     </div>
     {{ partial "pagination.html" (dict "Paginator" $p) }}

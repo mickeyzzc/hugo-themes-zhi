@@ -7,7 +7,8 @@
       {{ end }}
     </header>
     <div class="taxonomy-terms">
-      {{ range .Pages }}
+      {{ $sorted := sort .Pages ".Pages" "desc" }}
+      {{ range $sorted }}
       <a href="{{ .RelPermalink }}" class="taxonomy-term">
         <span class="taxonomy-term__name">{{ .LinkTitle }}</span>
         <span class="taxonomy-term__count">{{ len .Pages }}</span>

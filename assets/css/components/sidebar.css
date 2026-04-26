@@ -115,6 +115,7 @@
     background: var(--bg);
     scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;
+    z-index: 10;
   }
 
   .sidebar::-webkit-scrollbar {

@@ -22,7 +22,8 @@
 @import "components/archives.css";
 @import "components/busuanzi.css";
 
-@import "components/animations.css";
+@import "components/tag-cloud.css";
+@import "components/timeline.css";
 
 body {
   color: var(--text);

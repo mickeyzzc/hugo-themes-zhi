@@ -59,6 +59,12 @@
       </nav>
     </div>
     {{ end }}
+
+    {{/* Tag Cloud */}}
+    {{ if default true .Site.Params.features.tagCloud }}
+    {{ partial "tag-cloud.html" . }}
+    {{ end }}
+
   </div>
 </aside>
 <div class="sidebar-overlay" id="sidebar-overlay"></div>

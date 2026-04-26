@@ -1,0 +1,42 @@
+{{ $limit := .Site.Params.sidebar.tagCloudCount | default 10 }}
+{{ if gt (len site.Taxonomies.tags) 0 }}
+<div class="tag-cloud">
+  <h3 class="tag-cloud__title">标签</h3>
+  <div class="tag-cloud__list">
+    {{ $tags := slice }}
+    {{ range $term, $weightedPages := site.Taxonomies.tags }}
+      {{ $tags = $tags | append (dict "term" $term "pages" $weightedPages "count" (len $weightedPages)) }}
+    {{ end }}
+    {{ $tags = sort $tags "count" "desc" }}
+    {{ $tags = first $limit $tags }}
+    {{ $total := len $tags }}
+    {{ range $i, $tag := $tags }}
+      {{ $sizeClass := "xs" }}
+      {{ if gt $total 0 }}
+        {{ $ratio := div (mul $i 100) $total }}
+        {{ if lt $ratio 25 }}{{ $sizeClass = "lg" }}
+        {{ else if lt $ratio 50 }}{{ $sizeClass = "md" }}
+        {{ else if lt $ratio 75 }}{{ $sizeClass = "sm" }}
+        {{ end }}
+      {{ end }}
+      {{ $url := (index site.Taxonomies.tags $tag.term).Page.RelPermalink }}
+      <a href="{{ $url }}" class="tag-cloud__item tag-size-{{ $sizeClass }}">
+        <span>{{ $tag.term }}</span>
+      </a>
+    {{ end }}
+  </div>
+</div>
+{{ end }}
+
+<script>
+(function(){
+  var list = document.querySelector('.tag-cloud__list');
+  if (!list) return;
+  var items = Array.from(list.children);
+  for (var i = items.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    list.appendChild(items[j]);
+    var tmp = items[i]; items[i] = items[j]; items[j] = tmp;
+  }
+})();
+</script>
