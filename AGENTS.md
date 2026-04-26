@@ -33,7 +33,7 @@ assets/
 │   ├── main.css        # Aggregator — @import "components/X.css"
 │   └── components/     # 24 per-feature CSS modules (theme.css has CSS vars)
 └── js/                 # 12 individual scripts, no bundler
-    ├── main.js         # Orchestrator: MathJax + Mermaid lazy-load
+    ├── main.js         # Orchestrator: MathJax + Mermaid lazy-load (themeVars: lines 10-51, initMermaid: lines 53-102)
     ├── theme-toggle.js, code-copy.js, lightbox.js
     ├── video-geo-switch.js, sidebar.js, search.js, toc.js
     ├── reading-progress.js, back-to-top.js, donation.js, analytics.js
@@ -47,7 +47,7 @@ exampleSite/            # Self-contained demo site with full config schema
 - **Asset pipeline**: CSS via `css.Build` (source maps in dev, fingerprint in prod). JS via `resources.Get | minify | fingerprint`. No external build tools.
 - **Feature flags**: `site.Params.features.*` toggles which JS/CSS/partial components load. The `features.html` partial serializes these as JSON into `<body data-features='...'>`; JS reads this to conditionally initialize (MathJax, Mermaid, etc.).
 - **CSS theme system**: CSS variables in `components/theme.css` — `:root` (light) and `[data-theme="dark"]` overrides. FOUC prevention via inline `<script>` in `head.html`.
-- **Conditional loading**: MathJax only if `$...$`/`$$...$$` detected. Mermaid only if `code.language-mermaid` elements exist.
+- **Conditional loading**: MathJax only if `$...$`/`$$...$$` detected. Mermaid only if `code.language-mermaid` elements exist (uses `base` theme + custom themeVariables for dark/light).
 - **CSS layout**: body max-width `1200px`, sidebar via `params.sidebar`.
 
 ## Feature Flags
@@ -59,7 +59,7 @@ Controlled via `hugo.toml` → `[params.features]`. All default to `true` except
 | `codeHighlight` | Hugo Chroma syntax highlighting |
 | `themeSwitch` | Dark/light toggle button |
 | `mathJax` | MathJax 3 lazy-load |
-| `mermaid` | Mermaid diagram lazy-load |
+| `mermaid` | Mermaid diagram lazy-load (uses `base` theme + custom themeVariables for dark/light, CSS only for layout)
 | `lightbox` | Click-to-zoom images |
 | `search` | Local search (XML index + search.js) |
 | `sidebar` | Sidebar with avatar + social links |

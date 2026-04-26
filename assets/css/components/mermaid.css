@@ -1,73 +1,17 @@
-/* Mermaid diagram styles */
-
 .mermaid {
   display: block;
   margin: 1.5em 0;
   padding: 1.5em;
   background: var(--code-bg);
-  border-radius: 8px;
+  border-radius: var(--radius-lg, 12px);
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   text-align: center;
+  max-width: calc(100vw - 3rem);
 }
 
-/* Allow diagrams to render at natural size, scrollable if wider than container */
 .mermaid svg {
   max-width: none;
   height: auto;
-}
-
-/* Scrollable container for wide diagrams */
-.mermaid {
-  max-width: calc(100vw - 3rem);
-  overflow-x: auto;
-}
-
-/* Dark mode — override Mermaid's rendered colors for contrast */
-[data-theme="dark"] .mermaid {
-  background: #1e1e2e;
-}
-
-[data-theme="dark"] .mermaid svg {
-  filter: none;
-}
-
-/* Ensure text inside Mermaid nodes is readable in dark mode */
-[data-theme="dark"] .mermaid .nodeLabel,
-[data-theme="dark"] .mermaid .edgeLabel {
-  color: #cdd6f4 !important;
-}
-
-[data-theme="dark"] .mermaid .node rect,
-[data-theme="dark"] .mermaid .node circle,
-[data-theme="dark"] .mermaid .node polygon {
-  fill: #313244 !important;
-  stroke: #585b70 !important;
-}
-
-[data-theme="dark"] .mermaid .cluster rect {
-  fill: #181825 !important;
-  stroke: #45475a !important;
-}
-
-[data-theme="dark"] .mermaid .edgePath .path {
-  stroke: #a6adc8 !important;
-}
-
-[data-theme="dark"] .mermaid .edgeLabel {
-  background: #1e1e2e !important;
-  color: #a6adc8 !important;
-}
-
-[data-theme="dark"] .mermaid .label {
-  color: #cdd6f4 !important;
-}
-
-[data-theme="dark"] .mermaid span {
-  color: #cdd6f4 !important;
-}
-
-[data-theme="dark"] .mermaid text {
-  color: #cdd6f4 !important;
-  fill: #cdd6f4 !important;
+  transition: color 300ms ease, fill 300ms ease;
 }
