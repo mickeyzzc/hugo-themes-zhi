@@ -37,7 +37,7 @@
 
 ## Mermaid 图表
 
-Mermaid 图表功能，自动加载并渲染 ```mermaid 代码块，支持主题自适应。
+Mermaid v11+ 图表渲染，支持扩展节点形状、样式和布局。自动加载并渲染 ```mermaid 代码块，支持主题自适应（深色/浅色）。
 
 ### 配置
 
@@ -46,20 +46,48 @@ Mermaid 图表功能，自动加载并渲染 ```mermaid 代码块，支持主题
   mermaid = true          # 启用 Mermaid 图表
 ```
 
-### 用法
+### 支持的图表类型
 
-使用带有 `mermaid` 语言的围栏代码块：
+- 流程图（Flowchart，支持扩展节点形状）
+- 时序图（Sequence Diagram）
+- 类图（Class Diagram）
+- 状态图（State Diagram）
+- 甘特图（Gantt Chart）
+- 饼图（Pie Chart）
+- 架构图（Architecture Diagram，v11.1+）
+- 看板图（Kanban Diagram，v11.0+）
+- 思维导图（Mindmap）
+- 时间线（Timeline）
+- 桑基图（Sankey Diagram）
+- XY 图表（XYChart）
 
-~~~markdown
+### v11+ 扩展节点形状
+
+使用 `@{ shape: name, label: "文本" }` 语法：
+
 ```mermaid
-graph TD
-    A[Start] --> B{Decision}
-    B -->|Yes| C[Result]
-    B -->|No| D[End]
+flowchart LR
+    A@{ shape: doc, label: "文档" }
+    B@{ shape: cyl, label: "数据库" }
+    C@{ shape: diam, label: "决策" }
+    D@{ shape: hex, label: "处理" }
+    A --> B --> C --> D
 ```
-~~~
 
-系统会自动检测页面中的 ```mermaid 块并加载 Mermaid 库。
+### 使用 classDef 样式
+
+```mermaid
+flowchart LR
+    A[节点A] --> B[节点B]
+    classDef highlight fill:#e8f5e9,stroke:#4caf50
+    class B highlight
+```
+
+### 主题适配
+
+- 自动适配深色/浅色主题
+- 使用自定义 themeVariables
+- 主题切换时自动重绘图表
 
 ---
 

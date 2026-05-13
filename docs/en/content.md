@@ -48,11 +48,11 @@ $$
 
 ## Mermaid
 
-Mermaid diagram rendering. Auto-loaded when ```mermaid code blocks exist; theme-aware (dark/light).
+Mermaid v11+ diagram rendering with expanded shapes, styling, and layout support. Auto-loaded when ```mermaid code blocks exist; theme-aware (dark/light).
 
 ### Overview
 
-This feature automatically loads Mermaid when it detects Mermaid diagram code blocks in your content. It supports various diagram types including flowcharts, sequence diagrams, class diagrams, and state diagrams, with automatic theme adaptation (light/dark).
+This feature automatically loads Mermaid v11+ when it detects Mermaid diagram code blocks in your content. It uses the async/await API (`mermaid.run()`) for reliable rendering and supports all v11+ features including expanded node shapes, `classDef` styling, and architecture diagrams.
 
 ### Configuration
 
@@ -61,12 +61,49 @@ This feature automatically loads Mermaid when it detects Mermaid diagram code bl
   mermaid = true  # Default: true
 ```
 
-### Usage
+### Supported Diagram Types
 
-This feature requires no special markup in content. It automatically:
-- Loads Mermaid when ```mermaid code blocks are detected
-- Supports flowchart, sequence diagram, class diagram, state diagram, etc.
-- Adapts to current theme (light/dark) via CSS variables
+- Flowchart (with expanded node shapes)
+- Sequence Diagram
+- Class Diagram
+- State Diagram
+- Gantt Chart
+- Pie Chart
+- Architecture Diagram (v11.1+)
+- Kanban Diagram (v11.0+)
+- Mindmap
+- Timeline
+- Sankey Diagram
+- XYChart
+- Block Diagram
+
+### v11+ Enhanced Node Shapes
+
+Use the `@{ shape: name, label: "text" }` syntax:
+
+```mermaid
+flowchart LR
+    A@{ shape: doc, label: "Document" }
+    B@{ shape: cyl, label: "Database" }
+    C@{ shape: diam, label: "Decision" }
+    D@{ shape: hex, label: "Process" }
+    A --> B --> C --> D
+```
+
+### Styling with classDef
+
+```mermaid
+flowchart LR
+    A[Node A] --> B[Node B]
+    classDef highlight fill:#e8f5e9,stroke:#4caf50
+    class B highlight
+```
+
+### Theme Adaptation
+
+- Automatically adapts to light/dark theme
+- Uses custom `themeVariables` for both modes
+- Re-renders diagrams on theme toggle
 
 ```mermaid
 graph TD

@@ -9,7 +9,7 @@
 - **深色 / 浅色主题** — 系统偏好检测 + `localStorage` 持久化 → [文档](docs/zh-cn/features.md#主题切换)
 - **语法高亮** — Hugo 内置 Chroma，支持复制按钮和语言标签 → [文档](docs/zh-cn/content.md#代码高亮)
 - **MathJax 3** — 检测到 `$...$` 或 `$$...$$` 时自动加载 → [文档](docs/zh-cn/content.md#mathjax)
-- **Mermaid 图表** — 检测到 ` ```mermaid ` 代码块时自动加载，自适应深色/浅色 → [文档](docs/zh-cn/content.md#mermaid-图表)
+- **Mermaid v11+ 图表** — 检测到 ` ```mermaid ` 代码块时自动加载；支持扩展节点形状（`@{ shape: ... }`）、`classDef` 样式、ELK 布局、架构/看板图；自适应深色/浅色 → [文档](docs/zh-cn/content.md#mermaid-图表)
 - **视频短代码** — 嵌入哔哩哔哩或 YouTube，基于时区自动切换，支持手动切换 → [文档](docs/zh-cn/content.md#视频嵌入)
 - **图片灯箱** — 点击文章图片查看大图 → [文档](docs/zh-cn/features.md#图片灯箱)
 - **响应式设计** — 移动优先，内容区最大宽度 `768px`
@@ -91,18 +91,25 @@ theme = 'zhi'
 
 嵌入哔哩哔哩和/或 YouTube 视频。当同时提供两个 ID 时，播放器根据时区自动选择（中国 → 哔哩哔哩，其他 → 配置默认值）。用户可手动切换平台。
 
-### Mermaid 图表
+### Mermaid 图表（v11+）
 
-使用 `mermaid` 语言的围栏代码块：
+使用 `mermaid` 语言的围栏代码块。支持所有 Mermaid v11+ 功能，包括扩展节点形状和 `classDef` 样式：
 
 ~~~markdown
 ```mermaid
 graph TD
-    A[开始] --> B{判断}
-    B -->|是| C[结果]
-    B -->|否| D[结束]
+    A@{ shape: doc, label: "文档" } --> B@{ shape: diam, label: "判断" }
+    B -->|是| C@{ shape: hex, label: "处理" }
+    B -->|否| D@{ shape: cyl, label: "数据库" }
+
+    classDef primary fill:#e1f5fe,stroke:#0288d1
+    classDef warn fill:#fff3e0,stroke:#ef6c00
+    class A,C primary
+    class B,D warn
 ```
 ~~~
+
+支持的图表类型：`flowchart`、`sequence`、`class`、`state`、`ER`、`gantt`、`pie`、`mindmap`、`timeline`、`gitgraph`、`architecture`（v11.1+）、`kanban`（v11.0+）等。
 
 ### 数学公式 / LaTeX
 

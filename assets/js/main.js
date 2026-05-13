@@ -50,12 +50,12 @@
 
   var mermaidDefs = [];
 
-  function initMermaid() {
+  async function initMermaid() {
     var hasMermaidCode = document.querySelector('code.language-mermaid, pre.mermaid');
     if (!hasMermaidCode || !window.mermaid) return;
 
     var isDark = document.querySelector('[data-theme="dark"]');
-    window.mermaid.initialize({
+    await window.mermaid.initialize({
       startOnLoad: false,
       securityLevel: 'loose',
       theme: 'base',
@@ -73,7 +73,7 @@
       else { block.replaceWith(pre); }
     });
 
-    window.mermaid.run();
+    await window.mermaid.run();
 
     var toggle = document.querySelector('#theme-toggle');
     if (toggle) {
@@ -83,9 +83,9 @@
 
         containers.forEach(function(c) { c.classList.add('re-rendering'); });
 
-        setTimeout(function() {
+        setTimeout(async function() {
           var dark = document.querySelector('[data-theme="dark"]');
-          window.mermaid.initialize({
+          await window.mermaid.initialize({
             startOnLoad: false,
             securityLevel: 'loose',
             theme: 'base',
@@ -97,7 +97,7 @@
               container.innerHTML = mermaidDefs[i];
             }
           });
-          window.mermaid.run();
+          await window.mermaid.run();
           containers.forEach(function(c) { c.classList.remove('re-rendering'); });
         }, 200);
       });

@@ -59,7 +59,7 @@ Controlled via `hugo.toml` → `[params.features]`. All default to `true` except
 | `codeHighlight` | Hugo Chroma syntax highlighting |
 | `themeSwitch` | Dark/light toggle button |
 | `mathJax` | MathJax 3 lazy-load |
-| `mermaid` | Mermaid diagram lazy-load (uses `base` theme + custom themeVariables for dark/light, CSS only for layout)
+| `mermaid` | Mermaid v11+ diagram lazy-load with async/await API. Supports expanded node shapes (`@{ shape: ... }`), classDef styling, ELK layout, icons, architecture/kanban diagrams. Theme-aware (dark/light) with custom themeVariables |
 | `lightbox` | Click-to-zoom images |
 | `search` | Local search (XML index + search.js) |
 | `sidebar` | Sidebar with avatar + social links |
@@ -102,5 +102,4 @@ Playwright E2E tests in `tests/`. **Caveat**: `video.spec.ts` has a hardcoded Ma
 - **`hugo.toml` is a site config, not a theme config**: It has `baseURL`, menus, and content settings. When used as a theme module, the user's site config overrides everything. Do not modify `baseURL`/`title`/menus as theme defaults.
 - **`exampleSite/` has its own `hugo.toml`**: That's the comprehensive reference config (282 lines). The root `hugo.toml` is a simpler working config.
 - **No linter/formatter configured**: No ESLint, Stylelint, Prettier, or EditorConfig.
-- **No CI/CD pipeline**.
-- **No `theme.toml`**: This theme lacks standard Hugo theme metadata.
+- **No CI/CD pipeline**: See `.github/workflows/release.yml` for the release workflow.

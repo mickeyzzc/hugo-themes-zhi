@@ -9,7 +9,7 @@ A minimal Hugo blog theme with dark/light mode, MathJax, Mermaid diagrams, Bilib
 - **Dark / Light Theme** — Toggle with system preference detection and \`localStorage\` persistence → [docs](docs/en/features.md#theme-switch)
 - **Syntax Highlighting** — Hugo's built-in Chroma with copy button and language label → [docs](docs/en/content.md#code-highlight)
 - **MathJax 3** — Auto-loaded when \`$...$\$ or \`$$...$$\$ detected in page content → [docs](docs/en/content.md#mathjax)
-- **Mermaid Diagrams** — Auto-loaded when \` ```mermaid \` code blocks exist; theme-aware (dark/light) → [docs](docs/en/content.md#mermaid)
+- **Mermaid v11+ Diagrams** — Auto-loaded when ` ```mermaid ` code blocks exist; supports expanded node shapes (`@{ shape: ... }`), `classDef` styling, ELK layout, architecture/kanban diagrams; theme-aware (dark/light) → [docs](docs/en/content.md#mermaid)
 - **Video Shortcode** — Embed Bilibili or YouTube with automatic geo-switching (timezone-based) and manual toggle → [docs](docs/en/content.md#video)
 - **Image Lightbox** — Click any article image to view full-size overlay → [docs](docs/en/features.md#image-lightbox)
 - **Responsive Design** — Mobile-first, max-width `768px` content area
@@ -88,18 +88,25 @@ Comprehensive bilingual documentation for all features:
 
 Embed Bilibili and/or YouTube videos. When both IDs are provided, the player auto-selects based on timezone (China → Bilibili, else → config default). Users can manually switch platforms.
 
-### Mermaid Diagrams
+### Mermaid Diagrams (v11+)
 
-Use a fenced code block with the `mermaid` language:
+Use a fenced code block with the `mermaid` language. Supports all Mermaid v11+ features including expanded node shapes and `classDef` styling:
 
 ~~~markdown
 ```mermaid
 graph TD
-    A[Start] --> B{Decision}
-    B -->|Yes| C[Result]
-    B -->|No| D[End]
+    A@{ shape: doc, label: "Document" } --> B@{ shape: diam, label: "Decision" }
+    B -->|Yes| C@{ shape: hex, label: "Process" }
+    B -->|No| D@{ shape: cyl, label: "Database" }
+
+    classDef primary fill:#e1f5fe,stroke:#0288d1
+    classDef warn fill:#fff3e0,stroke:#ef6c00
+    class A,C primary
+    class B,D warn
 ```
 ~~~
+
+Supported diagram types: `flowchart`, `sequence`, `class`, `state`, `ER`, `gantt`, `pie`, `mindmap`, `timeline`, `gitgraph`, `architecture` (v11.1+), `kanban` (v11.0+), and more.
 
 ### Math / LaTeX
 
