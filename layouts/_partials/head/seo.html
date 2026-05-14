@@ -8,7 +8,7 @@
 <meta property="og:image:type" content="image/jpeg/png/svg/jpg" />
 <meta property="og:url" content="{{ .RelPermalink }}" />
 <meta property="og:site_name" content="{{ .Site.Title }}" />
-<meta property="og:locale" content="{{ .Site.LanguageCode }}" />
+<meta property="og:locale" content="{{ or .Site.Language.Locale .Site.LanguageCode }}" />
 {{ if .IsPage }}
 <meta property="article:author" content="{{ .Params.author | default .Site.Params.author }}" />
 <meta property="article:published_time" content="{{ .Date }}" />
