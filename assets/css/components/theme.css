@@ -29,6 +29,28 @@
   --code-linenumber-color: #9e9e9e;
   --code-linenumber-border: #e0dae8;
   --code-highlight-bg: rgba(124, 58, 237, 0.06);
+  --chroma-keyword: #cf222e;
+  --chroma-name-generic: #1f2328;
+  --chroma-constant-operator: #0550ae;
+  --chroma-name-builtin-entity: #6639ba;
+  --chroma-string: #0a3069;
+  --chroma-string-double: #0b6f8a;
+  --chroma-string-symbol: #032f62;
+  --chroma-number-integer: #b56205;
+  --chroma-comment: #57606a;
+  --chroma-variable: #953800;
+  --chroma-error-fg: #f6f8fa;
+  --chroma-error-bg: #82071e;
+  --chroma-deleted-fg: #82071e;
+  --chroma-deleted-bg: #ffebe9;
+  --chroma-inserted-fg: #116329;
+  --chroma-inserted-bg: #dafbe1;
+  --chroma-whitespace: #fff;
+  --chroma-name-label: #900;
+  --chroma-linenumber: #7f7f7f;
+  --chroma-highlight-bg: #dedede;
+  --chroma-namespace: #24292e;
+  --chroma-name-builtin-pseudo: #6a737d;
   
   /* Typography - System fonts only */
   --font-heading: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -79,6 +101,38 @@
   --accent: #A78BFA;
   --border: #313244;
   
+  --chroma-keyword: #cba6f7;
+  --chroma-keyword-namespace: #f38ba8;
+  --chroma-name-generic: #cdd6f4;
+  --chroma-name-attribute: #89dceb;
+  --chroma-name-class: #f9e2af;
+  --chroma-constant-operator: #89dceb;
+  --chroma-constant: #fab387;
+  --chroma-name-decorator: #89b4fa;
+  --chroma-name-builtin-entity: #94e2d5;
+  --chroma-name-function: #89b4fa;
+  --chroma-string: #a6e3a1;
+  --chroma-string-double: #a6e3a1;
+  --chroma-string-symbol: #a6e3a1;
+  --chroma-number-integer: #fab387;
+  --chroma-comment: #6c7086;
+  --chroma-variable: #f5c2e7;
+  --chroma-error-fg: #f38ba8;
+  --chroma-error-bg: #1e1e2e;
+  --chroma-deleted-fg: #f38ba8;
+  --chroma-deleted-bg: transparent;
+  --chroma-inserted-fg: #a6e3a1;
+  --chroma-inserted-bg: transparent;
+  --chroma-whitespace: #cdd6f4;
+  --chroma-name-label: #f9e2af;
+  --chroma-linenumber: #585b70;
+  --chroma-highlight-bg: rgba(49, 50, 68, 0.5);
+  --chroma-namespace: #cdd6f4;
+  --chroma-name-other: #a6e3a1;
+  --chroma-literal-property: #a6e3a1;
+  --chroma-literal: #fab387;
+  --chroma-operator: #89dceb;
+  --chroma-name-builtin-pseudo: #6c7086;
   /* Extended colors */
   --code-bg: #1e1e2e;
   --code-text: #cdd6f4;

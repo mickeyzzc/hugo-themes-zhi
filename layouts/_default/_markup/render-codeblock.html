@@ -2,8 +2,18 @@
 {{- $language := .Type -}}
 {{- $inner := .Inner -}}
 {{- $filename := "" -}}
+{{- $lineNos := true -}}
+{{- $hlLines := "" -}}
 {{- if .Attributes -}}
   {{- $filename = .Attributes.Get "filename" | default (.Attributes.Get "title" | default "") -}}
+  {{- with .Attributes.Get "linenos" -}}
+    {{- if eq (lower .) "false" -}}
+      {{- $lineNos = false -}}
+    {{- end -}}
+  {{- end -}}
+  {{- with .Attributes.Get "hl_lines" -}}
+    {{- $hlLines = . -}}
+  {{- end -}}
 {{- end -}}
 
 {{- /* Mermaid: output raw code so main.js can detect and render it */ -}}
@@ -19,7 +29,7 @@
   </div>
 </div>
 {{- else -}}
-{{- $highlighted := highlight $inner $language (dict "lineNos" true) -}}
+{{- $highlighted := highlight $inner $language (dict "lineNos" $lineNos "hl_lines" $hlLines) -}}
 <div class="code-block-wrapper" data-lang="{{ $language }}">
   <div class="code-block-header">
     <div class="code-block-meta">
@@ -30,10 +40,12 @@
         <span class="code-language">{{ . }}</span>
       {{- end -}}
     </div>
+    {{ if default true site.Params.features.codeHighlight }}
     <button class="copy-button" aria-label="Copy code">
       <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
       <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
     </button>
+    {{ end }}
   </div>
   <div class="code-block-body">
     {{- $highlighted | safeHTML -}}

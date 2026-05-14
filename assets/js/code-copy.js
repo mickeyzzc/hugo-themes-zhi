@@ -3,10 +3,19 @@
 
   document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.copy-button').forEach(function(button) {
+      // Create tooltip element
+      var tooltip = document.createElement('span');
+      tooltip.className = 'copy-tooltip';
+      tooltip.textContent = 'Copy';
+      button.appendChild(tooltip);
+
       button.addEventListener('click', function() {
         const code = this.getAttribute('data-code');
         if (!code) {
-          const codeBlock = this.closest('.code-block-wrapper').querySelector('code');
+          var wrapper = this.closest('.code-block-wrapper');
+          var codeBlock = wrapper.querySelector('.lntd:last-child pre code')
+            || wrapper.querySelector('.code-block-body pre code')
+            || wrapper.querySelector('code');
           if (codeBlock) {
             const textToCopy = codeBlock.textContent || codeBlock.innerText;
             copyToClipboard(textToCopy, this);
@@ -49,9 +58,12 @@
 
     function showCopiedFeedback(button) {
       button.classList.add('copied');
+      var tooltip = button.querySelector('.copy-tooltip');
+      if (tooltip) tooltip.textContent = 'Copied!';
 
       setTimeout(function() {
         button.classList.remove('copied');
+        if (tooltip) tooltip.textContent = 'Copy';
       }, 2000);
     }
   });

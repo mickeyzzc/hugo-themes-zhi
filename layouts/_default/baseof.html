@@ -24,12 +24,14 @@
   <script src="{{ $analyticsJS.RelPermalink }}" defer></script>
   {{ end }}
   {{ $themeToggle := resources.Get "js/theme-toggle.js" | minify | fingerprint }}
-  {{ $codeCopy := resources.Get "js/code-copy.js" | minify | fingerprint }}
   {{ $lightbox := resources.Get "js/lightbox.js" | minify | fingerprint }}
   {{ $videoSwitch := resources.Get "js/video-geo-switch.js" | minify | fingerprint }}
   {{ $main := resources.Get "js/main.js" | minify | fingerprint }}
   <script src="{{ $themeToggle.RelPermalink }}" defer></script>
+  {{ if default true .Site.Params.features.codeHighlight }}
+  {{ $codeCopy := resources.Get "js/code-copy.js" | minify | fingerprint }}
   <script src="{{ $codeCopy.RelPermalink }}" defer></script>
+  {{ end }}
   <script src="{{ $lightbox.RelPermalink }}" defer></script>
   <script src="{{ $videoSwitch.RelPermalink }}" defer></script>
   <script src="{{ $main.RelPermalink }}" defer></script>
