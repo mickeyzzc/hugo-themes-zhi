@@ -65,40 +65,74 @@
 
     function luminance(r, g, b) { return 0.299 * r + 0.587 * g + 0.114 * b; }
 
-    // Darken a light color for dark mode: reduce brightness, boost saturation slightly
-    function darkenForDarkMode(r, g, b) {
-      var factor = 0.25;
+    // Convert RGB to HSL
+    function rgbToHsl(r, g, b) {
+      r /= 255; g /= 255; b /= 255;
+      var max = Math.max(r, g, b), min = Math.min(r, g, b);
+      var h, s, l = (max + min) / 2;
+      if (max === min) { h = s = 0; }
+      else {
+        var d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+        else if (max === g) h = ((b - r) / d + 2) / 6;
+        else h = ((r - g) / d + 4) / 6;
+      }
+      return { h: h * 360, s: s, l: l };
+    }
+
+    // Convert HSL to RGB
+    function hslToRgb(h, s, l) {
+      h /= 360;
+      if (s === 0) { var v = Math.round(l * 255); return { r: v, g: v, b: v }; }
+      function hue2rgb(p, q, t) {
+        if (t < 0) t += 1; if (t > 1) t -= 1;
+        if (t < 1/6) return p + (q - p) * 6 * t;
+        if (t < 1/2) return q;
+        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+        return p;
+      }
+      var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      var p = 2 * l - q;
       return {
-        r: Math.round(r * factor),
-        g: Math.round(g * factor),
-        b: Math.round(b * factor)
+        r: Math.round(hue2rgb(p, q, h + 1/3) * 255),
+        g: Math.round(hue2rgb(p, q, h) * 255),
+        b: Math.round(hue2rgb(p, q, h - 1/3) * 255)
       };
+    }
+
+    // Darken a light color for dark mode: preserve hue, boost saturation, lower lightness
+    function darkenForDarkMode(r, g, b) {
+      var hsl = rgbToHsl(r, g, b);
+      // Keep the hue, boost saturation to at least 0.5, clamp lightness to 0.16-0.22
+      var newS = Math.max(hsl.s * 1.4, 0.5);
+      if (newS > 1) newS = 1;
+      var newL = Math.min(hsl.l, 0.20);
+      if (newL > 0.22) newL = 0.22;
+      if (newL < 0.12) newL = 0.12;
+      return hslToRgb(hsl.h, newS, newL);
     }
 
     document.querySelectorAll('.mermaid svg .node').forEach(function(node) {
       var shapes = node.querySelectorAll('rect, path, polygon');
       shapes.forEach(function(shape) {
-        var fill = shape.getAttribute('fill');
-        if (!fill) {
-          var cs = window.getComputedStyle(shape);
-          fill = cs.fill || cs.backgroundColor;
-        }
-        var c = parseColor(fill);
+        // Always use computedStyle — Mermaid v11 classDef sets fill via style="... !important"
+        // and inline CSS rules, both of which override setAttribute('fill', ...)
+        var computedFill = window.getComputedStyle(shape).fill;
+        var c = parseColor(computedFill);
         if (!c || luminance(c.r, c.g, c.b) <= 128) return;
 
-        // Light fill detected — darken it
+        // Light fill detected — darken it with !important to override Mermaid's !important
         var dark = darkenForDarkMode(c.r, c.g, c.b);
         var darkFill = 'rgb(' + dark.r + ',' + dark.g + ',' + dark.b + ')';
-        shape.setAttribute('fill', darkFill);
+        shape.style.setProperty('fill', darkFill, 'important');
 
         // Also darken the stroke if it's light
-        var stroke = shape.getAttribute('stroke');
-        if (stroke) {
-          var sc = parseColor(stroke);
-          if (sc && luminance(sc.r, sc.g, sc.b) > 128) {
-            var ds = darkenForDarkMode(sc.r, sc.g, sc.b);
-            shape.setAttribute('stroke', 'rgb(' + ds.r + ',' + ds.g + ',' + ds.b + ')');
-          }
+        var computedStroke = window.getComputedStyle(shape).stroke;
+        var sc = parseColor(computedStroke);
+        if (sc && luminance(sc.r, sc.g, sc.b) > 128) {
+          var ds = darkenForDarkMode(sc.r, sc.g, sc.b);
+          shape.style.setProperty('stroke', 'rgb(' + ds.r + ',' + ds.g + ',' + ds.b + ')', 'important');
         }
       });
     });
