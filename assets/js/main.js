@@ -65,9 +65,18 @@
 
     function luminance(r, g, b) { return 0.299 * r + 0.587 * g + 0.114 * b; }
 
+    // Darken a light color for dark mode: reduce brightness, boost saturation slightly
+    function darkenForDarkMode(r, g, b) {
+      var factor = 0.25;
+      return {
+        r: Math.round(r * factor),
+        g: Math.round(g * factor),
+        b: Math.round(b * factor)
+      };
+    }
+
     document.querySelectorAll('.mermaid svg .node').forEach(function(node) {
       var shapes = node.querySelectorAll('rect, path, polygon');
-      var hasLightBg = false;
       shapes.forEach(function(shape) {
         var fill = shape.getAttribute('fill');
         if (!fill) {
@@ -75,17 +84,23 @@
           fill = cs.fill || cs.backgroundColor;
         }
         var c = parseColor(fill);
-        if (c && luminance(c.r, c.g, c.b) > 128) hasLightBg = true;
-      });
+        if (!c || luminance(c.r, c.g, c.b) <= 128) return;
 
-      if (hasLightBg) {
-        node.querySelectorAll('text').forEach(function(t) {
-          t.style.fill = '#1A1A2E';
-        });
-        node.querySelectorAll('span.nodeLabel').forEach(function(s) {
-          s.style.color = '#1A1A2E';
-        });
-      }
+        // Light fill detected — darken it
+        var dark = darkenForDarkMode(c.r, c.g, c.b);
+        var darkFill = 'rgb(' + dark.r + ',' + dark.g + ',' + dark.b + ')';
+        shape.setAttribute('fill', darkFill);
+
+        // Also darken the stroke if it's light
+        var stroke = shape.getAttribute('stroke');
+        if (stroke) {
+          var sc = parseColor(stroke);
+          if (sc && luminance(sc.r, sc.g, sc.b) > 128) {
+            var ds = darkenForDarkMode(sc.r, sc.g, sc.b);
+            shape.setAttribute('stroke', 'rgb(' + ds.r + ',' + ds.g + ',' + ds.b + ')');
+          }
+        }
+      });
     });
   }
 
