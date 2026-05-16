@@ -166,34 +166,36 @@
 
     var toggle = document.querySelector('#theme-toggle');
     if (toggle) {
-      toggle.addEventListener('click', function() {
+      toggle.addEventListener('click', async function() {
         var containers = document.querySelectorAll('.mermaid');
         if (!containers.length || !window.mermaid) return;
 
         containers.forEach(function(c) { c.classList.add('re-rendering'); });
 
-        setTimeout(async function() {
-          var dark = document.querySelector('[data-theme="dark"]');
-          await window.mermaid.initialize({
-            startOnLoad: false,
-            securityLevel: 'loose',
-            theme: 'base',
-            themeVariables: dark ? darkThemeVars : lightThemeVars
-          });
-          document.querySelectorAll('.mermaid').forEach(function(container, i) {
-            if (mermaidDefs[i]) {
-              container.removeAttribute('data-processed');
-              container.innerHTML = mermaidDefs[i];
+        var dark = document.querySelector('[data-theme="dark"]');
+        await window.mermaid.initialize({
+          startOnLoad: false,
+          securityLevel: 'loose',
+          theme: 'base',
+          themeVariables: dark ? darkThemeVars : lightThemeVars
+        });
+
+        for (var i = 0; i < containers.length; i++) {
+          if (mermaidDefs[i]) {
+            var id = 'mermaid-svg-' + i + '-' + Date.now();
+            try {
+              var result = await window.mermaid.render(id, mermaidDefs[i]);
+              containers[i].innerHTML = result.svg;
+            } catch (e) {
+              containers[i].textContent = mermaidDefs[i];
             }
-          });
-          await window.mermaid.run();
-          fixMermaidDarkMode();
-          containers.forEach(function(c) { c.classList.remove('re-rendering'); });
-        }, 200);
+          }
+        }
+        fixMermaidDarkMode();
+        containers.forEach(function(c) { c.classList.remove('re-rendering'); });
       });
     }
   }
-
   function initMathJax() {
     var content = document.body.innerText;
     var hasMath = /\$[^\$]+\$/.test(content) || /\$\$[\s\S]*?\$\$/.test(content);
