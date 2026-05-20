@@ -59,7 +59,7 @@ Controlled via `hugo.toml` → `[params.features]`. All default to `true` except
 | `codeHighlight` | Hugo Chroma syntax highlighting |
 | `themeSwitch` | Dark/light toggle button |
 | `mathJax` | MathJax 3 lazy-load |
-| `mermaid` | Mermaid v11+ diagram lazy-load with async/await API. Supports expanded node shapes (`@{ shape: ... }`), classDef styling, ELK layout, icons, architecture/kanban diagrams. Theme-aware (dark/light) with custom themeVariables |
+| `mermaid` | Mermaid v11+ diagram lazy-load with async/await API. `classDef`/`style` work in flowchart, classDiagram, stateDiagram, erDiagram, mindmap, block-beta only — NOT in sequenceDiagram, timeline, gantt, pie, architecture. `@{ shape: ... }` only in flowchart/graph. Theme-aware (dark/light) with custom themeVariables |
 | `lightbox` | Click-to-zoom images |
 | `search` | Local search (XML index + search.js) |
 | `sidebar` | Sidebar with avatar + social links |
