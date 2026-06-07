@@ -46,7 +46,7 @@
     </div>
     {{ else }}
     <div class="sidebar-categories">
-      <h3 class="sidebar-categories__title">分类</h3>
+      <h3 class="sidebar-categories__title">{{ i18n `categories` }}</h3>
       <nav class="sidebar-categories__list">
         {{ range where site.Sections "Type" "==" "posts" }}
         {{ range .Sections }}

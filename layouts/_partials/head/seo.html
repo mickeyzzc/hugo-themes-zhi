@@ -22,3 +22,10 @@
 <meta name="twitter:description" content="{{ .Description | default .Site.Params.description }}" />
 <meta name="twitter:image" content="{{ if .Params.images }}{{ index .Params.images 0 }}{{ else }}{{ .Site.Params.seo.image | default .Site.Params.avatar }}{{ end }}" />
 {{ end }}
+
+{{/* Hreflang alternate links for multilingual SEO */}}
+{{ if gt (len site.Languages) 1 }}
+{{ range .AllTranslations }}
+<link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}" />
+{{ end }}
+{{ end }}

@@ -1,7 +1,7 @@
 {{ $limit := .Site.Params.sidebar.tagCloudCount | default 10 }}
 {{ if gt (len site.Taxonomies.tags) 0 }}
 <div class="tag-cloud">
-  <h3 class="tag-cloud__title">标签</h3>
+  <h3 class="tag-cloud__title">{{ i18n `tags` }}</h3>
   <div class="tag-cloud__list">
     {{ $tags := slice }}
     {{ range $term, $weightedPages := site.Taxonomies.tags }}
