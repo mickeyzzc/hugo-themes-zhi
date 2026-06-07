@@ -108,3 +108,9 @@
 
 [goodEvening]
   other = "Good evening"
+
+[home]
+  other = "Home"
+
+[switchLang]
+  other = "Switch language"

@@ -108,3 +108,9 @@
 
 [goodEvening]
   other = "晚上好"
+
+[home]
+  other = "首页"
+
+[switchLang]
+  other = "切换语言"
