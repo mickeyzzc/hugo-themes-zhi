@@ -1,0 +1,115 @@
+/* Language switcher styles */
+.lang-switcher {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Language toggle button — matches theme-toggle styling */
+.lang-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  background: none;
+  border: 1px solid transparent;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+  border-radius: var(--radius);
+  font-size: var(--text-sm);
+  font-family: var(--font-body);
+  line-height: 1;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.lang-toggle:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: transparent;
+}
+
+.lang-toggle .lang-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.lang-toggle .lang-chevron {
+  width: 0.625rem;
+  height: 0.625rem;
+  transition: transform var(--transition-fast);
+}
+
+/* Dropdown menu — hidden by default */
+.lang-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.25rem;
+  min-width: 8rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 16px var(--shadow);
+  padding: 0.25rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity var(--transition-fast), visibility var(--transition-fast), transform var(--transition-fast);
+  z-index: 100;
+}
+
+/* Show dropdown on hover / focus-within */
+.lang-switcher:hover .lang-dropdown,
+.lang-switcher:focus-within .lang-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Rotate chevron when dropdown is open */
+.lang-switcher:hover .lang-chevron,
+.lang-switcher:focus-within .lang-chevron {
+  transform: rotate(180deg);
+}
+
+/* Dropdown items */
+.lang-dropdown a {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  color: var(--text);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.lang-dropdown a:hover {
+  background: var(--bg-muted);
+  color: var(--accent);
+}
+
+/* Active language — visually distinct */
+.lang-dropdown a.active,
+.lang-dropdown a[aria-current="true"] {
+  background: var(--bg-muted);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.lang-dropdown a.active::before,
+.lang-dropdown a[aria-current="true"]::before {
+  content: '✓';
+  font-size: 0.6875rem;
+  margin-right: 0.125rem;
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+  .lang-dropdown {
+    right: auto;
+    left: 0;
+  }
+}
