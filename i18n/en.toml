@@ -138,3 +138,9 @@
 
 [toggleSortOrder]
   other = "Toggle sort order"
+
+[seriesPrevArticle]
+  other = "Previous"
+
+[seriesNextArticle]
+  other = "Next"

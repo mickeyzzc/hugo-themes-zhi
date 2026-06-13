@@ -138,3 +138,9 @@
 
 [toggleSortOrder]
   other = "切换排序"
+
+[seriesPrevArticle]
+  other = "上一篇"
+
+[seriesNextArticle]
+  other = "下一篇"

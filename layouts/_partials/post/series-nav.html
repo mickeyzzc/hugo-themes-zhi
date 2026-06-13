@@ -1,0 +1,41 @@
+{{- /* Series prev/next navigation — appears at the bottom of single post pages */ -}}
+{{- if and (default true site.Params.features.series) -}}
+  {{- with .GetTerms "series" -}}
+    {{- $series := index . 0 -}}
+    {{- $pages := $series.Pages.ByWeight -}}
+    {{- $len := len $pages -}}
+    {{- if gt $len 1 -}}
+      {{- range $i, $p := $pages -}}
+        {{- if eq $p.RelPermalink $.RelPermalink -}}
+          {{- $prevIdx := sub $i 1 -}}
+          {{- $nextIdx := add $i 1 -}}
+<div class="series-nav">
+  <div class="series-nav__label">
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    <span>{{ i18n "partOfSeries" }}:</span>
+    <a href="{{ $series.RelPermalink }}">{{ $series.LinkTitle }}</a>
+  </div>
+  <div class="series-nav__links">
+    {{- if ge $prevIdx 0 -}}
+      {{- $prev := index $pages $prevIdx -}}
+      <a href="{{ $prev.RelPermalink }}" class="series-nav__link series-nav__link--prev">
+        <span class="series-nav__arrow">&larr;</span>
+        <span class="series-nav__direction">{{ i18n "seriesPrevArticle" }}</span>
+        <span class="series-nav__title">{{ $prev.Title }}</span>
+      </a>
+    {{- end -}}
+    {{- if lt $nextIdx $len -}}
+      {{- $next := index $pages $nextIdx -}}
+      <a href="{{ $next.RelPermalink }}" class="series-nav__link series-nav__link--next">
+        <span class="series-nav__direction">{{ i18n "seriesNextArticle" }}</span>
+        <span class="series-nav__arrow">&rarr;</span>
+        <span class="series-nav__title">{{ $next.Title }}</span>
+      </a>
+    {{- end -}}
+  </div>
+</div>
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
