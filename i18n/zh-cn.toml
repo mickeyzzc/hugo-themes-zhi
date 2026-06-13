@@ -129,3 +129,12 @@
 
 [partOfSeries]
   other = "所属系列"
+
+[sortLatestFirst]
+  other = "最新在前"
+
+[sortReadingOrder]
+  other = "阅读顺序"
+
+[toggleSortOrder]
+  other = "切换排序"

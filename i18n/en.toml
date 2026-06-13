@@ -129,3 +129,12 @@
 
 [partOfSeries]
   other = "Part of series"
+
+[sortLatestFirst]
+  other = "Latest first"
+
+[sortReadingOrder]
+  other = "Reading order"
+
+[toggleSortOrder]
+  other = "Toggle sort order"

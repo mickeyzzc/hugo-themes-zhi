@@ -258,3 +258,30 @@
     padding: var(--spacing-sm) var(--spacing-md);
   }
 }
+
+/* ---- Sort Toggle Button ---- */
+
+.series-sort-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: 4px 10px;
+  background: var(--bg-muted);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: inherit;
+}
+
+.series-sort-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--bg-surface);
+}
+
+.series-sort-toggle__icon-asc {
+  display: none;
+}
