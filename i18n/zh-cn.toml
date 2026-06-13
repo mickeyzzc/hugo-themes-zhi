@@ -114,3 +114,18 @@
 
 [switchLang]
   other = "切换语言"
+
+[series]
+  other = "系列"
+
+[seriesPostCount]
+  other = "{{ .Count }} 篇文章"
+
+[seriesReadingOrder]
+  other = "按阅读顺序排列"
+
+[minReadSeries]
+  other = "分钟阅读"
+
+[partOfSeries]
+  other = "所属系列"

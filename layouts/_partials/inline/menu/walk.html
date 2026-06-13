@@ -4,6 +4,13 @@ Called by menu.html with dict "page" and "menuEntries".
 */ -}}
 {{- $page := .page }}
 {{- range .menuEntries }}
+  {{- /* Feature-gated menu items: hide if the associated feature is disabled */ -}}
+  {{- $featureGate := dict "series" "series" -}}
+  {{- with index $featureGate .Identifier -}}
+    {{- if not (default true (index site.Params.features .)) -}}
+      {{- continue -}}
+    {{- end -}}
+  {{- end -}}
   {{- $attrs := dict "href" .URL }}
   {{- if $page.IsMenuCurrent .Menu . }}
     {{- $attrs = merge $attrs (dict "class" "active" "aria-current" "page") }}

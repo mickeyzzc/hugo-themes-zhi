@@ -114,3 +114,18 @@
 
 [switchLang]
   other = "Switch language"
+
+[series]
+  other = "Series"
+
+[seriesPostCount]
+  other = "{{ .Count }} posts"
+
+[seriesReadingOrder]
+  other = "In reading order"
+
+[minReadSeries]
+  other = "min read"
+
+[partOfSeries]
+  other = "Part of series"

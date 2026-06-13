@@ -33,9 +33,21 @@
   {{- if default true $pm.tags -}}
     {{- with .GetTerms "tags" -}}
       <span class="post-meta-item">
-        <svg xmlns="http://www.w3.org/200/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
         {{- range $i, $tag := . -}}
           {{- if $i }}, {{ end -}}<a href="{{ $tag.RelPermalink }}">{{ $tag.LinkTitle }}</a>
+        {{- end -}}
+      </span>
+    {{- end -}}
+  {{- end -}}
+
+  {{- /* Series */ -}}
+  {{- if and (default true $pm.series) (default true site.Params.features.series) -}}
+    {{- with .GetTerms "series" -}}
+      <span class="post-meta-item post-meta-item--series">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        {{- range $i, $s := . -}}
+          {{- if $i }}, {{ end -}}<a href="{{ $s.RelPermalink }}">{{ $s.LinkTitle }}</a>
         {{- end -}}
       </span>
     {{- end -}}

@@ -1,0 +1,51 @@
+{{ define "main" }}
+{{- if not (default true site.Params.features.series) -}}
+{{- /* Feature disabled — render nothing */ -}}
+{{ else }}
+<div class="series-detail">
+  <header class="series-detail__header">
+    <h1>{{ .Title }}</h1>
+    {{ with .Content }}
+    <div class="series-detail__desc">{{ . }}</div>
+    {{ end }}
+    <div class="series-detail__meta">
+      <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        {{ i18n "seriesPostCount" (dict "Count" (len .Pages)) }}
+      </span>
+      <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        {{ i18n "seriesReadingOrder" }}
+      </span>
+    </div>
+  </header>
+
+  {{ if .Pages }}
+  <div class="series-stepper">
+  <div class="series-stepper">
+    {{ $sorted := .Pages.ByWeight }}
+    {{ range $i, $page := $sorted }}
+    <div class="series-stepper__item">
+      <div class="series-stepper__marker">
+        <span class="series-stepper__number">{{ add $i 1 }}</span>
+      </div>
+      <div class="series-stepper__content">
+        <a href="{{ $page.RelPermalink }}" class="series-stepper__title">{{ $page.Title }}</a>
+        <div class="series-stepper__meta">
+          <time datetime="{{ $page.Date.Format "2006-01-02" }}">{{ $page.Date | time.Format ":date_long" }}</time>
+          <span>·</span>
+          <span>{{ $page.ReadingTime }} {{ i18n "minReadSeries" }}</span>
+        </div>
+        {{ with $page.Summary }}
+        <p class="series-stepper__summary">{{ . }}</p>
+        {{ end }}
+      </div>
+    </div>
+    {{ end }}
+  </div>
+  {{ else }}
+  <p style="color: var(--text-secondary);">{{ i18n "search_noResults" }}</p>
+  {{ end }}
+</div>
+{{ end }}
+{{ end }}

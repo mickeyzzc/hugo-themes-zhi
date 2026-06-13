@@ -1,0 +1,33 @@
+{{ define "main" }}
+{{- if not (default true site.Params.features.series) -}}
+{{- /* Feature disabled — render nothing */ -}}
+{{ else }}
+<div class="series-list">
+  <header class="series-list__header">
+    <h1>{{ .Title }}</h1>
+    {{ with .Content }}
+    <div class="series-list__desc">{{ . }}</div>
+    {{ end }}
+  </header>
+
+  {{ if .Pages }}
+  <div class="series-grid">
+    {{ range sort .Pages ".Pages" "desc" }}
+    <a href="{{ .RelPermalink }}" class="series-card">
+      <div class="series-card__icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </div>
+      <h2 class="series-card__title">{{ .LinkTitle }}</h2>
+      <span class="series-card__count">{{ i18n "seriesPostCount" (dict "Count" (len .Pages)) }}</span>
+      {{ with .Description }}
+      <p class="series-card__desc">{{ . }}</p>
+      {{ end }}
+    </a>
+    {{ end }}
+  </div>
+  {{ else }}
+  <p style="color: var(--text-secondary);">{{ i18n "search_noResults" }}</p>
+  {{ end }}
+</div>
+{{ end }}
+{{ end }}
