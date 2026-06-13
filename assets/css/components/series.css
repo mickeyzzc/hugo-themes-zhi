@@ -223,6 +223,12 @@
   overflow: hidden;
 }
 
+.series-stepper__summary img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+
 /* ---- Responsive ---- */
 
 @media (max-width: 480px) {
