@@ -136,3 +136,81 @@
 
 将 `enable` 设置为 true。可选择的许可证有：by, by-sa, by-nc, by-nc-sa, by-nd, by-nc-nd。
 将 `size` 设置为 "normal" 或 "big"。
+
+
+---
+
+## 多语言 / i18n
+
+标准 Hugo 多语言配置，支持完整的 i18n 集成和语言切换 UI。
+
+### 配置
+
+```toml
+[languages.en]
+languageName = "English"
+title = "My Blog"
+weight = 1
+
+[languages.zh-cn]
+languageName = "简体中文"
+title = "我的博客"
+weight = 2
+
+# 当配置 2+ 种语言时自动渲染语言切换器
+[params.features]
+  i18n = true
+```
+
+### 用法
+
+在 Hugo 配置中设置 `languages` 表来启用多语言支持。
+当配置了 2+ 种语言时，系统会自动在页面头部渲染语言切换器。
+每种语言需要有自己的 i18n 文件，主题提供 `i18n/en.toml` 和 `i18n/zh-cn.toml`。
+双语内容约定：文章文件 `post.md`（默认语言）+ `post.en.md`（英文版本）。
+系列名称使用语言特定的 taxonomy 术语。
+
+---
+
+## 系列分类法
+
+系列分类法配置，支持时间线布局和排序切换功能。
+
+### 配置
+
+```toml
+[taxonomies]
+  series = "series"
+
+[params.features]
+  series = true  # 默认：true
+```
+
+### 用法
+
+在 Hugo 配置中启用 `series` 分类法。
+文章 front matter 示例：
+```yaml
+---
+title: "文章标题"
+date: 2024-01-15
+weight: 1  # 值越小越靠前
+series:
+- "系列名称"
+---
+```
+#BN
+双语系列命名使用语言特定名称：
+```yaml
+# 中文文章
+series:
+- "eBPF 可观测性系列"
+
+# 英文文章
+series:
+- "eBPF Observability Series"
+```
+#BN
+系统会自动创建系列列表页 (/series/) 和系列详情页 (/series/系列名称/)。
+详情页支持排序切换：默认倒序（最新在前），可切换为正序（阅读顺序）。
+用户偏好通过 localStorage 持久化。

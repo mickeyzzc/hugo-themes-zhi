@@ -4,6 +4,8 @@
 
 一个极简的 Hugo 博客主题，支持深色/浅色主题、MathJax、Mermaid 图表、哔哩哔哩/YouTube 视频短代码、图片灯箱和代码复制 —— 使用纯 Hugo Pipes 构建，零外部构建工具。
 
+![Hugo](https://img.shields.io/badge/Hugo-Extended%20%E2%89%A50.146.0-blue?logo=hugo&logoColor=white) ![License: MIT](https://img.shields.io/github/license/mickeyzzc/hugo-themes-zhi?color=green) ![Release](https://img.shields.io/github/v/release/mickeyzzc/hugo-themes-zhi) ![Stars](https://img.shields.io/github/stars/mickeyzzc/hugo-themes-zhi?style=social) ![Last Commit](https://img.shields.io/github/last-commit/mickeyzzc/hugo-themes-zhi?color=orange) ![Repo Size](https://img.shields.io/github/repo-size/mickeyzzc/hugo-themes-zhi?color=lightgray)
+
 ## 功能特性
 
 - **深色 / 浅色主题** — 系统偏好检测 + `localStorage` 持久化 → [文档](docs/zh-cn/features.md#主题切换)
@@ -15,6 +17,8 @@
 - **响应式设计** — 移动优先，内容区最大宽度 `768px`
 - **网站分析** — 可配置端点，支持采样率 → [文档](docs/zh-cn/configuration.md#网站分析)
 - **Hugo Pipes** — 所有 CSS/JS 通过 `resources.Get` → `minify` → `fingerprint` 处理，无需 webpack/vite
+- **多语言 / i18n** — 语言切换器与自动翻译链接 → [文档](docs/zh-cn/features.md#语言切换器)
+- **系列（Series）** — 带步骤布局的系列文章，排序切换，基于权重的排序 → [文档](docs/zh-cn/features.md#系列)
 
 ## 环境要求
 
@@ -54,7 +58,7 @@ theme = 'zhi'
   themeSwitch   = true   # 深色/浅色切换按钮
   lightbox      = true   # 点击图片放大
   analytics     = true   # 自定义分析端点
-
+  series       = true   # 带排序切换的系列文章
 [params.analytics]
   provider   = "custom"
   endpoint   = "/metrics"
@@ -66,7 +70,11 @@ theme = 'zhi'
   showSwitch      = true         # 显示平台切换按钮
 
 [params.theme]
-  default = "auto"   # "auto"、""light" 或 "dark"
+  default = "auto"   # "auto"、"light" 或 "dark"
+}
+
+[taxonomies]
+  series = "series"
 ```
 
 ## 文档
@@ -148,6 +156,11 @@ def hello():
   name = '文章'
   pageRef = '/posts'
   weight = 20
+
+[[menus.main]]
+  name = '系列'
+  pageRef = '/series'
+  weight = 30
 ```
 
 ### 社交链接
@@ -167,14 +180,13 @@ def hello():
 ```
 layouts/
 ├── _default/          # baseof.html、single.html、list.html、_markup/
-├── _partials/         # Hugo 0.120+ partials（head、header、footer、menu、terms）
+├── _partials/         # Hugo 0.120+ partials（head、header、footer、menu、terms、lang-switch、greeting、tag-cloud）
 ├── partials/          # 旧版（mathjax.html、mermaid.html）
 ├── shortcodes/        # video.html
-├── home.html          # 首页模板
-├── 404.html           # 独立 404 页面（不使用 baseof）
-├── section.html       # Section 列表
-├── taxonomy.html       # 分类概览
-└── term.html          # 分类术语页
+├── archives/           # 归档页面
+├── flinks/             # 友情链接页面
+├── series/             # 系列分类页面
+├── home.html, section.html, taxonomy.html, term.html
 
 assets/
 ├── css/
@@ -187,13 +199,26 @@ assets/
 │       ├── video.css
 │       ├── lightbox.css
 │       ├── mermaid.css
-│       └── math.css
+│       ├── math.css
+│       ├── lang-switch.css
+│       ├── series.css
+│       ├── greeting.css
+│       └── tag-cloud.css
 └── js/
     ├── main.js               # 编排器（MathJax + Mermaid 懒加载）
     ├── code-copy.js           # 代码块复制按钮
     ├── theme-toggle.js        # 深色/浅色切换及持久化
     ├── video-geo-switch.js    # 哔哩哔哩/YouTube 地域切换
-    └── lightbox.js            # 图片灯箱
+    ├── lightbox.js            # 图片灯箱
+    ├── sidebar.js
+    ├── greeting.js
+    ├── search.js
+    ├── toc.js
+    ├── reading-progress.js
+    ├── back-to-top.js
+    ├── donation.js
+    ├── analytics.js
+    └── series-sort.js
 ```
 
 ## 开发

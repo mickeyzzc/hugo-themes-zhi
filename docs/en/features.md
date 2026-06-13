@@ -15,6 +15,9 @@
 - [Greeting](#greeting)
 - [Footer](#footer)
 - [Pagination](#pagination)
+- [Language Switcher](#language-switcher)
+- [Series](#series)
+
 
 ---
 
@@ -328,6 +331,66 @@ paginate = 10
 ```
 
 ### Usage
-
 Set `paginate` in your site configuration to control the number of items per page.
 The theme uses i18n keys for previous and next navigation labels.
+
+---
+
+## Language Switcher
+
+Globe icon button with CSS dropdown, appears when site has 2+ languages configured.
+
+### Overview
+
+This feature provides a language switcher button in the header that displays as a globe icon. When the site is configured with multiple languages, it shows a dropdown menu with links to translated versions of the current page. Special handling is included for series and taxonomy term pages to ensure correct routing across different language slugs.
+
+### Configuration
+
+```toml
+# No special config needed beyond Hugo's multilingual setup
+```
+
+### Usage
+
+This feature automatically:
+- Shows a globe icon button in the header when 2+ languages are configured
+- Uses Hugo's `.Page.Translations` to find and link to translated versions
+- Handles series pages with language-specific series names
+- Handles taxonomy pages with language-specific slugs
+- Fully keyboard accessible
+---
+
+## Series
+
+Series taxonomy with listing page (/series/) showing all series as cards + detail page with stepper/timeline layout.
+
+### Overview
+
+This feature adds series support to the theme, providing both a listing page (/series/) that displays all series as cards and individual series detail pages with a stepper/timeline layout. Posts within each series are ordered by their `weight` front matter (lower values appear earlier in the series). Users can toggle between ascending (reading order) and descending (latest first) sorting on series detail pages.
+
+### Configuration
+
+```toml
+[params.features]
+  series = true  # Default: true
+
+[taxonomies]
+  series = "series"
+```
+
+### Usage
+
+To use series:
+1. Add series taxonomies to your hugo.toml config
+2. Add `weight` and `series` front matter to posts
+
+```yaml
+---
+title: "My Post"
+date: 2026-06-13
+weight: 1
+series:
+  - "My Series"
+---
+```
+

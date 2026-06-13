@@ -10,6 +10,8 @@
 - [Friend Links](#friend-links)
 - [Donation](#donation)
 - [Creative Commons](#creative-commons)
+- [Multilingual / i18n](#multilingual--i18n)
+- [Series Taxonomy](#series-taxonomy)
 
 ---
 
@@ -136,3 +138,71 @@ Display a Creative Commons license badge.
 
 Set `enable` to true. Choose a license from: by, by-sa, by-nc, by-nc-sa, by-nd, by-nc-nd.
 Set `size` to either "normal" or "big".
+
+---
+
+## Multilingual / i18n
+
+Standard Hugo multilingual configuration with automatic language switcher rendering.
+
+### Configuration
+
+```toml
+defaultContentLanguage = "zh-cn"
+
+[languages.en]
+  languageName = "English"
+  weight = 10
+
+[languages.zh-cn]
+  languageName = "简体中文"
+  weight = 20
+```
+
+### Usage
+
+Configure multiple languages in hugo.toml. The language switcher automatically renders when 2+ languages are configured:
+- Each language needs its own i18n file (theme provides en.toml and zh-cn.toml)
+- Follow bilingual content convention: post.md (default lang) + post.en.md (English)
+- Use language-specific series names for proper taxonomy
+
+---
+
+## Series Taxonomy
+
+Configuration for series taxonomy with weight-based ordering and bilingual naming support.
+
+### Configuration
+
+```toml
+[taxonomies]
+  series = "series"
+
+[params.features]
+  series = true  # Default: true
+```
+
+### Post Front Matter Example
+
+```yaml
+---
+title: "My Post"
+date: 2026-06-13
+weight: 1
+series:
+  - "My Series"
+---
+```
+
+### Usage
+
+The series taxonomy requires:
+1. Add `series = "series"` to taxonomies section
+2. Set `params.features.series = true` (default: true)
+3. Add `weight` and `series` front matter to posts
+
+**Bilingual Series Naming:** Use language-specific series names:
+- Chinese post: `series: ["eBPF 可观测性系列"]`
+- English post: `series: ["eBPF Observability Series"]`
+
+This creates separate taxonomy terms for each language, keeping series pages language-specific.

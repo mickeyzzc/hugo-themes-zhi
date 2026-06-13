@@ -4,17 +4,21 @@
 
 A minimal Hugo blog theme with dark/light mode, MathJax, Mermaid diagrams, Bilibili/YouTube video shortcodes, image lightbox, and code copy — built with pure Hugo Pipes, zero external build tools.
 
+![Hugo](https://img.shields.io/badge/Hugo-Extended%20%E2%89%A50.146.0-blue?logo=hugo&logoColor=white) ![License: MIT](https://img.shields.io/github/license/mickeyzzc/hugo-themes-zhi?color=green) ![Release](https://img.shields.io/github/v/release/mickeyzzc/hugo-themes-zhi) ![Stars](https://img.shields.io/github/stars/mickeyzzc/hugo-themes-zhi?style=social) ![Last Commit](https://img.shields.io/github/last-commit/mickeyzzc/hugo-themes-zhi?color=orange) ![Repo Size](https://img.shields.io/github/repo-size/mickeyzzc/hugo-themes-zhi?color=lightgray)
+
 ## Features
 
-- **Dark / Light Theme** — Toggle with system preference detection and \`localStorage\` persistence → [docs](docs/en/features.md#theme-switch)
+- **Dark / Light Theme** — Toggle with system preference detection and `localStorage` persistence → [docs](docs/en/features.md#theme-switch)
 - **Syntax Highlighting** — Hugo's built-in Chroma with copy button and language label → [docs](docs/en/content.md#code-highlight)
-- **MathJax 3** — Auto-loaded when \`$...$\$ or \`$$...$$\$ detected in page content → [docs](docs/en/content.md#mathjax)
+- **MathJax 3** — Auto-loaded when `$...$` or `$$...$$` detected in page content → [docs](docs/en/content.md#mathjax)
 - **Mermaid v11+ Diagrams** — Auto-loaded when ` ```mermaid ` code blocks exist; supports expanded node shapes (`@{ shape: ... }`), `classDef` styling, ELK layout, architecture/kanban diagrams; theme-aware (dark/light) → [docs](docs/en/content.md#mermaid)
 - **Video Shortcode** — Embed Bilibili or YouTube with automatic geo-switching (timezone-based) and manual toggle → [docs](docs/en/content.md#video)
 - **Image Lightbox** — Click any article image to view full-size overlay → [docs](docs/en/features.md#image-lightbox)
 - **Responsive Design** — Mobile-first, max-width `768px` content area
 - **Custom Analytics** — Configurable endpoint with sampling support → [docs](docs/en/configuration.md#analytics)
 - **Hugo Pipes** — All CSS/JS processed via `resources.Get` → `minify` → `fingerprint`, no webpack/vite
+- **Multilingual / i18n** — Language switcher with automatic translation linking → [docs](docs/en/features.md#language-switcher)
+- **Series Taxonomy** — Post series with stepper layout, sort toggle, and weight-based ordering → [docs](docs/en/features.md#series)
 
 ## Requirements
 
@@ -54,7 +58,7 @@ theme = 'zhi'
   themeSwitch   = true   # Dark/light toggle button
   lightbox      = true   # Click-to-zoom images
   analytics     = true   # Custom analytics endpoint
-
+  series       = true   # Post series with sort toggle
 [params.analytics]
   provider   = "custom"
   endpoint   = "/metrics"
@@ -67,6 +71,10 @@ theme = 'zhi'
 
 [params.theme]
   default = "auto"   # "auto", "light", or "dark"
+}
+
+[taxonomies]
+  series = "series"
 ```
 
 ## Documentation
@@ -145,6 +153,11 @@ def hello():
   name = 'Posts'
   pageRef = '/posts'
   weight = 20
+
+[[menus.main]]
+  name = 'Series'
+  pageRef = '/series'
+  weight = 30
 ```
 
 ### Social Links
@@ -164,14 +177,13 @@ def hello():
 ```
 layouts/
 ├── _default/          # baseof.html, single.html, list.html, _markup/
-├── _partials/         # Hugo 0.120+ partials (head, header, footer, menu, terms)
+├── _partials/         # Hugo 0.120+ partials (head, header, footer, menu, terms, lang-switch, greeting, tag-cloud)
 ├── partials/          # Legacy (mathjax.html, mermaid.html)
 ├── shortcodes/        # video.html
-├── home.html          # Homepage template
-├── 404.html           # Standalone 404 (no baseof)
-├── section.html       # Section list
-├── taxonomy.html      # Taxonomy overview
-└── term.html          # Taxonomy term page
+├── archives/           # Archives page
+├── flinks/             # Friend links page
+├── series/             # Series taxonomy pages
+├── home.html, section.html, taxonomy.html, term.html
 
 assets/
 ├── css/
@@ -184,13 +196,26 @@ assets/
 │       ├── video.css
 │       ├── lightbox.css
 │       ├── mermaid.css
-│       └── math.css
+│       ├── math.css
+│       ├── lang-switch.css
+│       ├── series.css
+│       ├── greeting.css
+│       └── tag-cloud.css
 └── js/
     ├── main.js               # Orchestrator (MathJax + Mermaid lazy-load)
     ├── code-copy.js           # Copy button for code blocks
     ├── theme-toggle.js        # Dark/light toggle with persistence
     ├── video-geo-switch.js    # Bilibili/YouTube geo-switching
-    └── lightbox.js            # Image lightbox overlay
+    ├── lightbox.js            # Image lightbox overlay
+    ├── sidebar.js
+    ├── greeting.js
+    ├── search.js
+    ├── toc.js
+    ├── reading-progress.js
+    ├── back-to-top.js
+    ├── donation.js
+    ├── analytics.js
+    └── series-sort.js
 ```
 
 ## Development

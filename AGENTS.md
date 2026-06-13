@@ -67,7 +67,7 @@ Controlled via `hugo.toml` → `[params.features]`. All default to `true` except
 | `readingProgress` | Thin progress bar |
 | `backToTop` | Floating scroll-to-top button |
 | `analytics` | Custom analytics endpoint |
-
+| `series` | Post series with stepper layout, sort toggle, weight-based ordering |
 Additional toggles outside `features`: `params.donation.enable`, `params.analytics.busuanzi`, `params.creativeCommons.enable`.
 
 ## Where to Look
@@ -83,11 +83,14 @@ Additional toggles outside `features`: `params.donation.enable`, `params.analyti
 | Code block rendering | `layouts/_default/_markup/render-codeblock.html` | Hugo render hook |
 | Video embedding | `layouts/shortcodes/video.html` + `assets/js/video-geo-switch.js` | Default platform: bilibili |
 | Translations | `i18n/en.toml`, `i18n/zh.toml` | Use `{{ i18n "key" }}` in templates |
-| Full config schema | `exampleSite/hugo.toml` | Documented reference with all params |
+|| Full config schema | `exampleSite/hugo.toml` | Documented reference with all params |
+| Series pages | `layouts/series/` | taxonomy.html (listing), term.html (detail with stepper) |
+| Language switcher | `layouts/_partials/lang-switch.html` | Auto-renders when 2+ languages configured |
 
 ## Conventions
 
 - **Partials**: ALWAYS use `layouts/_partials/`. The `layouts/partials/` directory no longer exists.
+- **Series**: Series term pages use `.Pages.ByWeight` in `series/term.html`. The sort toggle (series-sort.js) reverses client-side, defaulting to descending.
 - **Adding a new feature flag**: Must update THREE places: (1) `hugo.toml [params.features]`, (2) `features.html` partial to include it in the JSON map, (3) `baseof.html` to conditionally load the JS.
 - **Adding CSS**: Create `components/X.css`, add `@import "components/X.css"` in `main.css` (order matters for cascade).
 - **Adding JS**: Create `assets/js/X.js`, add Hugo Pipes block + `<script>` in `baseof.html` (with feature flag guard if applicable).

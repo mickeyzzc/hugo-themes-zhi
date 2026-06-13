@@ -62,6 +62,11 @@ theme        = 'hugo-themes-zhi'
   weight   = 30
 
 [[menus.main]]
+  name     = 'Series'
+  pageRef  = '/series'
+  weight   = 35
+
+[[menus.main]]
   name     = 'Tags'
   pageRef  = '/tags'
   weight   = 40
@@ -98,7 +103,7 @@ theme        = 'hugo-themes-zhi'
     readingProgress = true          # Thin progress bar at top/bottom of post
     backToTop       = true          # Floating back-to-top button
     analytics       = false         # Custom analytics endpoint
-
+    series          = true          # Post series with sort toggle
   # ==========================================================================
   # 3. Typography
   # ==========================================================================
@@ -273,6 +278,21 @@ theme        = 'hugo-themes-zhi'
 
   [params.theme]
     default = "auto"                # "auto" | "light" | "dark"
+
+# ==========================================================================
+# 18. Series Taxonomy
+# ==========================================================================
+# Series pages with stepper layout and sort toggle.
+# Enable by adding 'series = "series"' to [taxonomies] and this feature flag.
+
+# [taxonomies]
+#   series = "series"
+
+# Post front matter for series:
+#   weight = 1               # Order in series (lower = earlier)
+#   series = ["Series Name"] # Series taxonomy term
+
+# ==========================================================================
 
 # -- Minify ---------------------------------------------------------------
 [minify]
