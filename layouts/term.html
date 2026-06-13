@@ -6,7 +6,7 @@
       <div class="Content">{{ . }}</div>
       {{ end }}
     </header>
-    {{ $p := .Paginate .Pages }}
+    {{ $p := .Paginate (sort .Pages "Date" "desc") }}
     <div class="timeline">
       {{ range $p.Pages.GroupByDate "2006" }}
       <h2 class="timeline__year">{{ .Key }}</h2>
