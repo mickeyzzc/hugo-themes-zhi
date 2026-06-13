@@ -1,5 +1,5 @@
 {{ define "main" }}
-  {{ $p := .Paginate (where site.RegularPages "Type" "==" "posts") }}
+  {{ $p := .Paginate (sort (where site.RegularPages "Type" "==" "posts") "Date" "desc") }}
   <div class="post-list">
     {{ range $p.Pages }}
       {{ partial "post/card.html" (dict "page" .) }}
