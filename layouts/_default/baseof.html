@@ -63,5 +63,9 @@
   {{ $donationJS := resources.Get "js/donation.js" | minify | fingerprint }}
   <script src="{{ $donationJS.RelPermalink }}" defer></script>
   {{ end }}
+  {{ if default true .Site.Params.features.series }}
+  {{ $seriesSortJS := resources.Get "js/series-sort.js" | minify | fingerprint }}
+  <script src="{{ $seriesSortJS.RelPermalink }}" defer></script>
+  {{ end }}
 </body>
 </html>
