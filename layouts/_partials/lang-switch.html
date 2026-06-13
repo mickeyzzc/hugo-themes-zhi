@@ -19,6 +19,33 @@
     </a>
     {{ end }}
   </div>
+  {{ else if eq .Type "series" }}
+  {{- /* Series term pages have different slugs per language — Hugo can't auto-link them.
+         Resolve via the first post's translation: its series front matter names the
+         equivalent series in the other language. */ -}}
+  {{- $currentLang := .Page.Lang -}}
+  {{- $links := slice -}}
+  {{- range first 1 .Pages -}}
+    {{- range where .Translations "Lang" "ne" $currentLang -}}
+      {{- $otherLang := .Lang -}}
+      {{- $otherLangName := .Language.LanguageName -}}
+      {{- $otherRelPermalink := .RelPermalink -}}
+      {{- range first 1 (.Params.series | default slice) -}}
+        {{- $slug := . | urlize -}}
+        {{- /* Detect language prefix from translated post URL: /<lang>/... means non-default */ -}}
+        {{- $hasPrefix := hasPrefix $otherRelPermalink (printf "/%s/" $otherLang) -}}
+        {{- $url := cond $hasPrefix (printf "/%s/series/%s/" $otherLang $slug) (printf "/series/%s/" $slug) -}}
+        {{- $links = $links | append (dict "url" $url "lang" $otherLang "name" $otherLangName) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- with $links -}}
+  <div class="lang-dropdown">
+    {{- range . -}}
+    <a href="{{ .url }}" lang="{{ .lang }}" rel="alternate">{{ .name }}</a>
+    {{- end -}}
+  </div>
+  {{- end -}}
   {{ end }}
 </div>
 {{- end -}}
