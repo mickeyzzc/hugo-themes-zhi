@@ -3,10 +3,14 @@
 }
 
 mjx-container {
-  display: block;
-  margin: 1rem 0;
+  display: inline-block;
   overflow-x: auto;
   overflow-y: hidden;
+  vertical-align: baseline;
+}
+
+mjx-container:not([display="true"]) {
+  margin: 0;
 }
 
 mjx-container[jax="CHTML"][display="true"] {
