@@ -1,31 +1,63 @@
-{{ if default true .Site.Params.seo.openGraph }}
+{{- /* Open Graph */ -}}
+{{- if default true .Site.Params.seo.openGraph -}}
+{{- $ogImage := "" -}}
+{{- $ogImageWidth := "" -}}
+{{- $ogImageHeight := "" -}}
+{{- $ogImageType := "" -}}
+{{- /* Prefer page-level image, then site-level seo.image, then avatar */ -}}
+{{- with .Params.images -}}
+{{- $ogImage = (index . 0) | absURL -}}
+{{- else -}}
+{{- with .Site.Params.seo.image -}}
+{{- $ogImage = . | absURL -}}
+{{- else -}}
+{{- $ogImage = (.Site.Params.avatar | default "/imgs/avatar.jpeg") | absURL -}}
+{{- end -}}
+{{- end -}}
+{{- /* Resolve dimensions only when the image is a bundled resource */ -}}
+{{- with .Resources.GetMatch (strings.TrimPrefix "/" (index .Params.images 0 | default (.Site.Params.seo.image | default .Site.Params.avatar))) -}}
+{{- $ogImageWidth = .Width -}}
+{{- $ogImageHeight = .Height -}}
+{{- $ogImageType = .MediaType.Type -}}
+{{- end -}}
 <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}" />
 <meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Site.Title }} - {{ .Title }}{{ end }}" />
 <meta property="og:description" content="{{ .Description | default .Site.Params.description }}" />
-<meta property="og:image" content="{{ if .Params.images }}{{ index .Params.images 0 }}{{ else }}{{ .Site.Params.seo.image | default .Site.Params.avatar }}{{ end }}" />
-<meta property="og:image:width" content="312" />
-<meta property="og:image:height" content="312" />
-<meta property="og:image:type" content="image/jpeg/png/svg/jpg" />
-<meta property="og:url" content="{{ .RelPermalink }}" />
+<meta property="og:image" content="{{ $ogImage }}" />
+{{- with $ogImageWidth }}
+<meta property="og:image:width" content="{{ . }}" />
+{{- end }}
+{{- with $ogImageHeight }}
+<meta property="og:image:height" content="{{ . }}" />
+{{- end }}
+{{- with $ogImageType }}
+<meta property="og:image:type" content="{{ . }}" />
+{{- end }}
+<meta property="og:url" content="{{ .Permalink }}" />
 <meta property="og:site_name" content="{{ .Site.Title }}" />
 <meta property="og:locale" content="{{ or .Site.Language.Locale .Site.LanguageCode }}" />
-{{ if .IsPage }}
+{{- if .IsPage }}
 <meta property="article:author" content="{{ .Params.author | default .Site.Params.author }}" />
-<meta property="article:published_time" content="{{ .Date }}" />
-<meta property="article:modified_time" content="{{ .Lastmod }}" />
-{{ end }}
-{{ end }}
+<meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}" />
+<meta property="article:modified_time" content="{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}" />
+{{- end }}
+{{- end }}
 
-{{ if default true .Site.Params.seo.twitterCard }}
+{{- /* Twitter Card */ -}}
+{{- if default true .Site.Params.seo.twitterCard -}}
 <meta name="twitter:card" content="{{ .Site.Params.seo.twitterCardType | default "summary_large_image" }}" />
 <meta name="twitter:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Site.Title }} - {{ .Title }}{{ end }}" />
 <meta name="twitter:description" content="{{ .Description | default .Site.Params.description }}" />
-<meta name="twitter:image" content="{{ if .Params.images }}{{ index .Params.images 0 }}{{ else }}{{ .Site.Params.seo.image | default .Site.Params.avatar }}{{ end }}" />
-{{ end }}
+<meta name="twitter:image" content="{{ if .Params.images }}{{ index .Params.images 0 | absURL }}{{ else }}{{ (.Site.Params.seo.image | default .Site.Params.avatar) | absURL }}{{ end }}" />
+{{- with .Site.Params.seo.twitterSite }}<meta name="twitter:site" content="{{ . }}" />{{ end }}
+{{- with .Site.Params.seo.twitterCreator }}<meta name="twitter:creator" content="{{ . }}" />{{ end }}
+{{- end }}
 
-{{/* Hreflang alternate links for multilingual SEO */}}
-{{ if gt (len site.Languages) 1 }}
-{{ range .AllTranslations }}
-<link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}" />
-{{ end }}
-{{ end }}
+{{- /* Hreflang alternate links for multilingual SEO */ -}}
+{{- if gt (len site.Languages) 1 -}}
+{{- range .AllTranslations -}}
+<link rel="alternate" hreflang="{{ replace .Language.Lang "zh-cn" "zh-CN" }}" href="{{ .Permalink }}" />
+{{- end -}}
+{{- /* x-default points to the default language version */ -}}
+<link rel="alternate" hreflang="x-default" href="{{ .Site.Home.Permalink }}" />
+{{- end }}

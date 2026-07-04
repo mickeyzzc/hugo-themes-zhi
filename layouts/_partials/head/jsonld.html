@@ -1,0 +1,42 @@
+{{- /* JSON-LD structured data for SEO rich results */ -}}
+{{- $authorName := .Site.Params.author | default .Site.Title -}}
+{{- $siteLogo := (.Site.Params.seo.image | default .Site.Params.avatar | default "/imgs/avatar.jpeg") | absURL -}}
+{{- $description := .Description | default .Site.Params.description -}}
+{{- $datePublished := .Date.Format "2006-01-02T15:04:05Z07:00" -}}
+{{- $dateModified := .Lastmod.Format "2006-01-02T15:04:05Z07:00" -}}
+
+{{- if .IsPage -}}
+{{- $pageImage := $siteLogo -}}
+{{- if gt (len (.Params.images | default slice)) 0 -}}{{- $pageImage = (index .Params.images 0) | absURL -}}{{- end -}}
+{{- $schema := dict
+  "@context" "https://schema.org"
+  "@type" "BlogPosting"
+  "mainEntityOfPage" (dict "@type" "WebPage" "@id" .Permalink)
+  "headline" ((.Title | plainify) | truncate 110)
+  "description" ($description | plainify)
+  "image" (dict "@type" "ImageObject" "url" $pageImage)
+  "author" (dict "@type" "Person" "name" (.Params.author | default $authorName) "url" .Site.Home.Permalink)
+  "publisher" (dict "@type" "Person" "name" $authorName "image" (dict "@type" "ImageObject" "url" $siteLogo))
+  "datePublished" $datePublished
+  "dateModified" $dateModified
+  "url" .Permalink
+  "keywords" (delimit (.Params.tags | default slice) ", ")
+-}}
+<script type="application/ld+json">{{ $schema | jsonify (dict "indent" "  ") | safeHTML }}</script>
+{{- else if .IsHome -}}
+{{- $schema := dict
+  "@context" "https://schema.org"
+  "@type" "WebSite"
+  "name" .Site.Title
+  "alternateName" $authorName
+  "url" .Site.BaseURL
+  "description" ($description | plainify)
+  "inLanguage" .Site.Language.Lang
+  "publisher" (dict "@type" "Person" "name" $authorName "image" (dict "@type" "ImageObject" "url" $siteLogo))
+-}}
+{{- if .Site.Params.features.search -}}
+{{- $searchURL := printf "%s?q={search_term_string}" (strings.TrimSuffix "/" .Site.BaseURL) -}}
+{{- $schema = merge $schema (dict "potentialAction" (dict "@type" "SearchAction" "target" (dict "@type" "EntryPoint" "urlTemplate" $searchURL) "query-input" "required name=search_term_string")) -}}
+{{- end -}}
+<script type="application/ld+json">{{ $schema | jsonify (dict "indent" "  ") | safeHTML }}</script>
+{{- end -}}

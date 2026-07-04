@@ -1,0 +1,5 @@
+{{- /* robots.txt — allow all crawlers and declare sitemap location */ -}}
+User-agent: *
+Allow: /
+
+Sitemap: {{ "sitemap.xml" | absURL }}

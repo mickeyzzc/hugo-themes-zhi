@@ -26,6 +26,7 @@
 @import "components/tag-cloud.css";
 @import "components/timeline.css";
 @import "components/series.css";
+@import "components/post-related.css";
 
 body {
   color: var(--text);

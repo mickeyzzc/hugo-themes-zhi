@@ -144,3 +144,9 @@
 
 [seriesNextArticle]
   other = "Next"
+
+[page]
+  other = "Page {{ .Count }}"
+
+[relatedPosts]
+  other = "Related Posts"

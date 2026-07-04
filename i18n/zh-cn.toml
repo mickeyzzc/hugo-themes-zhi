@@ -144,3 +144,9 @@
 
 [seriesNextArticle]
   other = "下一篇"
+
+[page]
+  other = "第 {{ .Count }} 页"
+
+[relatedPosts]
+  other = "相关文章"

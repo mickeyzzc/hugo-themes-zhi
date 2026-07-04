@@ -1,0 +1,49 @@
+/* ============================================
+   Post Related — related posts block under articles
+   ============================================ */
+
+.post-related {
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-md);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-md, 8px);
+  background: var(--bg-secondary, transparent);
+}
+
+.post-related__title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: var(--border-width) solid var(--border);
+}
+
+.post-related__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.post-related__item {
+  line-height: var(--leading-snug, 1.4);
+}
+
+.post-related__link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.post-related__link:hover {
+  color: var(--text-link, var(--text));
+}
+
+.post-related__date {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}

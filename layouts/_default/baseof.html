@@ -18,7 +18,7 @@
   <footer>
     {{ partial "footer.html" . }}
   </footer>
-  {{ if site.Params.features.mermaid }}{{ partial "mermaid.html" . }}{{ end }}
+  {{ if and site.Params.features.mermaid .Content }}{{ if findRE `language-mermaid` .Content }}{{ partial "mermaid.html" . }}{{ end }}{{ end }}
   {{ if site.Params.features.analytics }}
   {{ $analyticsJS := resources.Get "js/analytics.js" | minify | fingerprint }}
   <script src="{{ $analyticsJS.RelPermalink }}" defer></script>

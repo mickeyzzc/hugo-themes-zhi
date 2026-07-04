@@ -1,0 +1,7 @@
+{{- /* render-image.html — lazy-load all Markdown images, preserve alt and title */ -}}
+<img src="{{ .Destination | safeURL }}"
+     alt="{{ .Text }}"
+     loading="lazy"
+     decoding="async"
+     {{- with .Title }} title="{{ . }}"{{ end -}}
+/>
