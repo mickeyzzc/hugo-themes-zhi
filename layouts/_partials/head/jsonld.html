@@ -22,7 +22,7 @@
   "url" .Permalink
   "keywords" (delimit (.Params.tags | default slice) ", ")
 -}}
-<script type="application/ld+json">{{ $schema | jsonify (dict "indent" "  ") | safeHTML }}</script>
+<script type="application/ld+json">{{ $schema | jsonify | safeJS }}</script>
 {{- else if .IsHome -}}
 {{- $schema := dict
   "@context" "https://schema.org"
@@ -38,5 +38,5 @@
 {{- $searchURL := printf "%s?q={search_term_string}" (strings.TrimSuffix "/" .Site.BaseURL) -}}
 {{- $schema = merge $schema (dict "potentialAction" (dict "@type" "SearchAction" "target" (dict "@type" "EntryPoint" "urlTemplate" $searchURL) "query-input" "required name=search_term_string")) -}}
 {{- end -}}
-<script type="application/ld+json">{{ $schema | jsonify (dict "indent" "  ") | safeHTML }}</script>
+<script type="application/ld+json">{{ $schema | jsonify | safeJS }}</script>
 {{- end -}}
