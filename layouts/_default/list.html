@@ -6,7 +6,7 @@
       <div class="Content">{{ . }}</div>
       {{ end }}
     </header>
-    {{ $p := .Paginate (sort .Pages "Date" "desc") }}
+    {{ $p := .Scratch.Get "paginator" }}
     <div class="post-list">
       {{ range $p.Pages }}
       <article class="post-card">

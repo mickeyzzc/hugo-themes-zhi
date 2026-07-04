@@ -1,24 +1,25 @@
 {{- $paginated := in (slice "home" "section" "taxonomy" "term") .Kind -}}
+{{- $paginator := .Scratch.Get "paginator" -}}
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Site.Title }} - {{ .Title }}{{ end }}{{ if and $paginated .Paginator.HasPrev }} - {{ i18n "page" (dict "Count" .Paginator.PageNumber) }}{{ end }}</title>
+<title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Site.Title }} - {{ .Title }}{{ end }}{{ if and $paginated $paginator.HasPrev }} - {{ i18n "page" (dict "Count" $paginator.PageNumber) }}{{ end }}</title>
 <meta name="description" content="{{ .Description | default .Site.Params.description }}">
 {{- with .Keywords }}
 <meta name="keywords" content="{{ delimit . `, ` }}">
 {{- end }}
 {{- /* Canonical: self-canonical per page including paginated pages */ -}}
-<link rel="canonical" href="{{ if and $paginated .Paginator.HasPrev }}{{ .Paginator.URL | absURL }}{{ else }}{{ .Permalink }}{{ end }}">
+<link rel="canonical" href="{{ if and $paginated $paginator.HasPrev }}{{ $paginator.URL | absURL }}{{ else }}{{ .Permalink }}{{ end }}">
 {{- /* RSS alternate: only when the page actually has an RSS output format */ -}}
 {{- with .OutputFormats.Get "RSS" }}
 <link rel="alternate" type="application/rss+xml" href="{{ .RelPermalink }}">
 {{- end }}
 {{- /* Pagination prev/next hints for SEO (paginated list pages only) */ -}}
-{{- if $paginated }}
-  {{- if .Paginator.HasPrev }}
-<link rel="prev" href="{{ .Paginator.Prev.URL | absURL }}">
+{{- if and $paginated $paginator }}
+  {{- if $paginator.HasPrev }}
+<link rel="prev" href="{{ $paginator.Prev.URL | absURL }}">
   {{- end }}
-  {{- if .Paginator.HasNext }}
-<link rel="next" href="{{ .Paginator.Next.URL | absURL }}">
+  {{- if $paginator.HasNext }}
+<link rel="next" href="{{ $paginator.Next.URL | absURL }}">
   {{- end }}
 {{- end }}
 

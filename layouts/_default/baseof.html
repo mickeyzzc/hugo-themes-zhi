@@ -2,6 +2,15 @@
 <html lang="{{ site.Language.Locale }}" dir="{{ or site.Language.Direction `ltr` }}"
       data-video-default="{{ .Site.Params.video.defaultPlatform }}"
       data-video-show-switch="{{ .Site.Params.video.showSwitch }}">
+{{- /* Initialize paginator once for list-style pages so head and main share the
+      same (date-desc) sort order. Hugo locks pagination on first .Paginator /
+      .Paginate call; calling it here with an explicit sequence prevents the
+      bare .Paginator in head.html from locking weight-first default order. */ -}}
+{{- if eq .Kind "home" -}}
+{{- .Scratch.Set "paginator" (.Paginate ((where site.RegularPages "Type" "==" "posts").ByDate.Reverse)) -}}
+{{- else if in (slice "section" "taxonomy" "term") .Kind -}}
+{{- .Scratch.Set "paginator" (.Paginate (.Pages.ByDate.Reverse)) -}}
+{{- end -}}
 <head>
   {{ partial "head.html" . }}
 </head>

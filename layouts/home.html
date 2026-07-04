@@ -1,5 +1,5 @@
 {{ define "main" }}
-  {{ $p := .Paginate (sort (where site.RegularPages "Type" "==" "posts") "Date" "desc") }}
+  {{ $p := .Scratch.Get "paginator" }}
   <div class="post-list">
     {{ range $p.Pages }}
       {{ partial "post/card.html" (dict "page" .) }}
