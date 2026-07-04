@@ -61,3 +61,11 @@
 {{- /* x-default points to the default language version */ -}}
 <link rel="alternate" hreflang="x-default" href="{{ .Site.Home.Permalink }}" />
 {{- end }}
+
+{{- /* Search engine verification meta tags (values come from config, never hardcoded) */ -}}
+{{- with .Site.Params.seo.googleSiteVerification -}}
+<meta name="google-site-verification" content="{{ . }}" />
+{{- end -}}
+{{- with .Site.Params.seo.bingSiteVerification -}}
+<meta name="msvalidate.01" content="{{ . }}" />
+{{- end }}
