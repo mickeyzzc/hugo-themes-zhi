@@ -28,6 +28,8 @@
 @import "components/series.css";
 @import "components/post-related.css";
 
+@import "components/animations.css";
+
 body {
   color: var(--text);
   background-color: var(--bg);

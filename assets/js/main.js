@@ -140,7 +140,12 @@
 
   async function initMermaid() {
     var hasMermaidCode = document.querySelector('code.language-mermaid, pre.mermaid');
-    if (!hasMermaidCode || !window.mermaid) return;
+    if (!hasMermaidCode) return;
+    if (!window.mermaid) {
+      console.warn('Mermaid JS not loaded yet, retrying in 2s');
+      setTimeout(initMermaid, 2000);
+      return;
+    }
 
     var isDark = document.querySelector('[data-theme="dark"]');
     await window.mermaid.initialize({
@@ -187,6 +192,7 @@
               var result = await window.mermaid.render(id, mermaidDefs[i]);
               containers[i].innerHTML = result.svg;
             } catch (e) {
+              console.error('Mermaid render failed:', e);
               containers[i].textContent = mermaidDefs[i];
             }
           }
