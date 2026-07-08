@@ -138,11 +138,21 @@
     });
   }
 
+  // Max retries for the "Mermaid CDN not loaded yet" poll. At 2s per attempt
+  // this bounds total wait to ~30s before giving up, instead of retrying forever.
+  var MERMAID_MAX_RETRIES = 15;
+  var mermaidRetries = 0;
+
   async function initMermaid() {
     var hasMermaidCode = document.querySelector('code.language-mermaid, pre.mermaid');
     if (!hasMermaidCode) return;
     if (!window.mermaid) {
-      console.warn('Mermaid JS not loaded yet, retrying in 2s');
+      if (mermaidRetries >= MERMAID_MAX_RETRIES) {
+        console.warn('Mermaid JS failed to load after ' + MERMAID_MAX_RETRIES +
+                     ' retries; diagrams will not render.');
+        return;
+      }
+      mermaidRetries++;
       setTimeout(initMermaid, 2000);
       return;
     }
@@ -205,7 +215,7 @@
   function initMathJax() {
     var content = document.body.innerText;
     var hasMath = /\$[^\$]+\$/.test(content) || /\$\$[\s\S]*?\$\$/.test(content);
-    if (!hasMath || window.MathJax) { initMermaid(); return; }
+    if (!hasMath || window.MathJax) return;
 
     var cfg = document.createElement('script');
     cfg.textContent = 'MathJax={tex:{inlineMath:[["$","$"],["\\\\(","\\\\)"]],displayMath:[["$$","$$"],["\\\\[","\\\\]"]],processEscapes:true,processEnvironments:true},options:{skipHtmlTags:["script","noscript","style","textarea","pre"]}};';
@@ -215,8 +225,6 @@
     script.id = 'MathJax-script';
     script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
     script.async = true;
-    script.addEventListener('load', initMermaid);
-    script.addEventListener('error', initMermaid);
     document.head.appendChild(script);
   }
 
@@ -238,8 +246,11 @@
   function init() {
     var features = getFeatures();
     initNavToggle();
+    // Mermaid and MathJax initialize independently. Previously Mermaid init was
+    // chained as MathJax's load/error handler, so a slow CDN could stall every
+    // diagram on the page. They touch different content, so parallelize them.
     if (features.mathJax) { initMathJax(); }
-    else if (features.mermaid) { initMermaid(); }
+    if (features.mermaid) { initMermaid(); }
   }
 
   if (document.readyState === 'loading') {
