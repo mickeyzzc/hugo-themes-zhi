@@ -28,6 +28,12 @@
     {{ partial "footer.html" . }}
   </footer>
   {{ if and site.Params.features.mermaid .Content }}{{ if findRE `language-mermaid` .Content }}{{ partial "mermaid.html" . }}{{ end }}{{ end }}
+  {{ if and site.Params.features.graphicsRuntime .Content }}
+  {{ if or (findRE `class="(pflow|sine|ringbuf|vstep|blur|conv|interp)-wrap"` .Content) (findRE `class="(axis-3d|tilt|drift|kernel|sr-evolution|pipeline)-` .Content) }}
+  {{ $gfx := resources.Get "js/graphics-runtime.js" | minify | fingerprint }}
+  <script src="{{ $gfx.RelPermalink }}" defer></script>
+  {{ end }}
+  {{ end }}
   {{ if site.Params.features.analytics }}
   {{ $analyticsJS := resources.Get "js/analytics.js" | minify | fingerprint }}
   <script src="{{ $analyticsJS.RelPermalink }}" defer></script>

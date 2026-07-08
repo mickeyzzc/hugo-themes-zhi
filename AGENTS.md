@@ -68,6 +68,7 @@ Controlled via `hugo.toml` → `[params.features]`. All default to `true` except
 | `backToTop` | Floating scroll-to-top button |
 | `analytics` | Custom analytics endpoint |
 | `series` | Post series with stepper layout, sort toggle, weight-based ordering |
+| `graphicsRuntime` | Lazy-loads `assets/js/graphics-runtime.js` on pages containing a JS-driven animation shortcode. Exposes `window.MiBeeGraphics` with shared helpers (`setupCanvas`, `runWhenVisible`, `phaseLoop`, `COLORS`, `prefersReducedMotion`) so each shortcode keeps only its draw logic. Content-detected in `baseof.html` (like mermaid) — not loaded on pages without shortcodes. |
 Additional toggles outside `features`: `params.donation.enable`, `params.analytics.busuanzi`, `params.creativeCommons.enable`.
 
 ## Where to Look
