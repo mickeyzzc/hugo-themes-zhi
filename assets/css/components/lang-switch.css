@@ -59,9 +59,18 @@
   z-index: 100;
 }
 
-/* Show dropdown on hover / focus-within */
+/* Show dropdown on hover / focus-within (desktop) */
 .lang-switcher:hover .lang-dropdown,
 .lang-switcher:focus-within .lang-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Show dropdown on click toggle (touch). The button's aria-expanded is
+   flipped by lang-switch.js; :hover/:focus-within alone are unreliable on
+   touch devices, so this rule is what actually opens the menu on mobile. */
+.lang-switcher:has(.lang-toggle[aria-expanded="true"]) .lang-dropdown {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
@@ -70,6 +79,10 @@
 /* Rotate chevron when dropdown is open */
 .lang-switcher:hover .lang-chevron,
 .lang-switcher:focus-within .lang-chevron {
+  transform: rotate(180deg);
+}
+
+.lang-switcher:has(.lang-toggle[aria-expanded="true"]) .lang-chevron {
   transform: rotate(180deg);
 }
 

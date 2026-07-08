@@ -223,6 +223,12 @@
   function initNavToggle() {
     var toggle = document.querySelector('.nav-toggle');
     if (!toggle) return;
+    // On mobile/tablet (<1024px) the hamburger drives the slide-in sidebar
+    // drawer, handled by sidebar.js. Binding the aria-expanded toggle here too
+    // would simultaneously drop the inline .site-nav dropdown AND open the
+    // drawer — two navigation surfaces stacked on one tap. Skip on narrow
+    // viewports so sidebar.js owns the button; desktop keeps this behavior.
+    if (window.innerWidth < 1024) return;
     toggle.addEventListener('click', function() {
       var expanded = toggle.getAttribute('aria-expanded') === 'true';
       toggle.setAttribute('aria-expanded', expanded ? 'false' : 'true');

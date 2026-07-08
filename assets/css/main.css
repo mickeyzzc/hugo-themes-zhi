@@ -30,6 +30,17 @@
 
 @import "components/animations.css";
 
+/* Global box-sizing reset. CSS spec requires @import rules to precede all
+   other statements, so this reset sits after the imports above.
+   Without it, the browser default content-box adds padding/border on top of
+   width/max-width, which makes elements like .Content overflow their padded
+   ancestors on mobile and produces a swipeable blank block on the right. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   color: var(--text);
   background-color: var(--bg);

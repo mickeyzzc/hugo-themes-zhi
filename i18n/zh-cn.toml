@@ -76,6 +76,9 @@
 [toggleNav]
   other = "切换导航"
 
+[mainNav]
+  other = "主导航"
+
 [closeSearch]
   other = "关闭搜索"
 

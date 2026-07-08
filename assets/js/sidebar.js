@@ -33,6 +33,13 @@
       if (e.key === 'Escape' && sidebar.classList.contains('open')) { close(); }
     });
 
+    // Allow other scripts (e.g. toc.js after a TOC link click) to close the
+    // drawer without reaching into its internals. Dispatching this event from
+    // anywhere closes the drawer and restores body scroll.
+    document.addEventListener('sidebar:close', function() {
+      if (sidebar.classList.contains('open')) { close(); }
+    });
+
     // Reset on resize to desktop
     window.addEventListener('resize', function() {
       if (window.innerWidth >= 1024) { close(); }

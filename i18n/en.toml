@@ -76,6 +76,9 @@
 [toggleNav]
   other = "Toggle navigation"
 
+[mainNav]
+  other = "Main navigation"
+
 [closeSearch]
   other = "Close search"
 

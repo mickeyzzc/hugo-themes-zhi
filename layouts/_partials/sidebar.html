@@ -39,6 +39,17 @@
 </nav>
 {{ end }}
 
+    {{/* Main navigation menu (首页 / 关于 / 系列 / 归档 ...).
+         On desktop these live in the header .site-nav; on mobile the header
+         nav is hidden (max-width: 1023px) and the hamburger opens this
+         drawer, so the menu must also be rendered here or items like "系列"
+         become unreachable on phones. */}}
+    {{ if site.Menus.main }}
+    <nav class="sidebar-nav" aria-label="{{ i18n `mainNav` | default `Main navigation` }}">
+      {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
+    </nav>
+    {{ end }}
+
     {{/* Smart sidebar content: TOC on article pages, Categories elsewhere */}}
     {{ if and (eq .Kind "page") (default true .Site.Params.features.toc) .TableOfContents }}
     <div class="sidebar-toc">

@@ -165,6 +165,18 @@ html, body {
   transition: background-color var(--transition), color var(--transition);
 }
 
+/* Prevent horizontal scroll on mobile from residual width overruns (off-canvas
+   sidebar, vw-based max-widths, negative margins). Scoped to <=1023px on
+   purpose: the desktop sidebar uses position: sticky, and setting overflow on
+   html/body creates a scroll containing block that breaks sticky — the
+   sidebar would scroll away instead of staying fixed. On mobile the sidebar
+   is a fixed drawer, so there is no sticky to preserve. */
+@media (max-width: 1023px) {
+  html, body {
+    overflow-x: hidden;
+  }
+}
+
 /* Accessibility: Reduce motion */
 @media (prefers-reduced-motion: reduce) {
   *,

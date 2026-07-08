@@ -1,5 +1,14 @@
 (function() {
   'use strict';
+
+  // Ask the sidebar drawer to close itself. sidebar.js listens for this event
+  // and tears down the overlay + restores body scroll. Defined here (not as a
+  // global) so it stays scoped to the TOC module; it is a no-op when the
+  // drawer is already closed or when sidebar.js is absent.
+  function closeSidebarDrawer() {
+    document.dispatchEvent(new Event('sidebar:close'));
+  }
+
   function init() {
     var toc = document.getElementById('toc');
     var tocBody = document.getElementById('toc-body');
@@ -78,6 +87,11 @@
         // Update URL hash without jumping
         history.pushState(null, '', link.getAttribute('href'));
       }
+      // Close the mobile sidebar drawer so the reader can interact with the
+      // article (and links such as the series nav) without first having to
+      // dismiss the drawer overlay — otherwise the first tap is swallowed by
+      // the overlay's click-to-close handler.
+      closeSidebarDrawer();
     });
 
     // Collapse/expand sub-items
@@ -98,6 +112,7 @@
                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 history.pushState(null, '', link.getAttribute('href'));
               }
+              closeSidebarDrawer();
             });
           }
         }

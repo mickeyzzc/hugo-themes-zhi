@@ -152,12 +152,11 @@ header {
   display: block;
 }
 
-/* Mobile styles (< 768px) */
-@media (max-width: 767px) {
-  .container {
-    padding: 0 1.25rem;
-  }
-
+/* Mobile/tablet nav (< 1024px). Breakpoint aligned with the sidebar drawer
+   (sidebar.css @media max-width: 1023px). Previously the hamburger only
+   appeared below 768px while the sidebar became an off-canvas drawer up to
+   1023px, leaving the drawer unreachable on 768–1023px tablets. */
+@media (max-width: 1023px) {
   .nav-toggle {
     display: flex;
   }
@@ -199,5 +198,13 @@ header {
   .site-nav a:hover {
     background: var(--bg-muted);
     color: var(--accent);
+  }
+}
+
+/* Narrow phones: slightly tighter header padding. Kept separate from the nav
+   breakpoint above so tablet widths keep the roomier 2rem gutter. */
+@media (max-width: 767px) {
+  .container {
+    padding: 0 1.25rem;
   }
 }

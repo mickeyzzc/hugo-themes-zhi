@@ -391,3 +391,12 @@
   max-width: 100%;
 }
 }
+
+/* Reserve space below the series nav so the floating back-to-top button
+   (position: fixed; bottom: 1rem; right: 1rem; 44x44px on mobile) does not
+   overlap the "next" series link and intercept taps on it. */
+@media (max-width: 768px) {
+  .series-nav {
+    padding-bottom: 4rem;
+  }
+}
