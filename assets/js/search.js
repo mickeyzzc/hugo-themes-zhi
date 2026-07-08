@@ -12,8 +12,12 @@
       callback();
       return;
     }
+    // Per-language index URL is injected by the search.html partial via
+    // data-index-url (e.g. "/en/searchindexes.json" on the English site).
+    // Fall back to the root index for backward compatibility.
+    var indexUrl = (overlay && overlay.getAttribute('data-index-url')) || '/searchindexes.json';
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/searchindexes.json', true);
+    xhr.open('GET', indexUrl, true);
     xhr.responseType = 'text';
     xhr.onload = function() {
       if (xhr.status !== 200) return;
