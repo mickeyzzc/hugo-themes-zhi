@@ -40,6 +40,9 @@
 [goHome]
   other = "Go Home"
 
+[redirectingHome]
+  other = "Redirecting home in {n}s…"
+
 [categories]
   other = "Categories"
 

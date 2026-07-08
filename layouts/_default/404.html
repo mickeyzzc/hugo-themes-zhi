@@ -3,6 +3,27 @@
   <div class="error-404__code">404</div>
   <h1 class="error-404__title">{{ i18n "pageNotFound" }}</h1>
   <p class="error-404__desc">{{ i18n "pageNotFoundDesc" }}</p>
-  <a href="/" class="error-404__home">{{ i18n "goHome" }}</a>
+  <a href="{{ site.Home.RelPermalink }}" class="error-404__home">{{ i18n "goHome" }}</a>
+  <p class="error-404__countdown" data-countdown="5" data-template="{{ i18n "redirectingHome" }}" data-home="{{ site.Home.RelPermalink }}"></p>
 </div>
+<script>
+(function () {
+  var el = document.querySelector('.error-404__countdown');
+  if (!el) return;
+  var template = el.getAttribute('data-template') || '';
+  var home = el.getAttribute('data-home') || '/';
+  var n = parseInt(el.getAttribute('data-countdown'), 10) || 0;
+  if (!template || n <= 0) return;
+  function tick() {
+    el.textContent = template.replace('{n}', n);
+    n--;
+    if (n < 0) {
+      window.location.replace(home);
+      return;
+    }
+    setTimeout(tick, 1000);
+  }
+  tick();
+})();
+</script>
 {{ end }}

@@ -40,6 +40,9 @@
 [goHome]
   other = "返回首页"
 
+[redirectingHome]
+  other = "{n} 秒后自动返回首页…"
+
 [categories]
   other = "分类"
 

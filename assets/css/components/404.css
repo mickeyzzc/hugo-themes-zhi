@@ -36,6 +36,13 @@
   transition: opacity 0.2s, transform 0.2s;
 }
 
+.error-404__countdown {
+  margin: 1.5rem 0 0;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
 .error-404__home:hover {
   opacity: 0.9;
   transform: translateY(-1px);
