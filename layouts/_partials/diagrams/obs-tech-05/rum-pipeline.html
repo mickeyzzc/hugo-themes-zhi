@@ -1,0 +1,117 @@
+{{- /* animated SVG, single source of truth for zh/en */ -}}
+{{- $lang := .lang | default "zh-cn" -}}
+{{- if eq $lang "en" -}}
+<svg viewBox="0 0 720 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;margin:1.5em auto;display:block;" role="img" aria-label="RUM Data Collection Pipeline">
+  <rect width="720" height="420" fill="#fafafa" rx="8"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#424242" font-family="system-ui,sans-serif">RUM Data Collection Pipeline</text>
+  <line x1="360" y1="48" x2="360" y2="350" stroke="#E0E0E0" stroke-width="2" stroke-dasharray="6,4"/>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.05;0.10;0.90;1" dur="14s" repeatCount="indefinite"/>
+    <rect x="210" y="50" width="300" height="60" rx="8" fill="#2196F3" fill-opacity="0.15" stroke="#2196F3" stroke-width="2"/>
+    <text x="360" y="75" text-anchor="middle" font-size="14" font-weight="600" fill="#1565C0" font-family="system-ui,sans-serif">User Browser → Performance API</text>
+    <text x="360" y="95" text-anchor="middle" font-size="11" fill="#1565C0" font-family="system-ui,sans-serif">Page load triggers Navigation / Resource / Paint Timing</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.15;0.20;0.90;1" dur="14s" repeatCount="indefinite"/>
+    <line x1="360" y1="114" x2="360" y2="120" stroke="#2196F3" stroke-width="2"/>
+    <polygon points="360,122 356,116 364,116" fill="#2196F3"/>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.22;0.27;0.90;1" dur="14s" repeatCount="indefinite"/>
+    <rect x="210" y="125" width="300" height="70" rx="8" fill="#FF9800" fill-opacity="0.15" stroke="#FF9800" stroke-width="2"/>
+    <text x="360" y="150" text-anchor="middle" font-size="14" font-weight="600" fill="#E65100" font-family="system-ui,sans-serif">Web Vitals SDK Collection</text>
+    <rect x="220" y="132" width="76" height="24" rx="4" fill="#FFF3E0" stroke="#FF9800"/>
+    <text x="258" y="148" text-anchor="middle" font-size="10" font-weight="600" fill="#E65100" font-family="monospace">LCP</text>
+    <rect x="300" y="132" width="76" height="24" rx="4" fill="#FFF3E0" stroke="#FF9800"/>
+    <text x="338" y="148" text-anchor="middle" font-size="10" font-weight="600" fill="#E65100" font-family="monospace">CLS</text>
+    <rect x="380" y="132" width="76" height="24" rx="4" fill="#FFF3E0" stroke="#FF9800"/>
+    <text x="418" y="148" text-anchor="middle" font-size="10" font-weight="600" fill="#E65100" font-family="monospace">INP</text>
+    <text x="360" y="185" text-anchor="middle" font-size="10" fill="#BF360C" font-family="system-ui,sans-serif">Automatically tracks Web Vitals per page</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.35;0.40;0.90;1" dur="14s" repeatCount="indefinite"/>
+    <line x1="360" y1="199" x2="360" y2="205" stroke="#FF9800" stroke-width="2"/>
+    <polygon points="360,207 356,201 364,201" fill="#FF9800"/>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.42;0.47;0.90;1" dur="14s" repeatCount="indefinite"/>
+    <rect x="210" y="210" width="300" height="60" rx="8" fill="#9C27B0" fill-opacity="0.15" stroke="#9C27B0" stroke-width="2"/>
+    <text x="360" y="235" text-anchor="middle" font-size="14" font-weight="600" fill="#6A1B9A" font-family="system-ui,sans-serif">sendBeacon / fetch Batch Report</text>
+    <text x="360" y="255" text-anchor="middle" font-size="11" fill="#6A1B9A" font-family="system-ui,sans-serif">Auto-sends on page unload for reliable delivery</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.55;0.60;0.90;1" dur="14s" repeatCount="indefinite"/>
+    <line x1="360" y1="274" x2="360" y2="280" stroke="#9C27B0" stroke-width="2"/>
+    <polygon points="360,282 356,276 364,276" fill="#9C27B0"/>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.62;0.67;0.90;1" dur="14s" repeatCount="indefinite"/>
+    <rect x="210" y="285" width="300" height="60" rx="8" fill="#4CAF50" fill-opacity="0.15" stroke="#4CAF50" stroke-width="2"/>
+    <text x="360" y="310" text-anchor="middle" font-size="14" font-weight="600" fill="#2E7D32" font-family="system-ui,sans-serif">Collector → Columnar OLAP Storage</text>
+    <text x="360" y="330" text-anchor="middle" font-size="11" fill="#2E7D32" font-family="system-ui,sans-serif">ClickHouse / Husky / Loki+Tempo etc.</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.72;0.77;0.90;1" dur="14s" repeatCount="indefinite"/>
+    <rect x="80" y="362" width="560" height="42" rx="8" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1.5"/>
+    <text x="360" y="382" text-anchor="middle" font-size="13" fill="#333" font-family="system-ui,sans-serif">RUM pipeline: Page load → SDK collection (LCP/CLS/INP) → Report → Columnar storage</text>
+    <text x="360" y="398" text-anchor="middle" font-size="11" fill="#2E7D32" font-family="system-ui,sans-serif">All mainstream RUM solutions share this collection paradigm; storage backend differs</text>
+  </g>
+</svg>
+{{- else -}}
+<svg viewBox="0 0 720 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;margin:1.5em auto;display:block;" role="img" aria-label="RUM 数据采集管道">
+  <rect width="720" height="420" fill="#fafafa" rx="8"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#424242" font-family="system-ui,sans-serif">RUM 数据采集管道</text>
+  <line x1="360" y1="48" x2="360" y2="350" stroke="#E0E0E0" stroke-width="2" stroke-dasharray="6,4"/>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.05;0.10;0.90;1" dur="14s" repeatCount="indefinite"/>
+    <rect x="210" y="50" width="300" height="60" rx="8" fill="#2196F3" fill-opacity="0.15" stroke="#2196F3" stroke-width="2"/>
+    <text x="360" y="75" text-anchor="middle" font-size="14" font-weight="600" fill="#1565C0" font-family="system-ui,sans-serif">用户浏览器 → Performance API</text>
+    <text x="360" y="95" text-anchor="middle" font-size="11" fill="#1565C0" font-family="system-ui,sans-serif">页面加载触发 Navigation / Resource / Paint Timing</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.15;0.20;0.90;1" dur="14s" repeatCount="indefinite"/>
+    <line x1="360" y1="114" x2="360" y2="120" stroke="#2196F3" stroke-width="2"/>
+    <polygon points="360,122 356,116 364,116" fill="#2196F3"/>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.22;0.27;0.90;1" dur="14s" repeatCount="indefinite"/>
+    <rect x="210" y="125" width="300" height="70" rx="8" fill="#FF9800" fill-opacity="0.15" stroke="#FF9800" stroke-width="2"/>
+    <text x="360" y="150" text-anchor="middle" font-size="14" font-weight="600" fill="#E65100" font-family="system-ui,sans-serif">Web Vitals SDK 采集</text>
+    <rect x="220" y="132" width="76" height="24" rx="4" fill="#FFF3E0" stroke="#FF9800"/>
+    <text x="258" y="148" text-anchor="middle" font-size="10" font-weight="600" fill="#E65100" font-family="monospace">LCP</text>
+    <rect x="300" y="132" width="76" height="24" rx="4" fill="#FFF3E0" stroke="#FF9800"/>
+    <text x="338" y="148" text-anchor="middle" font-size="10" font-weight="600" fill="#E65100" font-family="monospace">CLS</text>
+    <rect x="380" y="132" width="76" height="24" rx="4" fill="#FFF3E0" stroke="#FF9800"/>
+    <text x="418" y="148" text-anchor="middle" font-size="10" font-weight="600" fill="#E65100" font-family="monospace">INP</text>
+    <text x="360" y="185" text-anchor="middle" font-size="10" fill="#BF360C" font-family="system-ui,sans-serif">自动跟踪每个页面的 Web Vitals 指标</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.35;0.40;0.90;1" dur="14s" repeatCount="indefinite"/>
+    <line x1="360" y1="199" x2="360" y2="205" stroke="#FF9800" stroke-width="2"/>
+    <polygon points="360,207 356,201 364,201" fill="#FF9800"/>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.42;0.47;0.90;1" dur="14s" repeatCount="indefinite"/>
+    <rect x="210" y="210" width="300" height="60" rx="8" fill="#9C27B0" fill-opacity="0.15" stroke="#9C27B0" stroke-width="2"/>
+    <text x="360" y="235" text-anchor="middle" font-size="14" font-weight="600" fill="#6A1B9A" font-family="system-ui,sans-serif">sendBeacon / fetch 批量上报</text>
+    <text x="360" y="255" text-anchor="middle" font-size="11" fill="#6A1B9A" font-family="system-ui,sans-serif">页面卸载时自动发送，保证数据不丢失</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.55;0.60;0.90;1" dur="14s" repeatCount="indefinite"/>
+    <line x1="360" y1="274" x2="360" y2="280" stroke="#9C27B0" stroke-width="2"/>
+    <polygon points="360,282 356,276 364,276" fill="#9C27B0"/>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.62;0.67;0.90;1" dur="14s" repeatCount="indefinite"/>
+    <rect x="210" y="285" width="300" height="60" rx="8" fill="#4CAF50" fill-opacity="0.15" stroke="#4CAF50" stroke-width="2"/>
+    <text x="360" y="310" text-anchor="middle" font-size="14" font-weight="600" fill="#2E7D32" font-family="system-ui,sans-serif">Collector → 列式 OLAP 存储</text>
+    <text x="360" y="330" text-anchor="middle" font-size="11" fill="#2E7D32" font-family="system-ui,sans-serif">ClickHouse / Husky / Loki+Tempo 等</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.72;0.77;0.90;1" dur="14s" repeatCount="indefinite"/>
+    <rect x="80" y="362" width="560" height="42" rx="8" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1.5"/>
+    <text x="360" y="382" text-anchor="middle" font-size="13" fill="#333" font-family="system-ui,sans-serif">RUM 管道：页面加载 → SDK 采集（LCP/CLS/INP）→ 网络上报 → 列式存储</text>
+    <text x="360" y="398" text-anchor="middle" font-size="11" fill="#2E7D32" font-family="system-ui,sans-serif">所有主流 RUM 方案共享此采集范式，差异在后端存储选型</text>
+  </g>
+</svg>
+{{- end -}}

@@ -1,0 +1,109 @@
+{{- /* animated SVG, single source of truth for zh/en */ -}}
+{{- $lang := .lang | default "zh-cn" -}}
+{{- if eq $lang "en" -}}
+<svg viewBox="0 0 720 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;margin:1.5em auto;display:block;" role="img" aria-label="Trace context propagation animation">
+  <rect width="720" height="420" fill="#fafafa" rx="8"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#424242" font-family="system-ui,sans-serif">W3C TraceContext: trace_id propagates across services</text>
+  <text x="60" y="52" font-size="11" font-weight="600" fill="#9E9E9E" font-family="system-ui,sans-serif">Service</text>
+  <text x="440" y="52" font-size="11" font-weight="600" fill="#9E9E9E" font-family="system-ui,sans-serif">traceparent header</text>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.01;0.95;1" dur="16s" repeatCount="indefinite"/>
+    <rect x="30" y="65" width="160" height="50" rx="8" fill="#FFF3E0" stroke="#FF9800" stroke-width="2"/>
+    <text x="110" y="86" text-anchor="middle" font-size="14" font-weight="600" fill="#E65100" font-family="system-ui,sans-serif">Gateway</text>
+    <text x="110" y="102" text-anchor="middle" font-size="10" fill="#BF360C" font-family="system-ui,sans-serif">(entry point)</text>
+    <rect x="420" y="68" width="270" height="44" rx="6" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1"/>
+    <text x="555" y="86" text-anchor="middle" font-size="10" fill="#2E7D32" font-family="monospace" font-weight="600">traceparent: 00-abc123def456-0001-01</text>
+    <text x="555" y="102" text-anchor="middle" font-size="10" fill="#2E7D32" font-family="monospace">generates trace_id: abc123def456</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.22;0.23;0.95;1" dur="16s" repeatCount="indefinite"/>
+    <polygon points="105,120 110,128 115,120" fill="#FF9800"/>
+    <rect x="30" y="135" width="160" height="50" rx="8" fill="#E3F2FD" stroke="#2196F3" stroke-width="2"/>
+    <text x="110" y="156" text-anchor="middle" font-size="14" font-weight="600" fill="#1565C0" font-family="system-ui,sans-serif">Service A</text>
+    <text x="110" y="172" text-anchor="middle" font-size="10" fill="#1565C0" font-family="system-ui,sans-serif">(order service)</text>
+    <rect x="420" y="138" width="270" height="44" rx="6" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1"/>
+    <text x="555" y="156" text-anchor="middle" font-size="10" fill="#2E7D32" font-family="monospace" font-weight="600">traceparent: 00-abc123def456-0002-01</text>
+    <text x="555" y="172" text-anchor="middle" font-size="10" fill="#2E7D32" font-family="monospace">same trace_id, new span_id: 0002</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.44;0.45;0.95;1" dur="16s" repeatCount="indefinite"/>
+    <polygon points="105,190 110,198 115,190" fill="#2196F3"/>
+    <rect x="30" y="205" width="160" height="50" rx="8" fill="#E3F2FD" stroke="#2196F3" stroke-width="2"/>
+    <text x="110" y="226" text-anchor="middle" font-size="14" font-weight="600" fill="#1565C0" font-family="system-ui,sans-serif">Service B</text>
+    <text x="110" y="242" text-anchor="middle" font-size="10" fill="#1565C0" font-family="system-ui,sans-serif">(payment service)</text>
+    <rect x="420" y="208" width="270" height="44" rx="6" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1"/>
+    <text x="555" y="226" text-anchor="middle" font-size="10" fill="#2E7D32" font-family="monospace" font-weight="600">traceparent: 00-abc123def456-0003-01</text>
+    <text x="555" y="242" text-anchor="middle" font-size="10" fill="#2E7D32" font-family="monospace">same trace_id, new span_id: 0003</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.66;0.67;0.95;1" dur="16s" repeatCount="indefinite"/>
+    <polygon points="105,260 110,268 115,260" fill="#2196F3"/>
+    <rect x="30" y="275" width="160" height="50" rx="8" fill="#C8E6C9" stroke="#4CAF50" stroke-width="2"/>
+    <text x="110" y="296" text-anchor="middle" font-size="14" font-weight="600" fill="#2E7D32" font-family="system-ui,sans-serif">Database</text>
+    <text x="110" y="312" text-anchor="middle" font-size="10" fill="#2E7D32" font-family="system-ui,sans-serif">(storage)</text>
+    <rect x="420" y="278" width="270" height="44" rx="6" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1"/>
+    <text x="555" y="296" text-anchor="middle" font-size="10" fill="#2E7D32" font-family="monospace" font-weight="600">traceparent: 00-abc123def456-0004-01</text>
+    <text x="555" y="312" text-anchor="middle" font-size="10" fill="#2E7D32" font-family="monospace">same trace_id, new span_id: 0004</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.80;0.81;0.95;1" dur="16s" repeatCount="indefinite"/>
+    <line x1="20" y1="340" x2="700" y2="340" stroke="#E0E0E0" stroke-width="1"/>
+    <rect x="60" y="355" width="600" height="50" rx="8" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1.5"/>
+    <text x="360" y="376" text-anchor="middle" font-size="13" fill="#2E7D32" font-weight="600" font-family="system-ui,sans-serif">One request = one trace_id → multiple services = multiple spans</text>
+    <text x="360" y="394" text-anchor="middle" font-size="11" fill="#616161" font-family="system-ui,sans-serif">Spans linked by parent_span_id form a trace tree — this is the core of distributed tracing</text>
+  </g>
+</svg>
+{{- else -}}
+<svg viewBox="0 0 720 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;margin:1.5em auto;display:block;" role="img" aria-label="Trace 上下文传播动画">
+  <rect width="720" height="420" fill="#fafafa" rx="8"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#424242" font-family="system-ui,sans-serif">W3C TraceContext：trace_id 在服务间传播</text>
+  <text x="60" y="52" font-size="11" font-weight="600" fill="#9E9E9E" font-family="system-ui,sans-serif">服务节点</text>
+  <text x="440" y="52" font-size="11" font-weight="600" fill="#9E9E9E" font-family="system-ui,sans-serif">traceparent 请求头</text>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.01;0.95;1" dur="16s" repeatCount="indefinite"/>
+    <rect x="30" y="65" width="160" height="50" rx="8" fill="#FFF3E0" stroke="#FF9800" stroke-width="2"/>
+    <text x="110" y="86" text-anchor="middle" font-size="14" font-weight="600" fill="#E65100" font-family="system-ui,sans-serif">Gateway</text>
+    <text x="110" y="102" text-anchor="middle" font-size="10" fill="#BF360C" font-family="system-ui,sans-serif">(入口网关)</text>
+    <rect x="420" y="68" width="270" height="44" rx="6" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1"/>
+    <text x="555" y="86" text-anchor="middle" font-size="10" fill="#2E7D32" font-family="monospace" font-weight="600">traceparent: 00-abc123def456-0001-01</text>
+    <text x="555" y="102" text-anchor="middle" font-size="10" fill="#2E7D32" font-family="monospace">生成 trace_id: abc123def456</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.22;0.23;0.95;1" dur="16s" repeatCount="indefinite"/>
+    <polygon points="105,120 110,128 115,120" fill="#FF9800"/>
+    <rect x="30" y="135" width="160" height="50" rx="8" fill="#E3F2FD" stroke="#2196F3" stroke-width="2"/>
+    <text x="110" y="156" text-anchor="middle" font-size="14" font-weight="600" fill="#1565C0" font-family="system-ui,sans-serif">Service A</text>
+    <text x="110" y="172" text-anchor="middle" font-size="10" fill="#1565C0" font-family="system-ui,sans-serif">(订单服务)</text>
+    <rect x="420" y="138" width="270" height="44" rx="6" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1"/>
+    <text x="555" y="156" text-anchor="middle" font-size="10" fill="#2E7D32" font-family="monospace" font-weight="600">traceparent: 00-abc123def456-0002-01</text>
+    <text x="555" y="172" text-anchor="middle" font-size="10" fill="#2E7D32" font-family="monospace">trace_id 不变，生成 span_id: 0002</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.44;0.45;0.95;1" dur="16s" repeatCount="indefinite"/>
+    <polygon points="105,190 110,198 115,190" fill="#2196F3"/>
+    <rect x="30" y="205" width="160" height="50" rx="8" fill="#E3F2FD" stroke="#2196F3" stroke-width="2"/>
+    <text x="110" y="226" text-anchor="middle" font-size="14" font-weight="600" fill="#1565C0" font-family="system-ui,sans-serif">Service B</text>
+    <text x="110" y="242" text-anchor="middle" font-size="10" fill="#1565C0" font-family="system-ui,sans-serif">(支付服务)</text>
+    <rect x="420" y="208" width="270" height="44" rx="6" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1"/>
+    <text x="555" y="226" text-anchor="middle" font-size="10" fill="#2E7D32" font-family="monospace" font-weight="600">traceparent: 00-abc123def456-0003-01</text>
+    <text x="555" y="242" text-anchor="middle" font-size="10" fill="#2E7D32" font-family="monospace">trace_id 不变，生成 span_id: 0003</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.66;0.67;0.95;1" dur="16s" repeatCount="indefinite"/>
+    <polygon points="105,260 110,268 115,260" fill="#2196F3"/>
+    <rect x="30" y="275" width="160" height="50" rx="8" fill="#C8E6C9" stroke="#4CAF50" stroke-width="2"/>
+    <text x="110" y="296" text-anchor="middle" font-size="14" font-weight="600" fill="#2E7D32" font-family="system-ui,sans-serif">Database</text>
+    <text x="110" y="312" text-anchor="middle" font-size="10" fill="#2E7D32" font-family="system-ui,sans-serif">(数据存储)</text>
+    <rect x="420" y="278" width="270" height="44" rx="6" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1"/>
+    <text x="555" y="296" text-anchor="middle" font-size="10" fill="#2E7D32" font-family="monospace" font-weight="600">traceparent: 00-abc123def456-0004-01</text>
+    <text x="555" y="312" text-anchor="middle" font-size="10" fill="#2E7D32" font-family="monospace">trace_id 不变，生成 span_id: 0004</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.80;0.81;0.95;1" dur="16s" repeatCount="indefinite"/>
+    <line x1="20" y1="340" x2="700" y2="340" stroke="#E0E0E0" stroke-width="1"/>
+    <rect x="60" y="355" width="600" height="50" rx="8" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1.5"/>
+    <text x="360" y="376" text-anchor="middle" font-size="13" fill="#2E7D32" font-weight="600" font-family="system-ui,sans-serif">一个请求 = 一个 trace_id → 多个服务 = 多个 span</text>
+    <text x="360" y="394" text-anchor="middle" font-size="11" fill="#616161" font-family="system-ui,sans-serif">span 通过 parent_span_id 串联成调用链树——这就是分布式追踪的核心</text>
+  </g>
+</svg>
+{{- end -}}

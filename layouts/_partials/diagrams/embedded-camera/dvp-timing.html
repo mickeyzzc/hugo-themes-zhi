@@ -1,0 +1,63 @@
+{{- /* animated SVG, single source of truth for zh/en */ -}}
+{{- $lang := .lang | default "zh-cn" -}}
+{{- if eq $lang "en" -}}
+<svg viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;" role="img" aria-label="DVP signal timing diagram">
+<style>@media(prefers-reduced-motion:reduce){.dvp-scan{display:none}}</style>
+<rect x="100" y="15" width="460" height="260" fill="#2196F3" fill-opacity="0.06" rx="4"/>
+<text x="330" y="12" text-anchor="middle" font-size="11" fill="#888" font-family="sans-serif">← Frame Period →</text>
+<text x="6" y="44" font-size="15" font-weight="700" fill="#42a5f5" font-family="sans-serif">VSYNC</text>
+<text x="6" y="114" font-size="15" font-weight="700" fill="#ffa726" font-family="sans-serif">HREF</text>
+<text x="6" y="184" font-size="15" font-weight="700" fill="#ab47bc" font-family="sans-serif">PCLK</text>
+<text x="6" y="259" font-size="15" font-weight="700" fill="#66bb6a" font-family="sans-serif">D[7:0]</text>
+<path d="M 80,50 L 100,50 L 100,28 L 560,28 L 560,50 L 660,50 L 660,28 L 720,28 L 720,50 L 740,50" fill="none" stroke="#42a5f5" stroke-width="2.2"/>
+<path d="M 80,120 L 110,120 L 110,98 L 190,98 L 190,120 L 220,120 L 220,98 L 300,98 L 300,120 L 330,120 L 330,98 L 410,98 L 410,120 L 440,120 L 440,98 L 520,98 L 520,120 L 560,120 L 660,120 L 660,98 L 720,98 L 720,120 L 740,120" fill="none" stroke="#ffa726" stroke-width="2.2"/>
+<path d="M 80,190 L 110,190 L 110,168 L 120,168 L 120,190 L 130,190 L 130,168 L 140,168 L 140,190 L 150,190 L 150,168 L 160,168 L 160,190 L 170,190 L 170,168 L 180,168 L 180,190 L 190,190 L 220,190 L 220,168 L 230,168 L 230,190 L 240,190 L 240,168 L 250,168 L 250,190 L 260,190 L 260,168 L 270,168 L 270,190 L 280,190 L 280,168 L 290,168 L 290,190 L 300,190 L 330,190 L 330,168 L 340,168 L 340,190 L 350,190 L 350,168 L 360,168 L 360,190 L 370,190 L 370,168 L 380,168 L 380,190 L 390,190 L 390,168 L 400,168 L 400,190 L 410,190 L 440,190 L 440,168 L 450,168 L 450,190 L 460,190 L 460,168 L 470,168 L 470,190 L 480,190 L 480,168 L 490,168 L 490,190 L 500,190 L 500,168 L 510,168 L 510,190 L 520,190 L 670,190 L 670,168 L 680,168 L 680,190 L 690,190 L 690,168 L 700,168 L 700,190 L 710,190 L 710,168 L 720,168 L 720,190 L 740,190" fill="none" stroke="#ab47bc" stroke-width="1.8"/>
+<g font-family="'Courier New',monospace" font-size="13" font-weight="700" fill="#66bb6a" text-anchor="middle">
+<text x="115" y="262">D0</text><text x="135" y="262">D1</text><text x="155" y="262">D2</text><text x="175" y="262">D3</text>
+<text x="260" y="262" font-size="16">⋯</text><text x="370" y="262" font-size="16">⋯</text><text x="480" y="262" font-size="16">⋯</text>
+</g>
+<g font-size="10" fill="#aaa" font-family="sans-serif" text-anchor="middle">
+<text x="150" y="91">Line 1</text><text x="260" y="91">Line 2</text><text x="370" y="91">Line 3</text><text x="480" y="91">Line 4</text>
+</g>
+<g opacity="0.85">
+<circle cx="110" cy="168" r="4" fill="#e53935"/>
+<line x1="110" y1="168" x2="110" y2="140" stroke="#e53935" stroke-width="1" stroke-dasharray="2,2"/>
+<text x="110" y="133" text-anchor="middle" font-size="10" fill="#e53935" font-family="sans-serif">↑ Sample</text>
+</g>
+<g class="dvp-scan">
+<line x1="80" y1="15" x2="80" y2="280" stroke="#ef5350" stroke-width="1.5" opacity="0.5" stroke-dasharray="5,3"/>
+<circle cx="80" cy="11" r="4" fill="#ef5350"/>
+<animateTransform attributeName="transform" type="translate" values="0 0; 660 0" dur="7s" repeatCount="indefinite"/>
+</g>
+</svg>
+{{- else -}}
+<svg viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;" role="img" aria-label="DVP 信号时序图">
+<style>@media(prefers-reduced-motion:reduce){.dvp-scan{display:none}}</style>
+<rect x="100" y="15" width="460" height="260" fill="#2196F3" fill-opacity="0.06" rx="4"/>
+<text x="330" y="12" text-anchor="middle" font-size="11" fill="#888" font-family="sans-serif">← 一帧周期 →</text>
+<text x="6" y="44" font-size="15" font-weight="700" fill="#42a5f5" font-family="sans-serif">VSYNC</text>
+<text x="6" y="114" font-size="15" font-weight="700" fill="#ffa726" font-family="sans-serif">HREF</text>
+<text x="6" y="184" font-size="15" font-weight="700" fill="#ab47bc" font-family="sans-serif">PCLK</text>
+<text x="6" y="259" font-size="15" font-weight="700" fill="#66bb6a" font-family="sans-serif">D[7:0]</text>
+<path d="M 80,50 L 100,50 L 100,28 L 560,28 L 560,50 L 660,50 L 660,28 L 720,28 L 720,50 L 740,50" fill="none" stroke="#42a5f5" stroke-width="2.2"/>
+<path d="M 80,120 L 110,120 L 110,98 L 190,98 L 190,120 L 220,120 L 220,98 L 300,98 L 300,120 L 330,120 L 330,98 L 410,98 L 410,120 L 440,120 L 440,98 L 520,98 L 520,120 L 560,120 L 660,120 L 660,98 L 720,98 L 720,120 L 740,120" fill="none" stroke="#ffa726" stroke-width="2.2"/>
+<path d="M 80,190 L 110,190 L 110,168 L 120,168 L 120,190 L 130,190 L 130,168 L 140,168 L 140,190 L 150,190 L 150,168 L 160,168 L 160,190 L 170,190 L 170,168 L 180,168 L 180,190 L 190,190 L 220,190 L 220,168 L 230,168 L 230,190 L 240,190 L 240,168 L 250,168 L 250,190 L 260,190 L 260,168 L 270,168 L 270,190 L 280,190 L 280,168 L 290,168 L 290,190 L 300,190 L 330,190 L 330,168 L 340,168 L 340,190 L 350,190 L 350,168 L 360,168 L 360,190 L 370,190 L 370,168 L 380,168 L 380,190 L 390,190 L 390,168 L 400,168 L 400,190 L 410,190 L 440,190 L 440,168 L 450,168 L 450,190 L 460,190 L 460,168 L 470,168 L 470,190 L 480,190 L 480,168 L 490,168 L 490,190 L 500,190 L 500,168 L 510,168 L 510,190 L 520,190 L 670,190 L 670,168 L 680,168 L 680,190 L 690,190 L 690,168 L 700,168 L 700,190 L 710,190 L 710,168 L 720,168 L 720,190 L 740,190" fill="none" stroke="#ab47bc" stroke-width="1.8"/>
+<g font-family="'Courier New',monospace" font-size="13" font-weight="700" fill="#66bb6a" text-anchor="middle">
+<text x="115" y="262">D0</text><text x="135" y="262">D1</text><text x="155" y="262">D2</text><text x="175" y="262">D3</text>
+<text x="260" y="262" font-size="16">⋯</text><text x="370" y="262" font-size="16">⋯</text><text x="480" y="262" font-size="16">⋯</text>
+</g>
+<g font-size="10" fill="#aaa" font-family="sans-serif" text-anchor="middle">
+<text x="150" y="91">行1</text><text x="260" y="91">行2</text><text x="370" y="91">行3</text><text x="480" y="91">行4</text>
+</g>
+<g opacity="0.85">
+<circle cx="110" cy="168" r="4" fill="#e53935"/>
+<line x1="110" y1="168" x2="110" y2="140" stroke="#e53935" stroke-width="1" stroke-dasharray="2,2"/>
+<text x="110" y="133" text-anchor="middle" font-size="10" fill="#e53935" font-family="sans-serif">↑ 采样</text>
+</g>
+<g class="dvp-scan">
+<line x1="80" y1="15" x2="80" y2="280" stroke="#ef5350" stroke-width="1.5" opacity="0.5" stroke-dasharray="5,3"/>
+<circle cx="80" cy="11" r="4" fill="#ef5350"/>
+<animateTransform attributeName="transform" type="translate" values="0 0; 660 0" dur="7s" repeatCount="indefinite"/>
+</g>
+</svg>
+{{- end -}}

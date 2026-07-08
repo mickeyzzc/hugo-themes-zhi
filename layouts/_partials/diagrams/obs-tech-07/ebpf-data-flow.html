@@ -1,0 +1,99 @@
+{{- /* animated SVG, single source of truth for zh/en */ -}}
+{{- $lang := .lang | default "zh-cn" -}}
+{{- if eq $lang "en" -}}
+<svg viewBox="0 0 720 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;margin:1.5em auto;display:block;" role="img" aria-label="eBPF kernel to user space data flow animation">
+  <rect width="720" height="400" fill="#fafafa" rx="8"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#424242" font-family="system-ui,sans-serif">eBPF Data Flow: Kernel Space to User Space</text>
+  <rect x="30" y="50" width="660" height="130" rx="6" fill="#E3F2FD" fill-opacity="0.35"/>
+  <text x="46" y="72" font-size="11" font-weight="600" fill="#1565C0" font-family="system-ui,sans-serif">Kernel Space</text>
+  <rect x="30" y="190" width="660" height="130" rx="6" fill="#E8F5E9" fill-opacity="0.35"/>
+  <text x="46" y="212" font-size="11" font-weight="600" fill="#2E7D32" font-family="system-ui,sans-serif">User Space</text>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.01;0.95;1" dur="14s" repeatCount="indefinite"/>
+    <rect x="50" y="95" width="120" height="44" rx="8" fill="#FF9800"/>
+    <text x="110" y="121" text-anchor="middle" font-size="12" fill="#fff" font-weight="600" font-family="system-ui,sans-serif">Packet/Syscall</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.14;0.15;0.95;1" dur="14s" repeatCount="indefinite"/>
+    <polygon points="174,113 184,117 174,121" fill="#9E9E9E"/>
+    <rect x="190" y="91" width="140" height="52" rx="8" fill="#9C27B0"/>
+    <text x="260" y="113" text-anchor="middle" font-size="11" fill="#fff" font-weight="600" font-family="system-ui,sans-serif">eBPF Program</text>
+    <text x="260" y="130" text-anchor="middle" font-size="9" fill="#E1BEE7" font-family="system-ui,sans-serif">(kprobe/tracepoint)</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.28;0.29;0.95;1" dur="14s" repeatCount="indefinite"/>
+    <polygon points="334,113 344,117 334,121" fill="#9E9E9E"/>
+    <rect x="350" y="91" width="150" height="52" rx="8" fill="#2196F3"/>
+    <text x="425" y="113" text-anchor="middle" font-size="11" fill="#fff" font-weight="600" font-family="system-ui,sans-serif">Ring Buffer / Map</text>
+    <text x="425" y="130" text-anchor="middle" font-size="9" fill="#BBDEFB" font-family="system-ui,sans-serif">(kernel memory)</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.42;0.43;0.95;1" dur="14s" repeatCount="indefinite"/>
+    <line x1="425" y1="143" x2="425" y2="235" stroke="#7B1FA2" stroke-width="2" stroke-dasharray="5,3"/>
+    <polygon points="421,230 425,240 429,230" fill="#7B1FA2"/>
+    <rect x="350" y="245" width="150" height="48" rx="8" fill="#4CAF50"/>
+    <text x="425" y="267" text-anchor="middle" font-size="12" fill="#fff" font-weight="600" font-family="system-ui,sans-serif">User Space Agent</text>
+    <text x="425" y="283" text-anchor="middle" font-size="9" fill="#C8E6C9" font-family="system-ui,sans-serif">(PEM / Hubble)</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.56;0.57;0.95;1" dur="14s" repeatCount="indefinite"/>
+    <polygon points="504,265 514,269 504,273" fill="#9E9E9E"/>
+    <rect x="520" y="245" width="150" height="48" rx="8" fill="#2196F3"/>
+    <text x="595" y="267" text-anchor="middle" font-size="12" fill="#fff" font-weight="600" font-family="system-ui,sans-serif">Backend Storage</text>
+    <text x="595" y="283" text-anchor="middle" font-size="9" fill="#BBDEFB" font-family="system-ui,sans-serif">(ClickHouse etc.)</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.70;0.71;0.95;1" dur="14s" repeatCount="indefinite"/>
+    <rect x="60" y="345" width="600" height="38" rx="6" fill="#FFF3E0" stroke="#FF9800" stroke-width="1"/>
+    <text x="360" y="369" text-anchor="middle" font-size="11" fill="#E65100" font-family="system-ui,sans-serif">vs Traditional: App must instrument SDK manually, no kernel visibility. eBPF captures at kernel level transparently.</text>
+  </g>
+</svg>
+{{- else -}}
+<svg viewBox="0 0 720 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;margin:1.5em auto;display:block;" role="img" aria-label="eBPF 内核到用户态数据流动画">
+  <rect width="720" height="400" fill="#fafafa" rx="8"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#424242" font-family="system-ui,sans-serif">eBPF 数据流：从内核态到用户态</text>
+  <rect x="30" y="50" width="660" height="130" rx="6" fill="#E3F2FD" fill-opacity="0.35"/>
+  <text x="46" y="72" font-size="11" font-weight="600" fill="#1565C0" font-family="system-ui,sans-serif">内核态（Kernel Space）</text>
+  <rect x="30" y="190" width="660" height="130" rx="6" fill="#E8F5E9" fill-opacity="0.35"/>
+  <text x="46" y="212" font-size="11" font-weight="600" fill="#2E7D32" font-family="system-ui,sans-serif">用户态（User Space）</text>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.01;0.95;1" dur="14s" repeatCount="indefinite"/>
+    <rect x="50" y="95" width="120" height="44" rx="8" fill="#FF9800"/>
+    <text x="110" y="121" text-anchor="middle" font-size="12" fill="#fff" font-weight="600" font-family="system-ui,sans-serif">数据包/系统调用</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.14;0.15;0.95;1" dur="14s" repeatCount="indefinite"/>
+    <polygon points="174,113 184,117 174,121" fill="#9E9E9E"/>
+    <rect x="190" y="91" width="140" height="52" rx="8" fill="#9C27B0"/>
+    <text x="260" y="113" text-anchor="middle" font-size="11" fill="#fff" font-weight="600" font-family="system-ui,sans-serif">eBPF 程序</text>
+    <text x="260" y="130" text-anchor="middle" font-size="9" fill="#E1BEE7" font-family="system-ui,sans-serif">(kprobe/tracepoint)</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.28;0.29;0.95;1" dur="14s" repeatCount="indefinite"/>
+    <polygon points="334,113 344,117 334,121" fill="#9E9E9E"/>
+    <rect x="350" y="91" width="150" height="52" rx="8" fill="#2196F3"/>
+    <text x="425" y="113" text-anchor="middle" font-size="11" fill="#fff" font-weight="600" font-family="system-ui,sans-serif">Ring Buffer / Map</text>
+    <text x="425" y="130" text-anchor="middle" font-size="9" fill="#BBDEFB" font-family="system-ui,sans-serif">(内核内存)</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.42;0.43;0.95;1" dur="14s" repeatCount="indefinite"/>
+    <line x1="425" y1="143" x2="425" y2="235" stroke="#7B1FA2" stroke-width="2" stroke-dasharray="5,3"/>
+    <polygon points="421,230 425,240 429,230" fill="#7B1FA2"/>
+    <rect x="350" y="245" width="150" height="48" rx="8" fill="#4CAF50"/>
+    <text x="425" y="267" text-anchor="middle" font-size="12" fill="#fff" font-weight="600" font-family="system-ui,sans-serif">用户态 Agent</text>
+    <text x="425" y="283" text-anchor="middle" font-size="9" fill="#C8E6C9" font-family="system-ui,sans-serif">(PEM / Hubble)</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.56;0.57;0.95;1" dur="14s" repeatCount="indefinite"/>
+    <polygon points="504,265 514,269 504,273" fill="#9E9E9E"/>
+    <rect x="520" y="245" width="150" height="48" rx="8" fill="#2196F3"/>
+    <text x="595" y="267" text-anchor="middle" font-size="12" fill="#fff" font-weight="600" font-family="system-ui,sans-serif">后端存储</text>
+    <text x="595" y="283" text-anchor="middle" font-size="9" fill="#BBDEFB" font-family="system-ui,sans-serif">(ClickHouse 等)</text>
+  </g>
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.70;0.71;0.95;1" dur="14s" repeatCount="indefinite"/>
+    <rect x="60" y="345" width="600" height="38" rx="6" fill="#FFF3E0" stroke="#FF9800" stroke-width="1"/>
+    <text x="360" y="369" text-anchor="middle" font-size="11" fill="#E65100" font-family="system-ui,sans-serif">对比传统方案：应用需手动埋点 SDK，无法感知内核事件；eBPF 在内核态自动捕获，无需修改应用代码</text>
+  </g>
+</svg>
+{{- end -}}

@@ -1,0 +1,38 @@
+{{- /* animated SVG, single source of truth for zh/en */ -}}
+{{- $lang := .lang | default "zh-cn" -}}
+{{- if eq $lang "en" -}}
+<svg viewBox="0 0 720 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;" role="img" aria-label="Quad Bayer pixel binning">
+<style>@media(prefers-reduced-motion:reduce){animate{display:none}}</style>
+<text x="150" y="22" text-anchor="middle" font-size="12" font-weight="600" fill="#888" font-family="sans-serif">Original 4 × 1.0µm</text>
+<rect x="100" y="35" width="50" height="50" fill="#81c784" stroke="#4caf50" stroke-width="2"/>
+<rect x="150" y="35" width="50" height="50" fill="#81c784" stroke="#4caf50" stroke-width="2"/>
+<rect x="100" y="85" width="50" height="50" fill="#81c784" stroke="#4caf50" stroke-width="2"/>
+<rect x="150" y="85" width="50" height="50" fill="#81c784" stroke="#4caf50" stroke-width="2"/>
+<g opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.3;0.35;0.6;0.65;1" dur="3s" repeatCount="indefinite"/><rect x="100" y="35" width="100" height="100" fill="#388e3c" fill-opacity="0.25" stroke="none"/></g>
+<text x="150" y="155" text-anchor="middle" font-size="10" fill="#888" font-family="sans-serif">Small area, avg low-light</text>
+<text x="280" y="90" font-size="28" fill="#aaa" font-family="sans-serif">⇒</text>
+<text x="530" y="22" text-anchor="middle" font-size="12" font-weight="600" fill="#388e3c" font-family="sans-serif">Binned 1 × 2.0µm</text>
+<rect x="450" y="35" width="160" height="100" fill="#388e3c" fill-opacity="0.3" stroke="#388e3c" stroke-width="3"/>
+<text x="530" y="95" text-anchor="middle" font-size="30" font-weight="700" fill="#2e7d32" font-family="sans-serif">2.0µm</text>
+<text x="530" y="155" text-anchor="middle" font-size="10" fill="#388e3c" font-family="sans-serif">4× area, strong low-light ✅</text>
+</svg>
+{{- else -}}
+<svg viewBox="0 0 720 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;" role="img" aria-label="Quad Bayer 像素合并">
+<style>@media(prefers-reduced-motion:reduce){animate{display:none}}</style>
+<!-- 左: 4个小像素 -->
+<text x="150" y="22" text-anchor="middle" font-size="12" font-weight="600" fill="#888" font-family="sans-serif">原始模式 4 × 1.0µm</text>
+<rect x="100" y="35" width="50" height="50" fill="#81c784" stroke="#4caf50" stroke-width="2"/>
+<rect x="150" y="35" width="50" height="50" fill="#81c784" stroke="#4caf50" stroke-width="2"/>
+<rect x="100" y="85" width="50" height="50" fill="#81c784" stroke="#4caf50" stroke-width="2"/>
+<rect x="150" y="85" width="50" height="50" fill="#81c784" stroke="#4caf50" stroke-width="2"/>
+<!-- 像素框交替消失/出现 -->
+<g opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.3;0.35;0.6;0.65;1" dur="3s" repeatCount="indefinite"/><rect x="100" y="35" width="100" height="100" fill="#388e3c" fill-opacity="0.25" stroke="none"/></g>
+<text x="150" y="155" text-anchor="middle" font-size="10" fill="#888" font-family="sans-serif">面积小，低光一般</text>
+<text x="280" y="90" font-size="28" fill="#aaa" font-family="sans-serif">⇒</text>
+<!-- 右: 1个大像素 -->
+<text x="530" y="22" text-anchor="middle" font-size="12" font-weight="600" fill="#388e3c" font-family="sans-serif">合并模式 1 × 2.0µm</text>
+<rect x="450" y="35" width="160" height="100" fill="#388e3c" fill-opacity="0.3" stroke="#388e3c" stroke-width="3"/>
+<text x="530" y="95" text-anchor="middle" font-size="30" font-weight="700" fill="#2e7d32" font-family="sans-serif">2.0µm</text>
+<text x="530" y="155" text-anchor="middle" font-size="10" fill="#388e3c" font-family="sans-serif">面积 ×4，低光强 ✅</text>
+</svg>
+{{- end -}}

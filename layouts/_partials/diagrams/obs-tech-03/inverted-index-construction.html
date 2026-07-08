@@ -1,0 +1,185 @@
+{{- /* animated SVG, single source of truth for zh/en */ -}}
+{{- $lang := .lang | default "zh-cn" -}}
+{{- if eq $lang "en" -}}
+<svg viewBox="0 0 720 440" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;margin:1.5em auto;display:block;" role="img" aria-label="Inverted Index Construction Animation">
+<style>
+@keyframes iiStage1 {
+    0%, 10% { opacity: 1; }        /* Stage 1 solo */
+    11%, 43% { opacity: 0; }     /* hidden during stages 2-4 */
+    44%, 100% { opacity: 1; }    /* ALL visible → seamless to next cycle */
+  }
+  @keyframes iiStage2 {
+    0%, 10% { opacity: 0; }
+    11%, 21% { opacity: 1; }       /* Stage 2 solo */
+    22%, 43% { opacity: 0; }
+    44%, 80% { opacity: 1; }       /* ALL visible */
+    81%, 100% { opacity: 0; }      /* fade out → only Stage 1 remains */
+  }
+  @keyframes iiStage3 {
+    0%, 21% { opacity: 0; }
+    22%, 32% { opacity: 1; }       /* Stage 3 solo */
+    33%, 43% { opacity: 0; }
+    44%, 80% { opacity: 1; }       /* ALL visible */
+    81%, 100% { opacity: 0; }      /* fade out */
+  }
+  @keyframes iiStage4 {
+    0%, 32% { opacity: 0; }
+    33%, 43% { opacity: 1; }       /* Stage 4 solo */
+    44%, 80% { opacity: 1; }       /* ALL visible */
+    81%, 100% { opacity: 0; }      /* fade out */
+  }
+  .ii-s1 { animation: iiStage1 20s infinite; }
+  .ii-s2 { animation: iiStage2 20s infinite; }
+  .ii-s3 { animation: iiStage3 20s infinite; }
+  .ii-s4 { animation: iiStage4 20s infinite; }
+</style>
+  <rect width="720" height="440" fill="#fafafa" rx="8"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#424242" font-family="system-ui,sans-serif">Inverted Index Construction</text>
+  <!-- Stage 1 -->
+  <g class="ii-s1">
+    <text x="30" y="62" font-size="12" font-weight="600" fill="#9E9E9E" font-family="system-ui,sans-serif">1. Raw log text</text>
+    <rect x="30" y="74" width="660" height="44" rx="6" fill="#E3F2FD" stroke="#2196F3" stroke-width="1.5"/>
+    <text x="360" y="100" text-anchor="middle" font-size="14" fill="#1565C0" font-family="monospace">[ERROR] db connection failed at 10:03:45</text>
+  </g>
+  <!-- Stage 2 -->
+  <g class="ii-s2">
+    <text x="30" y="148" font-size="12" font-weight="600" fill="#9E9E9E" font-family="system-ui,sans-serif">2. Tokenization: splitting text into individual terms</text>
+    <rect x="30" y="160" width="76" height="32" rx="4" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
+    <text x="68" y="180" text-anchor="middle" font-size="12" fill="#E65100" font-family="monospace">[ERROR]</text>
+    <rect x="116" y="160" width="50" height="32" rx="4" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
+    <text x="141" y="180" text-anchor="middle" font-size="12" fill="#E65100" font-family="monospace">db</text>
+    <rect x="176" y="160" width="90" height="32" rx="4" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
+    <text x="221" y="180" text-anchor="middle" font-size="12" fill="#E65100" font-family="monospace">connection</text>
+    <rect x="276" y="160" width="60" height="32" rx="4" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
+    <text x="306" y="180" text-anchor="middle" font-size="12" fill="#E65100" font-family="monospace">failed</text>
+    <rect x="346" y="160" width="35" height="32" rx="4" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
+    <text x="363" y="180" text-anchor="middle" font-size="12" fill="#E65100" font-family="monospace">at</text>
+    <rect x="391" y="160" width="80" height="32" rx="4" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
+    <text x="431" y="180" text-anchor="middle" font-size="12" fill="#E65100" font-family="monospace">10:03:45</text>
+  </g>
+  <!-- Stage 3 -->
+  <g class="ii-s3">
+    <text x="30" y="220" font-size="12" font-weight="600" fill="#9E9E9E" font-family="system-ui,sans-serif">3. Building the inverted index: each term → doc ID list</text>
+    <rect x="30" y="232" width="280" height="24" rx="4" fill="#1565C0"/>
+    <text x="170" y="248" text-anchor="middle" font-size="12" fill="#fff" font-weight="600" font-family="system-ui,sans-serif">Term Dictionary</text>
+    <rect x="340" y="232" width="280" height="24" rx="4" fill="#7B1FA2"/>
+    <text x="480" y="248" text-anchor="middle" font-size="12" fill="#fff" font-weight="600" font-family="system-ui,sans-serif">Posting List</text>
+    <rect x="30" y="262" width="280" height="26" rx="3" fill="#FFF8E1" stroke="#FFB300" stroke-width="1"/>
+    <text x="170" y="279" text-anchor="middle" font-size="12" fill="#E65100" font-family="monospace">[ERROR]</text>
+    <line x1="310" y1="275" x2="340" y2="275" stroke="#BDBDBD" stroke-width="1" stroke-dasharray="4,3"/>
+    <rect x="340" y="262" width="280" height="26" rx="3" fill="#E8F5E9" stroke="#66BB6A" stroke-width="1"/>
+    <text x="480" y="279" text-anchor="middle" font-size="12" fill="#2E7D32" font-family="monospace">Doc [1, 5, 12, ...]</text>
+    <rect x="30" y="292" width="280" height="26" rx="3" fill="#FFF8E1" stroke="#FFB300" stroke-width="1"/>
+    <text x="170" y="309" text-anchor="middle" font-size="12" fill="#E65100" font-family="monospace">db</text>
+    <line x1="310" y1="305" x2="340" y2="305" stroke="#BDBDBD" stroke-width="1" stroke-dasharray="4,3"/>
+    <rect x="340" y="292" width="280" height="26" rx="3" fill="#E8F5E9" stroke="#66BB6A" stroke-width="1"/>
+    <text x="480" y="309" text-anchor="middle" font-size="12" fill="#2E7D32" font-family="monospace">Doc [1, 3, 7, ...]</text>
+    <rect x="30" y="322" width="280" height="26" rx="3" fill="#FFF8E1" stroke="#FFB300" stroke-width="1"/>
+    <text x="170" y="339" text-anchor="middle" font-size="12" fill="#E65100" font-family="monospace">connection</text>
+    <line x1="310" y1="335" x2="340" y2="335" stroke="#BDBDBD" stroke-width="1" stroke-dasharray="4,3"/>
+    <rect x="340" y="322" width="280" height="26" rx="3" fill="#E8F5E9" stroke="#66BB6A" stroke-width="1"/>
+    <text x="480" y="339" text-anchor="middle" font-size="12" fill="#2E7D32" font-family="monospace">Doc [1, 8, 9, ...]</text>
+    <rect x="30" y="352" width="280" height="26" rx="3" fill="#FFF8E1" stroke="#FFB300" stroke-width="1"/>
+    <text x="170" y="369" text-anchor="middle" font-size="12" fill="#E65100" font-family="monospace">failed</text>
+    <line x1="310" y1="365" x2="340" y2="365" stroke="#BDBDBD" stroke-width="1" stroke-dasharray="4,3"/>
+    <rect x="340" y="352" width="280" height="26" rx="3" fill="#E8F5E9" stroke="#66BB6A" stroke-width="1"/>
+    <text x="480" y="369" text-anchor="middle" font-size="12" fill="#2E7D32" font-family="monospace">Doc [1, 4, ...]</text>
+  </g>
+  <!-- Stage 4 -->
+  <g class="ii-s4">
+    <rect x="80" y="394" width="560" height="36" rx="6" fill="#FCE4EC" stroke="#EF9A9A" stroke-width="1.5"/>
+    <text x="360" y="416" text-anchor="middle" font-size="13" fill="#C62828" font-family="system-ui,sans-serif">One log line → 6 terms; millions of logs → millions of index entries → 3-5x index bloat</text>
+  </g>
+</svg>
+{{- else -}}
+<svg viewBox="0 0 720 440" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;margin:1.5em auto;display:block;" role="img" aria-label="倒排索引构建过程动画演示">
+<style>
+@keyframes iiStage1 {
+    0%, 10% { opacity: 1; }        /* Stage 1 solo */
+    11%, 43% { opacity: 0; }     /* hidden during stages 2-4 */
+    44%, 100% { opacity: 1; }    /* ALL visible → seamless to next cycle */
+  }
+  @keyframes iiStage2 {
+    0%, 10% { opacity: 0; }
+    11%, 21% { opacity: 1; }       /* Stage 2 solo */
+    22%, 43% { opacity: 0; }
+    44%, 80% { opacity: 1; }       /* ALL visible */
+    81%, 100% { opacity: 0; }      /* fade out → only Stage 1 remains */
+  }
+  @keyframes iiStage3 {
+    0%, 21% { opacity: 0; }
+    22%, 32% { opacity: 1; }       /* Stage 3 solo */
+    33%, 43% { opacity: 0; }
+    44%, 80% { opacity: 1; }       /* ALL visible */
+    81%, 100% { opacity: 0; }      /* fade out */
+  }
+  @keyframes iiStage4 {
+    0%, 32% { opacity: 0; }
+    33%, 43% { opacity: 1; }       /* Stage 4 solo */
+    44%, 80% { opacity: 1; }       /* ALL visible */
+    81%, 100% { opacity: 0; }      /* fade out */
+  }
+  .ii-s1 { animation: iiStage1 20s infinite; }
+  .ii-s2 { animation: iiStage2 20s infinite; }
+  .ii-s3 { animation: iiStage3 20s infinite; }
+  .ii-s4 { animation: iiStage4 20s infinite; }
+</style>
+  <rect width="720" height="440" fill="#fafafa" rx="8"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#424242" font-family="system-ui,sans-serif">倒排索引构建过程</text>
+  <!-- Stage 1 -->
+  <g class="ii-s1">
+    <text x="30" y="62" font-size="12" font-weight="600" fill="#9E9E9E" font-family="system-ui,sans-serif">1. 原始日志文本</text>
+    <rect x="30" y="74" width="660" height="44" rx="6" fill="#E3F2FD" stroke="#2196F3" stroke-width="1.5"/>
+    <text x="360" y="100" text-anchor="middle" font-size="14" fill="#1565C0" font-family="monospace">[ERROR] db connection failed at 10:03:45</text>
+  </g>
+  <!-- Stage 2 -->
+  <g class="ii-s2">
+    <text x="30" y="148" font-size="12" font-weight="600" fill="#9E9E9E" font-family="system-ui,sans-serif">2. 分词（Tokenization）：将文本拆解为独立 term</text>
+    <rect x="30" y="160" width="76" height="32" rx="4" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
+    <text x="68" y="180" text-anchor="middle" font-size="12" fill="#E65100" font-family="monospace">[ERROR]</text>
+    <rect x="116" y="160" width="50" height="32" rx="4" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
+    <text x="141" y="180" text-anchor="middle" font-size="12" fill="#E65100" font-family="monospace">db</text>
+    <rect x="176" y="160" width="90" height="32" rx="4" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
+    <text x="221" y="180" text-anchor="middle" font-size="12" fill="#E65100" font-family="monospace">connection</text>
+    <rect x="276" y="160" width="60" height="32" rx="4" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
+    <text x="306" y="180" text-anchor="middle" font-size="12" fill="#E65100" font-family="monospace">failed</text>
+    <rect x="346" y="160" width="35" height="32" rx="4" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
+    <text x="363" y="180" text-anchor="middle" font-size="12" fill="#E65100" font-family="monospace">at</text>
+    <rect x="391" y="160" width="80" height="32" rx="4" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
+    <text x="431" y="180" text-anchor="middle" font-size="12" fill="#E65100" font-family="monospace">10:03:45</text>
+  </g>
+  <!-- Stage 3 -->
+  <g class="ii-s3">
+    <text x="30" y="220" font-size="12" font-weight="600" fill="#9E9E9E" font-family="system-ui,sans-serif">3. 构建倒排索引：每个 term 对应文档 ID 列表</text>
+    <rect x="30" y="232" width="280" height="24" rx="4" fill="#1565C0"/>
+    <text x="170" y="248" text-anchor="middle" font-size="12" fill="#fff" font-weight="600" font-family="system-ui,sans-serif">Term Dictionary（词典）</text>
+    <rect x="340" y="232" width="280" height="24" rx="4" fill="#7B1FA2"/>
+    <text x="480" y="248" text-anchor="middle" font-size="12" fill="#fff" font-weight="600" font-family="system-ui,sans-serif">Posting List（倒排表）</text>
+    <rect x="30" y="262" width="280" height="26" rx="3" fill="#FFF8E1" stroke="#FFB300" stroke-width="1"/>
+    <text x="170" y="279" text-anchor="middle" font-size="12" fill="#E65100" font-family="monospace">[ERROR]</text>
+    <line x1="310" y1="275" x2="340" y2="275" stroke="#BDBDBD" stroke-width="1" stroke-dasharray="4,3"/>
+    <rect x="340" y="262" width="280" height="26" rx="3" fill="#E8F5E9" stroke="#66BB6A" stroke-width="1"/>
+    <text x="480" y="279" text-anchor="middle" font-size="12" fill="#2E7D32" font-family="monospace">Doc [1, 5, 12, ...]</text>
+    <rect x="30" y="292" width="280" height="26" rx="3" fill="#FFF8E1" stroke="#FFB300" stroke-width="1"/>
+    <text x="170" y="309" text-anchor="middle" font-size="12" fill="#E65100" font-family="monospace">db</text>
+    <line x1="310" y1="305" x2="340" y2="305" stroke="#BDBDBD" stroke-width="1" stroke-dasharray="4,3"/>
+    <rect x="340" y="292" width="280" height="26" rx="3" fill="#E8F5E9" stroke="#66BB6A" stroke-width="1"/>
+    <text x="480" y="309" text-anchor="middle" font-size="12" fill="#2E7D32" font-family="monospace">Doc [1, 3, 7, ...]</text>
+    <rect x="30" y="322" width="280" height="26" rx="3" fill="#FFF8E1" stroke="#FFB300" stroke-width="1"/>
+    <text x="170" y="339" text-anchor="middle" font-size="12" fill="#E65100" font-family="monospace">connection</text>
+    <line x1="310" y1="335" x2="340" y2="335" stroke="#BDBDBD" stroke-width="1" stroke-dasharray="4,3"/>
+    <rect x="340" y="322" width="280" height="26" rx="3" fill="#E8F5E9" stroke="#66BB6A" stroke-width="1"/>
+    <text x="480" y="339" text-anchor="middle" font-size="12" fill="#2E7D32" font-family="monospace">Doc [1, 8, 9, ...]</text>
+    <rect x="30" y="352" width="280" height="26" rx="3" fill="#FFF8E1" stroke="#FFB300" stroke-width="1"/>
+    <text x="170" y="369" text-anchor="middle" font-size="12" fill="#E65100" font-family="monospace">failed</text>
+    <line x1="310" y1="365" x2="340" y2="365" stroke="#BDBDBD" stroke-width="1" stroke-dasharray="4,3"/>
+    <rect x="340" y="352" width="280" height="26" rx="3" fill="#E8F5E9" stroke="#66BB6A" stroke-width="1"/>
+    <text x="480" y="369" text-anchor="middle" font-size="12" fill="#2E7D32" font-family="monospace">Doc [1, 4, ...]</text>
+  </g>
+  <!-- Stage 4 -->
+  <g class="ii-s4">
+    <rect x="80" y="394" width="560" height="36" rx="6" fill="#FCE4EC" stroke="#EF9A9A" stroke-width="1.5"/>
+    <text x="360" y="416" text-anchor="middle" font-size="13" fill="#C62828" font-family="system-ui,sans-serif">一条日志产生 6 个 term → 百万条日志产生数百万条目 → 索引膨胀 3-5x</text>
+  </g>
+</svg>
+{{- end -}}
