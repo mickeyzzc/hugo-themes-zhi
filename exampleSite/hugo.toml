@@ -41,7 +41,7 @@ theme        = 'hugo-themes-zhi'
   section  = ["HTML", "RSS"]
 
 [outputFormats.SearchIndexes]
-  mediatype     = "application/xml"
+  mediatype     = "application/json"
   baseName      = "searchindexes"
   isPlainText   = false
 
