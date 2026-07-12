@@ -146,6 +146,7 @@
     margin: 0;
     padding: 0 1rem;
     width: 100%;
+    min-width: 0; /* Prevent long English content from expanding the grid track */
   }
 
   body:has(.sidebar) > footer {

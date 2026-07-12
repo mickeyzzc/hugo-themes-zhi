@@ -11,6 +11,7 @@
   max-width: 840px;
   margin: 0 auto;
   padding: var(--spacing-xl) var(--spacing-md);
+  overflow-wrap: break-word; /* Prevent long English words/URLs from overflowing */
 }
 
 /* ============================================
