@@ -229,6 +229,123 @@
   border-radius: var(--radius-sm);
 }
 
+/* ---- Chapter Grouping (Accordion) ---- */
+/* Rendered when a series has posts tagged with the optional `chapter`
+   front-matter field. Each chapter is a <details>/<summary> panel. */
+
+/* Suppress the global vertical connector line in grouped mode — it would
+   run straight through the chapter cards. Item markers still draw their
+   own circles via .series-stepper__marker. */
+.series-stepper--grouped {
+  padding-left: 0;
+}
+
+.series-stepper--grouped::before {
+  display: none;
+}
+
+.series-chapter {
+  background: var(--bg-surface);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-lg);
+  overflow: hidden;
+  transition: border-color var(--transition);
+}
+
+.series-chapter:hover {
+  border-color: var(--accent);
+}
+
+.series-chapter[open] {
+  border-color: var(--accent);
+}
+
+/* Header = the <summary>. Strip the default disclosure triangle across
+   browsers and draw our own rotating marker. */
+.series-chapter__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  transition: background var(--transition);
+}
+
+.series-chapter__header::-webkit-details-marker {
+  display: none;
+}
+
+.series-chapter__header::before {
+  content: "▸";
+  display: inline-block;
+  color: var(--accent);
+  font-size: var(--text-sm);
+  transition: transform var(--transition);
+  flex-shrink: 0;
+}
+
+.series-chapter[open] > .series-chapter__header::before {
+  transform: rotate(90deg);
+}
+
+.series-chapter__name {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--text);
+  flex: 1;
+  min-width: 0;
+}
+
+.series-chapter__count {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+/* Items container — restore the stepper timeline (padding-left + connector)
+   inside each chapter so the numbered markers still line up. */
+.series-chapter__items {
+  position: relative;
+  padding: 0 var(--spacing-lg) var(--spacing-lg) calc(var(--spacing-lg) + 48px);
+}
+
+.series-chapter__items::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--spacing-lg) + 18px);
+  top: 0;
+  bottom: var(--spacing-lg);
+  width: 2px;
+  background: var(--border);
+}
+
+/* Inside a chapter, marker offsets are relative to .series-chapter__items'
+   padding box, so anchor them to that left edge. */
+.series-chapter__items .series-stepper__item:last-child {
+  margin-bottom: 0;
+}
+
+/* "Ungrouped" tail chapter — render with a muted, secondary look so it
+   reads as a fallback bucket, not a real chapter. */
+.series-chapter--ungrouped .series-chapter__name {
+  color: var(--text-secondary);
+  font-style: italic;
+  font-weight: 500;
+}
+
+.series-chapter--ungrouped {
+  border-style: dashed;
+}
+
+.series-chapter--ungrouped:hover,
+.series-chapter--ungrouped[open] {
+  border-color: var(--border);
+}
+
 /* ---- Responsive ---- */
 
 @media (max-width: 480px) {
@@ -256,6 +373,27 @@
 
   .series-stepper__content {
     padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  /* Chapter accordion on mobile: tighten the per-chapter timeline
+     padding so the numbered markers stay within the narrow viewport. */
+  .series-chapter__header {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .series-chapter__items {
+    padding-left: calc(var(--spacing-md) + 36px);
+    padding-right: var(--spacing-md);
+  }
+
+  .series-chapter__items::before {
+    left: calc(var(--spacing-md) + 13px);
+  }
+
+  .series-chapter__items .series-stepper__marker {
+    left: -36px;
+    width: 28px;
+    height: 28px;
   }
 }
 

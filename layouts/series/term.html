@@ -25,6 +25,105 @@
   </header>
 
   {{ if .Pages }}
+    {{- /* Build chapter buckets from weight-sorted pages. Pages without a
+          `chapter` front-matter field fall into an "ungrouped" bucket.
+          Chapter display order = order of first appearance in weight order
+          (i.e. each chapter sorts by its smallest-weight article). */ -}}
+    {{- $.Scratch.Set "chapters" dict -}}
+    {{- $.Scratch.Set "order" slice -}}
+    {{- $.Scratch.Set "ungrouped" slice -}}
+    {{- $.Scratch.Set "globalIdx" 0 -}}
+    {{- range .Pages.ByWeight -}}
+      {{- if .Params.chapter -}}
+        {{- $name := .Params.chapter -}}
+        {{- $chapters := $.Scratch.Get "chapters" -}}
+        {{- if not (in ($.Scratch.Get "order") $name) -}}
+          {{- /* New chapter: record its display order and seed its bucket. */ -}}
+          {{- $.Scratch.Set "order" ($.Scratch.Get "order" | append $name) -}}
+          {{- $.Scratch.Set "chapters" (merge $chapters (dict $name (slice .))) -}}
+        {{- else -}}
+          {{- /* Existing chapter: append to its bucket. */ -}}
+          {{- $.Scratch.Set "chapters" (merge $chapters (dict $name (index $chapters $name | append .))) -}}
+        {{- end -}}
+      {{- else -}}
+        {{- $.Scratch.Set "ungrouped" ($.Scratch.Get "ungrouped" | append .) -}}
+      {{- end -}}
+    {{- end -}}
+
+    {{- $hasChapters := gt (len ($.Scratch.Get "order")) 0 -}}
+
+    {{- /* Macro: render one stepper item; globalIdx advances across chapters
+          so server-rendered numbering stays continuous (1..N) without JS. */ -}}
+    {{- $renderItem := "" -}}
+
+  {{ if $hasChapters }}
+  <div class="series-stepper series-stepper--grouped" id="series-stepper">
+    {{ range $ci, $chapterName := $.Scratch.Get "order" }}
+    {{ $pages := index ($.Scratch.Get "chapters") $chapterName }}
+    <details class="series-chapter" data-min-weight="{{ (index $pages 0).Params.weight | default 0 }}"{{ if eq $ci 0 }} open{{ end }}>
+      <summary class="series-chapter__header">
+        <span class="series-chapter__name">{{ $chapterName }}</span>
+        <span class="series-chapter__count">{{ i18n "seriesPostCount" (dict "Count" (len $pages)) }}</span>
+      </summary>
+      <div class="series-chapter__items">
+        {{ range $page := $pages }}
+        {{ $i := $.Scratch.Get "globalIdx" }}
+        {{ $.Scratch.Set "globalIdx" (add $i 1) }}
+        <div class="series-stepper__item" data-weight="{{ $page.Params.weight | default 0 }}">
+          <div class="series-stepper__marker">
+            <span class="series-stepper__number">{{ add $i 1 }}</span>
+          </div>
+          <div class="series-stepper__content">
+            <a href="{{ $page.RelPermalink }}" class="series-stepper__title">{{ $page.Title }}</a>
+            <div class="series-stepper__meta">
+              <time datetime="{{ $page.Date.Format "2006-01-02" }}">{{ $page.Date | time.Format ":date_long" }}</time>
+              <span>·</span>
+              <span>{{ $page.ReadingTime }} {{ i18n "minReadSeries" }}</span>
+            </div>
+            {{ with $page.Summary }}
+            <div class="series-stepper__summary">{{ . }}</div>
+            {{ end }}
+          </div>
+        </div>
+        {{ end }}
+      </div>
+    </details>
+    {{ end }}
+
+    {{ with $ungrouped := $.Scratch.Get "ungrouped" }}
+    {{ if gt (len $ungrouped) 0 }}
+    <details class="series-chapter series-chapter--ungrouped" data-min-weight="999999">
+      <summary class="series-chapter__header">
+        <span class="series-chapter__name">{{ i18n "seriesChapterUngrouped" }}</span>
+        <span class="series-chapter__count">{{ i18n "seriesPostCount" (dict "Count" (len $ungrouped)) }}</span>
+      </summary>
+      <div class="series-chapter__items">
+        {{ range $page := $ungrouped }}
+        {{ $i := $.Scratch.Get "globalIdx" }}
+        {{ $.Scratch.Set "globalIdx" (add $i 1) }}
+        <div class="series-stepper__item" data-weight="{{ $page.Params.weight | default 0 }}">
+          <div class="series-stepper__marker">
+            <span class="series-stepper__number">{{ add $i 1 }}</span>
+          </div>
+          <div class="series-stepper__content">
+            <a href="{{ $page.RelPermalink }}" class="series-stepper__title">{{ $page.Title }}</a>
+            <div class="series-stepper__meta">
+              <time datetime="{{ $page.Date.Format "2006-01-02" }}">{{ $page.Date | time.Format ":date_long" }}</time>
+              <span>·</span>
+              <span>{{ $page.ReadingTime }} {{ i18n "minReadSeries" }}</span>
+            </div>
+            {{ with $page.Summary }}
+            <div class="series-stepper__summary">{{ . }}</div>
+            {{ end }}
+          </div>
+        </div>
+        {{ end }}
+      </div>
+    </details>
+    {{ end }}
+    {{ end }}
+  </div>
+  {{ else }}
   <div class="series-stepper" id="series-stepper">
     {{ $sorted := .Pages.ByWeight }}
     {{ range $i, $page := $sorted }}
@@ -46,6 +145,7 @@
     </div>
     {{ end }}
   </div>
+  {{ end }}
   {{ else }}
   <p style="color: var(--text-secondary);">{{ i18n "search_noResults" }}</p>
   {{ end }}

@@ -151,6 +151,9 @@
 [seriesNextArticle]
   other = "Next"
 
+[seriesChapterUngrouped]
+  other = "Other"
+
 [page]
   other = "Page {{ .Count }}"
 

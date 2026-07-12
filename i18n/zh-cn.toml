@@ -151,6 +151,9 @@
 [seriesNextArticle]
   other = "下一篇"
 
+[seriesChapterUngrouped]
+  other = "未分组"
+
 [page]
   other = "第 {{ .Count }} 页"
 
