@@ -86,7 +86,7 @@
   {{ $seriesSortJS := resources.Get "js/series-sort.js" | minify | fingerprint }}
   <script src="{{ $seriesSortJS.RelPermalink }}" defer></script>
   {{ end }}
-  {{ if gt (len site.Languages) 1 }}
+  {{ if hugo.IsMultilingual }}
   {{ $langSwitchJS := resources.Get "js/lang-switch.js" | minify | fingerprint }}
   <script src="{{ $langSwitchJS.RelPermalink }}" defer></script>
   {{ end }}
