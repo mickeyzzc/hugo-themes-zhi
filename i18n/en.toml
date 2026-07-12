@@ -159,3 +159,18 @@
 
 [relatedPosts]
   other = "Related Posts"
+
+[ttsTitle]
+  other = "Read Aloud"
+
+[ttsPlay]
+  other = "Play"
+
+[ttsPause]
+  other = "Pause"
+
+[ttsStop]
+  other = "Stop"
+
+[ttsSpeed]
+  other = "Speed"

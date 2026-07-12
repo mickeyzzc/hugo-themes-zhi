@@ -159,3 +159,18 @@
 
 [relatedPosts]
   other = "相关文章"
+
+[ttsTitle]
+  other = "朗读"
+
+[ttsPlay]
+  other = "播放"
+
+[ttsPause]
+  other = "暂停"
+
+[ttsStop]
+  other = "停止"
+
+[ttsSpeed]
+  other = "语速"

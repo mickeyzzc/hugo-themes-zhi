@@ -74,6 +74,10 @@
   {{ $tocJS := resources.Get "js/toc.js" | minify | fingerprint }}
   <script src="{{ $tocJS.RelPermalink }}" defer></script>
   {{ end }}
+  {{ if default true .Site.Params.features.tts }}
+  {{ $ttsJS := resources.Get "js/tts.js" | minify | fingerprint }}
+  <script src="{{ $ttsJS.RelPermalink }}" defer></script>
+  {{ end }}
   {{ if site.Params.donation.enable }}
   {{ $donationJS := resources.Get "js/donation.js" | minify | fingerprint }}
   <script src="{{ $donationJS.RelPermalink }}" defer></script>

@@ -4,6 +4,38 @@
       <h1 class="post-title">{{ .Title }}</h1>
       {{ partial "post/meta.html" . }}
     </header>
+    {{ $audioUrl := printf "%stts.mp3" .RelPermalink }}
+    {{ $audioFile := printf "static%s" $audioUrl }}
+    {{ $ttsEnabled := default true .Site.Params.features.tts }}
+    {{ if and $ttsEnabled (fileExists $audioFile) }}
+    <div class="tts-bar tts-prepared" role="region" aria-label="{{ i18n "ttsTitle" }}">
+      <span class="tts-speaker-icon">🔊</span>
+      <audio controls preload="none" src="{{ $audioUrl }}" class="tts-audio"></audio>
+    </div>
+    {{ else if and $ttsEnabled (eq .Language.Lang "zh-cn") }}
+    <div class="tts-bar" role="region" aria-label="{{ i18n "ttsTitle" }}">
+      <span class="tts-speaker-icon">🔊</span>
+      <button type="button" class="tts-btn tts-play" aria-label="{{ i18n "ttsPlay" }}"
+              data-label-play="{{ i18n "ttsPlay" }}" data-label-pause="{{ i18n "ttsPause" }}">
+        <span class="tts-btn-icon">▶</span>
+        <span class="tts-btn-text">{{ i18n "ttsPlay" }}</span>
+      </button>
+      <button type="button" class="tts-btn tts-stop" aria-label="{{ i18n "ttsStop" }}" disabled>
+        <span class="tts-btn-icon">⏹</span>
+      </button>
+      <label class="tts-speed-wrap">
+        <span class="tts-speed-label">{{ i18n "ttsSpeed" }}</span>
+        <select class="tts-speed" aria-label="{{ i18n "ttsSpeed" }}">
+          <option value="0.5">0.5×</option>
+          <option value="0.75">0.75×</option>
+          <option value="1" selected>1×</option>
+          <option value="1.25">1.25×</option>
+          <option value="1.5">1.5×</option>
+          <option value="2">2×</option>
+        </select>
+      </label>
+    </div>
+    {{ end }}
     <div class="Content">
       {{ .Content }}
     </div>
