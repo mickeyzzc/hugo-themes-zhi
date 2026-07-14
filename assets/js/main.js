@@ -50,6 +50,170 @@
 
   var mermaidDefs = [];
 
+  /* ---------- Click-to-zoom modal ----------
+   * The in-page diagram is always rendered complete (CSS scales the SVG to the
+   * column, never crops). Clicking opens a full-screen modal showing the SAME
+   * complete diagram at the largest size that fits the viewport, with wheel /
+   * button zoom and drag pan so fine text can be read.
+   */
+  var mermaidModal = null;
+  var mermaidModalZoom = null;
+  var mermaidModalState = { scale: 1, x: 0, y: 0, stage: null };
+
+  function ensureMermaidModal() {
+    if (mermaidModal) return mermaidModal;
+    mermaidModal = document.createElement('div');
+    mermaidModal.className = 'mermaid-modal';
+    mermaidModal.setAttribute('role', 'dialog');
+    mermaidModal.setAttribute('aria-modal', 'true');
+    mermaidModal.innerHTML =
+      '<div class="mermaid-modal__stage">' +
+        '<div class="mermaid-modal__zoom"></div>' +
+      '</div>' +
+      '<div class="mermaid-modal__toolbar">' +
+        '<button class="mermaid-modal__btn" data-zoom="in" aria-label="放大">+</button>' +
+        '<button class="mermaid-modal__btn" data-zoom="out" aria-label="缩小">−</button>' +
+        '<button class="mermaid-modal__btn" data-zoom="reset" aria-label="重置">↺</button>' +
+        '<button class="mermaid-modal__btn" data-zoom="close" aria-label="关闭">✕</button>' +
+      '</div>' +
+      '<div class="mermaid-modal__hint">滚轮缩放 · 拖动平移 · ESC 关闭</div>';
+    document.body.appendChild(mermaidModal);
+    mermaidModalZoom = mermaidModal.querySelector('.mermaid-modal__zoom');
+    mermaidModalState.stage = mermaidModal.querySelector('.mermaid-modal__stage');
+
+    function setZoom(action) {
+      var s = mermaidModalState.scale;
+      if (action === 'in') s = Math.min(s * 1.25, 6);
+      else if (action === 'out') s = Math.max(s / 1.25, 0.3);
+      else if (action === 'reset') { s = 1; mermaidModalState.x = 0; mermaidModalState.y = 0; }
+      mermaidModalState.scale = s;
+      applyMermaidTransform();
+    }
+
+    mermaidModal.addEventListener('click', function(e) {
+      var btn = e.target.closest('[data-zoom]');
+      if (btn) {
+        var z = btn.getAttribute('data-zoom');
+        if (z === 'close') closeMermaidModal();
+        else setZoom(z);
+        return;
+      }
+      // Click on empty backdrop closes.
+      if (e.target === mermaidModal || e.target.classList.contains('mermaid-modal__stage') ||
+          e.target.classList.contains('mermaid-modal__zoom')) {
+        closeMermaidModal();
+      }
+    });
+
+    // Wheel zoom centered on cursor.
+    mermaidModal.addEventListener('wheel', function(e) {
+      e.preventDefault();
+      var st = mermaidModalState;
+      var factor = e.deltaY < 0 ? 1.12 : 1 / 1.12;
+      var ns = Math.min(Math.max(st.scale * factor, 0.3), 6);
+      var rect = st.stage.getBoundingClientRect();
+      var cx = e.clientX - rect.left - rect.width / 2;
+      var cy = e.clientY - rect.top - rect.height / 2;
+      var ratio = ns / st.scale;
+      st.x = cx - (cx - st.x) * ratio;
+      st.y = cy - (cy - st.y) * ratio;
+      st.scale = ns;
+      applyMermaidTransform();
+    }, { passive: false });
+
+    // Pointer drag pan (works for mouse + touch).
+    var dragging = false, lastX = 0, lastY = 0;
+    mermaidModal.addEventListener('pointerdown', function(e) {
+      if (e.target.closest('[data-zoom]')) return;
+      dragging = true; lastX = e.clientX; lastY = e.clientY;
+      try { mermaidModal.setPointerCapture(e.pointerId); } catch (_) {}
+    });
+    mermaidModal.addEventListener('pointermove', function(e) {
+      if (!dragging) return;
+      mermaidModalState.x += e.clientX - lastX;
+      mermaidModalState.y += e.clientY - lastY;
+      lastX = e.clientX; lastY = e.clientY;
+      applyMermaidTransform();
+    });
+    mermaidModal.addEventListener('pointerup', function(e) {
+      dragging = false;
+      try { mermaidModal.releasePointerCapture(e.pointerId); } catch (_) {}
+    });
+    mermaidModal.addEventListener('pointercancel', function() { dragging = false; });
+
+    document.addEventListener('keydown', function(e) {
+      if (!mermaidModal.classList.contains('mermaid-modal--open')) return;
+      if (e.key === 'Escape') closeMermaidModal();
+      else if (e.key === '+' || e.key === '=') setZoom('in');
+      else if (e.key === '-' || e.key === '_') setZoom('out');
+      else if (e.key === '0') setZoom('reset');
+    });
+
+    return mermaidModal;
+  }
+
+  function applyMermaidTransform() {
+    if (!mermaidModalZoom) return;
+    var st = mermaidModalState;
+    mermaidModalZoom.style.transform =
+      'translate(' + st.x + 'px,' + st.y + 'px) scale(' + st.scale + ')';
+  }
+
+  // Clone the source SVG into the modal and make it fill the stage while
+  // preserving its aspect ratio (object-fit:contain via viewBox). We strip the
+  // width/height attributes Mermaid emits and rely on viewBox + preserveAspectRatio
+  // so the whole diagram is always visible, letterboxed within the stage.
+  function loadMermaidSvg(svgSource) {
+    mermaidModalZoom.innerHTML = '';
+    if (!svgSource) return;
+    var clone = svgSource.cloneNode(true);
+    // Mermaid sets width="100%" and a pixel height; remove both so the element
+    // honors its CSS size (100% of the stage) and scales by viewBox.
+    clone.removeAttribute('width');
+    clone.removeAttribute('height');
+    clone.removeAttribute('style');
+    // Guarantee contain behavior if Mermaid omitted it.
+    if (!clone.getAttribute('preserveAspectRatio')) {
+      clone.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    }
+    mermaidModalZoom.appendChild(clone);
+  }
+
+  function openMermaidModal(svgSource) {
+    var modal = ensureMermaidModal();
+    loadMermaidSvg(svgSource);
+    mermaidModalState.scale = 1;
+    mermaidModalState.x = 0;
+    mermaidModalState.y = 0;
+    applyMermaidTransform();
+    modal.classList.add('mermaid-modal--open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMermaidModal() {
+    if (!mermaidModal) return;
+    mermaidModal.classList.remove('mermaid-modal--open');
+    document.body.style.overflow = '';
+  }
+
+  // Attach click-to-open and the expand hint. Called after every render pass.
+  function enhanceMermaidContainers() {
+    document.querySelectorAll('.mermaid').forEach(function(container) {
+      if (container.dataset.mermaidEnhanced === '1') return;
+      container.dataset.mermaidEnhanced = '1';
+
+      var hint = document.createElement('span');
+      hint.className = 'mermaid__expand';
+      hint.textContent = '🔍 点击放大';
+      container.appendChild(hint);
+
+      container.addEventListener('click', function() {
+        var svg = container.querySelector('svg');
+        openMermaidModal(svg);
+      });
+    });
+  }
+
   function fixMermaidDarkMode() {
     var isDark = document.querySelector('[data-theme="dark"]');
     if (!isDark) return;
@@ -178,6 +342,7 @@
 
     await window.mermaid.run();
     fixMermaidDarkMode();
+    enhanceMermaidContainers();
 
     var toggle = document.querySelector('#theme-toggle');
     if (toggle) {
@@ -208,6 +373,7 @@
           }
         }
         fixMermaidDarkMode();
+        enhanceMermaidContainers();
         containers.forEach(function(c) { c.classList.remove('re-rendering'); });
       });
     }
