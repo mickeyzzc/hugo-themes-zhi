@@ -2,10 +2,11 @@
 {{ $position := .Site.Params.sidebar.position | default "left" }}
 <aside class="sidebar" id="sidebar" data-position="{{ $position }}">
   <div class="sidebar-inner">
-    {{/* Avatar */}}
+    {{/* Avatar — eager: above the fold on desktop sidebars, lazy would delay
+         first paint there; the resized 176px source keeps it cheap on mobile. */}}
     {{ with .Site.Params.avatar }}
     <div class="sidebar-avatar">
-      <img src="{{ . }}" alt="{{ $.Site.Params.author | default $.Site.Title }}" loading="lazy">
+      <img src="{{ . }}" alt="{{ $.Site.Params.author | default $.Site.Title }}" width="176" height="176" loading="eager" decoding="async">
     </div>
     {{ end }}
 

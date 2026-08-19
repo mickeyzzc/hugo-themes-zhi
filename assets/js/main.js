@@ -177,6 +177,27 @@
       clone.setAttribute('preserveAspectRatio', 'xMidYMid meet');
     }
     mermaidModalZoom.appendChild(clone);
+
+    // The modal stages the SVG on a fixed dark overlay (rgba(0,0,0,0.85)) in
+    // both themes, while handDrawn node interiors are transparent. Labels
+    // cloned from a light page would be dark-on-dark — force light text on
+    // nodes without a painted fill so the zoomed copy stays readable.
+    clone.querySelectorAll('g.rough-node, g.node').forEach(function(g) {
+      var shapes = g.querySelectorAll('rect, path, polygon, circle, ellipse');
+      var painted = false;
+      for (var i = 0; i < shapes.length; i++) {
+        var s = shapes[i];
+        var bb = s.getBoundingClientRect();
+        if (bb.width < 2 || bb.height < 2) continue;
+        var f = window.getComputedStyle(s).fill;
+        if (f && f !== 'none') { painted = true; break; }
+      }
+      if (painted) return;
+      g.querySelectorAll('span, p, text').forEach(function(el) {
+        el.style.setProperty('color', '#ffffff', 'important');
+        el.style.setProperty('fill', '#ffffff', 'important');
+      });
+    });
   }
 
   function openMermaidModal(svgSource) {
@@ -214,20 +235,23 @@
     });
   }
 
+  // Shared color helpers for the post-render fixups below.
+  function parseColor(c) {
+    if (!c || c === 'none' || c === 'transparent') return null;
+    var m = c.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+    if (m && (m[4] === undefined || parseFloat(m[4]) > 0.05)) {
+      return { r: parseInt(m[1]), g: parseInt(m[2]), b: parseInt(m[3]) };
+    }
+    m = c.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
+    if (m) return { r: parseInt(m[1], 16), g: parseInt(m[2], 16), b: parseInt(m[3], 16) };
+    return null;
+  }
+
+  function luminance(r, g, b) { return 0.299 * r + 0.587 * g + 0.114 * b; }
+
   function fixMermaidDarkMode() {
     var isDark = document.querySelector('[data-theme="dark"]');
     if (!isDark) return;
-
-    function parseColor(c) {
-      if (!c || c === 'none' || c === 'transparent') return null;
-      var m = c.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
-      if (m) return { r: parseInt(m[1]), g: parseInt(m[2]), b: parseInt(m[3]) };
-      m = c.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
-      if (m) return { r: parseInt(m[1], 16), g: parseInt(m[2], 16), b: parseInt(m[3], 16) };
-      return null;
-    }
-
-    function luminance(r, g, b) { return 0.299 * r + 0.587 * g + 0.114 * b; }
 
     // Convert RGB to HSL
     function rgbToHsl(r, g, b) {
@@ -277,7 +301,8 @@
       return hslToRgb(hsl.h, newS, newL);
     }
 
-    document.querySelectorAll('.mermaid svg .node').forEach(function(node) {
+    // handDrawn look renames node groups to .rough-node (classic .node kept for safety)
+    document.querySelectorAll('.mermaid svg .node, .mermaid svg .rough-node').forEach(function(node) {
       var shapes = node.querySelectorAll('rect, path, polygon');
       shapes.forEach(function(shape) {
         // Always use computedStyle — Mermaid v11 classDef sets fill via style="... !important"
@@ -298,6 +323,67 @@
           var ds = darkenForDarkMode(sc.r, sc.g, sc.b);
           shape.style.setProperty('stroke', 'rgb(' + ds.r + ',' + ds.g + ',' + ds.b + ')', 'important');
         }
+      });
+    });
+  }
+
+  // Per-node label contrast: posts set saturated Material fills via
+  // classDef/style while labels keep the theme's near-black text — dark
+  // fills (e.g. #9C27B0 purple) become unreadable, with or without the
+  // handDrawn look. After every render pass, measure the WCAG contrast of
+  // each node's CURRENT label color against its computed fill and, only
+  // when clearly broken, flip to white or theme-dark — whichever contrasts
+  // more. 2.75 separates this site's palette: dark-text-on-purple/brown
+  // (<=2.7) gets fixed, author-chosen white-on-green/blue (>=2.8) is left
+  // untouched so existing diagram looks don't shift.
+  function fixMermaidNodeTextContrast() {
+    function chan(v) {
+      v /= 255;
+      return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    }
+    function relLum(c) { return 0.2126 * chan(c.r) + 0.7152 * chan(c.g) + 0.0722 * chan(c.b); }
+    function contrast(a, b) {
+      var l1 = relLum(a), l2 = relLum(b);
+      return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+    }
+
+    var isDark = document.querySelector('[data-theme="dark"]');
+    var darkText = isDark ? { r: 0xcd, g: 0xd6, b: 0xf4 } : { r: 0x1a, g: 0x1a, b: 0x2e };
+    var white = { r: 255, g: 255, b: 255 };
+
+    // .rough-node/.rough-cluster: Mermaid v11 renames the groups under look:handDrawn
+    document.querySelectorAll('.mermaid svg .node, .mermaid svg .rough-node, .mermaid svg .cluster, .mermaid svg .rough-cluster').forEach(function(node) {
+      // rough.js (handDrawn) emits stroke-only sketch paths and keeps a 0x0
+      // inherited-fill rect; find the first *visible* shape with a real fill.
+      var shapes = node.querySelectorAll('rect, path, polygon, circle, ellipse');
+      var fill = null;
+      for (var i = 0; i < shapes.length; i++) {
+        var s = shapes[i];
+        var bb = s.getBoundingClientRect();
+        if (bb.width < 2 || bb.height < 2) continue;
+        var c = parseColor(window.getComputedStyle(s).fill);
+        if (c) { fill = c; break; }
+      }
+      // Transparent interior (handDrawn norm): the label sits on the themed
+      // page background and the theme label color already contrasts with it.
+      if (!fill) return;
+
+      var labels = node.querySelectorAll('span, p, text');
+      if (!labels.length) return;
+
+      // Current combo: HTML labels render via `color`, SVG <text> via `fill`.
+      var style0 = window.getComputedStyle(labels[0]);
+      var viaFill = labels[0].namespaceURI === 'http://www.w3.org/2000/svg';
+      var cur = parseColor(viaFill ? style0.fill : style0.color)
+        || parseColor(style0.color) || parseColor(style0.fill) || darkText;
+      if (contrast(fill, cur) >= 2.75) return;
+
+      var use = contrast(fill, white) >= contrast(fill, darkText)
+        ? '#ffffff'
+        : (isDark ? '#cdd6f4' : '#1a1a2e');
+      labels.forEach(function(el) {
+        el.style.setProperty('color', use, 'important');
+        el.style.setProperty('fill', use, 'important');
       });
     });
   }
@@ -326,6 +412,8 @@
       startOnLoad: false,
       securityLevel: 'loose',
       theme: 'base',
+      look: 'handDrawn',
+      handDrawnSeed: 42,
       themeVariables: isDark ? darkThemeVars : lightThemeVars
     });
 
@@ -342,10 +430,12 @@
 
     await window.mermaid.run();
     fixMermaidDarkMode();
+    fixMermaidNodeTextContrast();
     enhanceMermaidContainers();
 
-    var toggle = document.querySelector('#theme-toggle');
-    if (toggle) {
+    // Re-render diagrams on theme switches; bind every .theme-toggle
+    // instance (header #theme-toggle + the floating .fab-group copy).
+    document.querySelectorAll('.theme-toggle').forEach(function(toggle) {
       toggle.addEventListener('click', async function() {
         var containers = document.querySelectorAll('.mermaid');
         if (!containers.length || !window.mermaid) return;
@@ -357,6 +447,8 @@
           startOnLoad: false,
           securityLevel: 'loose',
           theme: 'base',
+          look: 'handDrawn',
+          handDrawnSeed: 42,
           themeVariables: dark ? darkThemeVars : lightThemeVars
         });
 
@@ -373,10 +465,11 @@
           }
         }
         fixMermaidDarkMode();
+        fixMermaidNodeTextContrast();
         enhanceMermaidContainers();
         containers.forEach(function(c) { c.classList.remove('re-rendering'); });
       });
-    }
+    });
   }
   function initMathJax() {
     var content = document.body.innerText;

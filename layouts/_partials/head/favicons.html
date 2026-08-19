@@ -1,8 +1,11 @@
-{{- /* Favicons: standard, apple-touch, with correct MIME type */ -}}
+{{- /* Favicons: standard, apple-touch, with correct MIME type.
+       appleTouchIcon falls back to favicon — iOS wants ~180x180, browser
+       tabs need only 48x48, so sites can ship two differently-sized files. */ -}}
 {{- $favicon := .Site.Params.favicon | default "/favicon.ico" -}}
+{{- $appleTouch := .Site.Params.appleTouchIcon | default $favicon -}}
 {{- $iconExt := path.Ext $favicon -}}
 {{- $iconType := cond (eq (lower $iconExt) ".png") "image/png" (cond (eq (lower $iconExt) ".svg") "image/svg+xml" "image/x-icon") -}}
 {{- if .Site.Params.favicon | default "/favicon.ico" }}
 <link rel="icon" type="{{ $iconType }}" href="{{ $favicon | absURL }}">
-<link rel="apple-touch-icon" href="{{ $favicon | absURL }}">
+<link rel="apple-touch-icon" href="{{ $appleTouch | absURL }}">
 {{- end }}

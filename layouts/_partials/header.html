@@ -37,7 +37,7 @@
       {{ end }}
       
       <!-- Theme Toggle -->
-      <button id="theme-toggle" {{ if .Site.Params.features.themeSwitch }}data-feature-theme-switch="true"{{ end }} aria-label="{{ i18n `toggleTheme` }}">
+      <button id="theme-toggle" class="theme-toggle" {{ if .Site.Params.features.themeSwitch }}data-feature-theme-switch="true"{{ end }} aria-label="{{ i18n `toggleTheme` }}">
         <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="5"></circle>
           <line x1="12" y1="1" x2="12" y2="5"></line>

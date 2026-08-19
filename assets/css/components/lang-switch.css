@@ -126,3 +126,87 @@
     left: 0;
   }
 }
+
+/* Language suggestion banner — bottom-center pill shown by lang-switch.js when
+   the browser's preferred language doesn't match the page language. */
+.lang-hint {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translate(-50%, 8px);
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  max-width: calc(100vw - 2rem);
+  padding: 0.5rem 0.75rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  box-shadow: 0 4px 16px var(--shadow);
+  font-size: var(--text-sm);
+  /* Below the fab-group (z 40): on narrow screens the centered banner can
+     reach the bottom-right button stack — buttons must stay on top. */
+  z-index: 30;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition), transform var(--transition), visibility var(--transition);
+}
+
+.lang-hint--visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+.lang-hint__text {
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lang-hint__switch {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.lang-hint__switch:hover {
+  text-decoration: underline;
+}
+
+.lang-hint__close {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.lang-hint__close:hover {
+  background: var(--bg-muted);
+  color: var(--text);
+}
+
+/* On very narrow screens let the text wrap instead of truncating. */
+@media (max-width: 400px) {
+  .lang-hint {
+    flex-wrap: wrap;
+    justify-content: center;
+    border-radius: var(--radius-md);
+  }
+
+  .lang-hint__text {
+    white-space: normal;
+  }
+}

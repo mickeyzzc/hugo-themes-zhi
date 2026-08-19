@@ -55,15 +55,14 @@
     // Send pageview event on load
     sendEvent('pageview', {});
 
-    // Track theme switches
-    var themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
+    // Track theme switches (all .theme-toggle instances)
+    document.querySelectorAll('.theme-toggle').forEach(function(themeToggle) {
       themeToggle.addEventListener('click', function() {
         sendEvent('theme_switch', {
           to: document.documentElement.getAttribute('data-theme') || 'light'
         });
       });
-    }
+    });
 
     // Track video platform switches
     var videoSwitchButtons = document.querySelectorAll('.video-switch-button');

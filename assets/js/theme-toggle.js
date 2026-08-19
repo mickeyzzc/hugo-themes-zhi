@@ -33,19 +33,19 @@
   }
 
   function updateButtonIcon(theme) {
-    var toggle = document.getElementById('theme-toggle');
-    if (!toggle) return;
+    // Update every instance (header #theme-toggle + floating .fab-group copy)
+    document.querySelectorAll('.theme-toggle').forEach(function(toggle) {
+      var sunIcon = toggle.querySelector('.sun-icon');
+      var moonIcon = toggle.querySelector('.moon-icon');
 
-    var sunIcon = toggle.querySelector('.sun-icon');
-    var moonIcon = toggle.querySelector('.moon-icon');
-
-    if (theme === DARK_THEME) {
-      if (sunIcon) sunIcon.style.display = 'none';
-      if (moonIcon) moonIcon.style.display = 'block';
-    } else {
-      if (sunIcon) sunIcon.style.display = 'block';
-      if (moonIcon) moonIcon.style.display = 'none';
-    }
+      if (theme === DARK_THEME) {
+        if (sunIcon) sunIcon.style.display = 'none';
+        if (moonIcon) moonIcon.style.display = 'block';
+      } else {
+        if (sunIcon) sunIcon.style.display = 'block';
+        if (moonIcon) moonIcon.style.display = 'none';
+      }
+    });
   }
 
   function toggleTheme() {
@@ -77,10 +77,9 @@
     var initialTheme = getCurrentTheme();
     applyTheme(initialTheme);
 
-    var toggle = document.getElementById('theme-toggle');
-    if (toggle) {
+    document.querySelectorAll('.theme-toggle').forEach(function(toggle) {
       toggle.addEventListener('click', toggleTheme);
-    }
+    });
 
     window.addEventListener('storage', handleStorageChange);
 

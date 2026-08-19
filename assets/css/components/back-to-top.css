@@ -58,3 +58,117 @@
     right: 1rem;
   }
 }
+
+/* ---------- Floating action group ----------
+   Bottom-right stack: language switcher, theme toggle, back-to-top.
+   The group owns the fixed position; .back-to-top becomes a flex child. */
+.fab-group {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 40;
+}
+
+.fab-group .back-to-top {
+  position: static;
+}
+
+/* Theme button in the group — round icon button matching .back-to-top
+   (the header #theme-toggle keeps its own id-scoped styles). */
+.fab-group .theme-toggle {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px var(--shadow);
+  transition: background var(--transition), color var(--transition), border-color var(--transition), transform var(--transition);
+}
+
+.fab-group .theme-toggle:hover {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.fab-group .theme-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Compact language switcher: globe icon only in a round button; the
+   dropdown still opens on click/hover like the header variant. */
+.fab-group .lang-switcher {
+  position: relative;
+  display: flex;
+}
+
+.fab-group .lang-toggle {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  gap: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px var(--shadow);
+  transition: background var(--transition), color var(--transition), border-color var(--transition), transform var(--transition);
+}
+
+.fab-group .lang-toggle:hover {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.fab-group .lang-toggle .lang-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* The target-language label and chevron stay in the header variant;
+   the round FAB shows the globe only. */
+.fab-group .lang-toggle .lang-current,
+.fab-group .lang-toggle .lang-chevron {
+  display: none;
+}
+
+/* Open LEFTWARD, vertically centered on the globe button. The default
+   drop-below placement would cover the theme and back-to-top buttons
+   stacked underneath, making them unclickable while the menu is open. */
+.fab-group .lang-dropdown {
+  top: 50%;
+  right: calc(100% + 0.5rem);
+  left: auto;
+  transform: translateY(-50%) translateX(4px);
+}
+
+.fab-group .lang-switcher:hover .lang-dropdown,
+.fab-group .lang-switcher:focus-within .lang-dropdown,
+.fab-group .lang-switcher:has(.lang-toggle[aria-expanded="true"]) .lang-dropdown {
+  transform: translateY(-50%) translateX(0);
+}
+
+@media (max-width: 768px) {
+  .fab-group {
+    bottom: 1rem;
+    right: 1rem;
+  }
+}
