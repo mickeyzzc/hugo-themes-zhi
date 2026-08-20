@@ -177,27 +177,6 @@
       clone.setAttribute('preserveAspectRatio', 'xMidYMid meet');
     }
     mermaidModalZoom.appendChild(clone);
-
-    // The modal stages the SVG on a fixed dark overlay (rgba(0,0,0,0.85)) in
-    // both themes, while handDrawn node interiors are transparent. Labels
-    // cloned from a light page would be dark-on-dark — force light text on
-    // nodes without a painted fill so the zoomed copy stays readable.
-    clone.querySelectorAll('g.rough-node, g.node').forEach(function(g) {
-      var shapes = g.querySelectorAll('rect, path, polygon, circle, ellipse');
-      var painted = false;
-      for (var i = 0; i < shapes.length; i++) {
-        var s = shapes[i];
-        var bb = s.getBoundingClientRect();
-        if (bb.width < 2 || bb.height < 2) continue;
-        var f = window.getComputedStyle(s).fill;
-        if (f && f !== 'none') { painted = true; break; }
-      }
-      if (painted) return;
-      g.querySelectorAll('span, p, text').forEach(function(el) {
-        el.style.setProperty('color', '#ffffff', 'important');
-        el.style.setProperty('fill', '#ffffff', 'important');
-      });
-    });
   }
 
   function openMermaidModal(svgSource) {
