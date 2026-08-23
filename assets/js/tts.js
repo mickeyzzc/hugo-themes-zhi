@@ -19,6 +19,9 @@
     var playBtn = ttsBar.querySelector('.tts-play');
     var stopBtn = ttsBar.querySelector('.tts-stop');
     var speedSelect = ttsBar.querySelector('.tts-speed');
+    // .tts-prepared pages (pre-generated tts.mp3 from CI) render a native
+    // <audio> player instead of the button UI — nothing to wire up here.
+    if (!playBtn || !stopBtn || !speedSelect) return;
     var playIcon = playBtn.querySelector('.tts-btn-icon');
     var playText = playBtn.querySelector('.tts-btn-text');
     var labelPlay = playBtn.getAttribute('data-label-play') || 'Play';
