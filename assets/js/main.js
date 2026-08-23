@@ -451,7 +451,11 @@
     });
   }
   function initMathJax() {
-    var content = document.body.innerText;
+    // Detect math in prose only: shell snippets full of $VAR would otherwise
+    // trigger a ~1MB MathJax download on pages that have no math at all.
+    var clone = document.body.cloneNode(true);
+    clone.querySelectorAll('pre, code, script, style, textarea, .mermaid, svg').forEach(function(el) { el.remove(); });
+    var content = clone.textContent;
     var hasMath = /\$[^\$]+\$/.test(content) || /\$\$[\s\S]*?\$\$/.test(content);
     if (!hasMath || window.MathJax) return;
 

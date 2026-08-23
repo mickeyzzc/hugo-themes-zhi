@@ -1,7 +1,22 @@
-{{- /* render-image.html — lazy-load all Markdown images, preserve alt and title */ -}}
-<img src="{{ .Destination | safeURL }}"
+{{- /* render-image.html — lazy-load all Markdown images, preserve alt and
+      title. Emit intrinsic width/height for site-local images (they live as
+      loose files under content/, not page-bundle resources, so read them
+      from disk with imageConfig) so browsers reserve layout space (CLS). */ -}}
+{{- $dest := .Destination -}}
+{{- $width := 0 -}}
+{{- $height := 0 -}}
+{{- $u := urls.Parse $dest -}}
+{{- if and (not $u.Host) (hasPrefix $dest "/") -}}
+  {{- $path := printf "content%s" $dest -}}
+  {{- /* imageConfig cannot parse SVG (no fixed intrinsic size) */ -}}
+  {{- if and (fileExists $path) (findRE `(?i)\.(png|jpe?g|webp|gif|bmp|tiff?)$` $path 1) -}}
+    {{- with imageConfig $path -}}{{- $width = .Width -}}{{- $height = .Height -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+<img src="{{ $dest | safeURL }}"
      alt="{{ .Text }}"
      loading="lazy"
      decoding="async"
      {{- with .Title }} title="{{ . }}"{{ end -}}
+     {{- if $width }} width="{{ $width }}" height="{{ $height }}"{{ end -}}
 />

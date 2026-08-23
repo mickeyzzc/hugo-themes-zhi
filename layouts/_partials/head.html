@@ -2,7 +2,9 @@
 {{- $paginator := .Scratch.Get "paginator" -}}
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Site.Title }} - {{ .Title }}{{ end }}{{ if and $paginated $paginator.HasPrev }} - {{ i18n "page" (dict "Count" $paginator.PageNumber) }}{{ end }}</title>
+{{- /* Article pages put the page title first: SERPs truncate around 60
+      chars, so the site name must not eat the keyword-bearing position. */ -}}
+<title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}{{ if and $paginated $paginator.HasPrev }} - {{ i18n "page" (dict "Count" $paginator.PageNumber) }}{{ end }}</title>
 <meta name="description" content="{{ .Description | default .Site.Params.description }}">
 {{- with .Keywords }}
 <meta name="keywords" content="{{ delimit . `, ` }}">

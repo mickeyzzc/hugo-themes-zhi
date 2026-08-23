@@ -21,7 +21,7 @@
 {{- $ogImageType = .MediaType.Type -}}
 {{- end -}}
 <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}" />
-<meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Site.Title }} - {{ .Title }}{{ end }}" />
+<meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}" />
 <meta property="og:description" content="{{ .Description | default .Site.Params.description }}" />
 <meta property="og:image" content="{{ $ogImage }}" />
 {{- with $ogImageWidth }}
@@ -46,20 +46,29 @@
 {{- /* Twitter Card */ -}}
 {{- if default true .Site.Params.seo.twitterCard -}}
 <meta name="twitter:card" content="{{ .Site.Params.seo.twitterCardType | default "summary_large_image" }}" />
-<meta name="twitter:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Site.Title }} - {{ .Title }}{{ end }}" />
+<meta name="twitter:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}" />
 <meta name="twitter:description" content="{{ .Description | default .Site.Params.description }}" />
 <meta name="twitter:image" content="{{ if .Params.images }}{{ index .Params.images 0 | absURL }}{{ else }}{{ (.Site.Params.seo.image | default .Site.Params.avatar) | absURL }}{{ end }}" />
 {{- with .Site.Params.seo.twitterSite }}<meta name="twitter:site" content="{{ . }}" />{{ end }}
 {{- with .Site.Params.seo.twitterCreator }}<meta name="twitter:creator" content="{{ . }}" />{{ end }}
 {{- end }}
 
-{{- /* Hreflang alternate links for multilingual SEO */ -}}
+{{- /* Hreflang alternate links for multilingual SEO.
+      Google requires every page of a translation cluster to emit the
+      IDENTICAL set of alternates, so x-default must resolve to the same
+      URL from both language versions — the default-language translation
+      of this page, not the current language's home. Untranslated pages
+      emit no cluster at all (a self-only hreflang is noise). */ -}}
 {{- if hugo.IsMultilingual -}}
-{{- range .AllTranslations -}}
+{{- $translations := .AllTranslations -}}
+{{- if gt (len $translations) 1 -}}
+{{- range $translations -}}
 <link rel="alternate" hreflang="{{ replace .Language.Lang "zh-cn" "zh-CN" }}" href="{{ .Permalink }}" />
 {{- end -}}
-{{- /* x-default points to the default language version */ -}}
-<link rel="alternate" hreflang="x-default" href="{{ .Site.Home.Permalink }}" />
+{{- with where $translations "Language.Lang" site.Sites.Default.Language.Lang -}}
+<link rel="alternate" hreflang="x-default" href="{{ (index . 0).Permalink }}" />
+{{- end -}}
+{{- end -}}
 {{- end }}
 
 {{- /* Search engine verification meta tags (values come from config, never hardcoded) */ -}}
