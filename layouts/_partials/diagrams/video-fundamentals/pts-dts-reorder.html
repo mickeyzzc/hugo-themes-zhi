@@ -1,0 +1,203 @@
+{{- /* PTS vs DTS: stream order I P B B -> reorder buffer -> display order I B B P. */ -}}
+{{- $lang := .lang | default "zh-cn" -}}
+{{- if eq $lang "en" -}}
+<svg viewBox="0 0 720 330" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;margin:1.5em auto;display:block;" role="img" aria-label="PTS and DTS reorder animation">
+<style>
+  @keyframes tokI {
+    0%, 5% { opacity: 0; transform: translate(0,0); }
+    8%, 11% { opacity: 1; transform: translate(0,0); }
+    15%, 19% { opacity: 1; transform: translate(81px, 97px); }
+    24%, 92% { opacity: 1; transform: translate(0px, 172px); }
+    97%, 100% { opacity: 0; transform: translate(0px, 172px); }
+  }
+  @keyframes tokP {
+    0%, 26% { opacity: 0; transform: translate(0,0); }
+    29%, 32% { opacity: 1; transform: translate(0,0); }
+    36%, 40% { opacity: 1; transform: translate(-9px, 97px); }
+    44% { opacity: 1; }
+    52% { opacity: 0.55; }
+    60% { opacity: 1; }
+    68% { opacity: 0.55; }
+    73%, 74% { opacity: 1; transform: translate(-9px, 97px); }
+    81%, 92% { opacity: 1; transform: translate(320px, 172px); }
+    97%, 100% { opacity: 0; transform: translate(320px, 172px); }
+  }
+  @keyframes tokB1 {
+    0%, 42% { opacity: 0; transform: translate(0,0); }
+    45%, 47% { opacity: 1; transform: translate(0,0); }
+    51%, 54% { opacity: 1; transform: translate(-99px, 97px); }
+    59%, 92% { opacity: 1; transform: translate(-160px, 172px); }
+    97%, 100% { opacity: 0; transform: translate(-160px, 172px); }
+  }
+  @keyframes tokB2 {
+    0%, 56% { opacity: 0; transform: translate(0,0); }
+    59%, 61% { opacity: 1; transform: translate(0,0); }
+    64%, 66% { opacity: 1; transform: translate(-189px, 97px); }
+    71%, 92% { opacity: 1; transform: translate(-160px, 172px); }
+    97%, 100% { opacity: 0; transform: translate(-160px, 172px); }
+  }
+  @keyframes waitLabel { 0%, 42% { opacity: 0; } 47%, 68% { opacity: 1; } 73%, 100% { opacity: 0; } }
+  @keyframes noteIn { 0%, 84% { opacity: 0; } 88%, 94% { opacity: 1; } 98%, 100% { opacity: 0; } }
+  .tok-i { animation: tokI 12s infinite; }
+  .tok-p { animation: tokP 12s infinite; }
+  .tok-b1 { animation: tokB1 12s infinite; }
+  .tok-b2 { animation: tokB2 12s infinite; }
+  .wait-label { animation: waitLabel 12s infinite; }
+  .note { animation: noteIn 12s infinite; }
+</style>
+  <rect width="720" height="330" fill="#fafafa" rx="8"/>
+  <text x="360" y="22" text-anchor="middle" font-size="15" font-weight="600" fill="#424242" font-family="system-ui,sans-serif">PTS vs DTS: decode order ≠ display order (IBBP example)</text>
+
+  <!-- row 1: stream order -->
+  <text x="34" y="50" font-size="10" fill="#9E9E9E" font-family="system-ui,sans-serif">① stream order (by DTS)</text>
+  <rect x="90" y="58" width="72" height="54" rx="5" fill="#FFEBEE" stroke="#F44336" stroke-width="1.5"/>
+  <text x="126" y="82" text-anchor="middle" font-size="15" font-weight="700" fill="#C62828" font-family="system-ui,sans-serif">I</text>
+  <text x="126" y="100" text-anchor="middle" font-size="8.5" fill="#C62828" font-family="monospace">pts=0 dts=0</text>
+  <rect x="250" y="58" width="72" height="54" rx="5" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
+  <text x="286" y="82" text-anchor="middle" font-size="15" font-weight="700" fill="#E65100" font-family="system-ui,sans-serif">P</text>
+  <text x="286" y="100" text-anchor="middle" font-size="8.5" fill="#E65100" font-family="monospace">pts=3 dts=1</text>
+  <rect x="410" y="58" width="72" height="54" rx="5" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1.5"/>
+  <text x="446" y="82" text-anchor="middle" font-size="15" font-weight="700" fill="#2E7D32" font-family="system-ui,sans-serif">B</text>
+  <text x="446" y="100" text-anchor="middle" font-size="8.5" fill="#2E7D32" font-family="monospace">pts=1 dts=2</text>
+  <rect x="570" y="58" width="72" height="54" rx="5" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1.5"/>
+  <text x="606" y="82" text-anchor="middle" font-size="15" font-weight="700" fill="#2E7D32" font-family="system-ui,sans-serif">B</text>
+  <text x="606" y="100" text-anchor="middle" font-size="8.5" fill="#2E7D32" font-family="monospace">pts=2 dts=3</text>
+
+  <!-- guide arrows -->
+  <path d="M 200 128 C 220 145, 240 150, 262 158" fill="none" stroke="#B0BEC5" stroke-width="1.2"/>
+  <path d="M 360 128 C 340 145, 320 150, 298 158" fill="none" stroke="#B0BEC5" stroke-width="1.2"/>
+  <path d="M 520 128 C 500 145, 480 150, 458 158" fill="none" stroke="#B0BEC5" stroke-width="1.2"/>
+  <path d="M 620 128 C 600 148, 560 152, 528 158" fill="none" stroke="#B0BEC5" stroke-width="1.2"/>
+  <path d="M 200 216 C 220 226, 230 228, 246 232" fill="none" stroke="#B0BEC5" stroke-width="1.2"/>
+  <path d="M 500 216 C 480 226, 470 228, 454 232" fill="none" stroke="#B0BEC5" stroke-width="1.2"/>
+
+  <!-- buffer -->
+  <text x="34" y="180" font-size="10" fill="#9E9E9E" font-family="system-ui,sans-serif">② decoder +</text>
+  <text x="34" y="194" font-size="10" fill="#9E9E9E" font-family="system-ui,sans-serif">reorder buffer</text>
+  <rect x="170" y="158" width="380" height="46" rx="6" fill="#F3E5F5" fill-opacity="0.35" stroke="#9C27B0" stroke-width="1.2" stroke-dasharray="6,4"/>
+  <text class="wait-label" x="360" y="150" text-anchor="middle" font-size="9.5" font-weight="700" fill="#C62828" font-family="system-ui,sans-serif">P decoded but pts=3 — it must wait for the two B frames</text>
+
+  <!-- row 3: display slots -->
+  <text x="34" y="252" font-size="10" fill="#9E9E9E" font-family="system-ui,sans-serif">③ display (by PTS)</text>
+  <rect x="90" y="230" width="72" height="54" rx="5" fill="none" stroke="#90A4AE" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="126" y="262" text-anchor="middle" font-size="9" fill="#90A4AE" font-family="monospace">slot pts=0</text>
+  <rect x="250" y="230" width="72" height="54" rx="5" fill="none" stroke="#90A4AE" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="286" y="262" text-anchor="middle" font-size="9" fill="#90A4AE" font-family="monospace">slot pts=1</text>
+  <rect x="410" y="230" width="72" height="54" rx="5" fill="none" stroke="#90A4AE" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="446" y="262" text-anchor="middle" font-size="9" fill="#90A4AE" font-family="monospace">slot pts=2</text>
+  <rect x="570" y="230" width="72" height="54" rx="5" fill="none" stroke="#90A4AE" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="606" y="262" text-anchor="middle" font-size="9" fill="#90A4AE" font-family="monospace">slot pts=3</text>
+
+  <!-- tokens -->
+  <g class="tok-i"><rect x="109" y="66" width="34" height="34" rx="4" fill="#F44336"/><text x="126" y="88" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">I</text></g>
+  <g class="tok-p"><rect x="269" y="66" width="34" height="34" rx="4" fill="#FF9800"/><text x="286" y="88" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">P</text></g>
+  <g class="tok-b1"><rect x="429" y="66" width="34" height="34" rx="4" fill="#4CAF50"/><text x="446" y="88" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">B</text></g>
+  <g class="tok-b2"><rect x="589" y="66" width="34" height="34" rx="4" fill="#4CAF50"/><text x="606" y="88" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">B</text></g>
+
+  <!-- bottom note -->
+  <g class="note">
+    <rect x="80" y="296" width="560" height="26" rx="5" fill="#E3F2FD" stroke="#2196F3" stroke-width="1"/>
+    <text x="360" y="313" text-anchor="middle" font-size="10.5" fill="#1565C0" font-family="system-ui,sans-serif">No B frames → DTS equals PTS. With B frames the decoder decodes the later P first — this is why real-time links often disable B frames</text>
+  </g>
+</svg>
+{{- else -}}
+<svg viewBox="0 0 720 330" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;margin:1.5em auto;display:block;" role="img" aria-label="PTS 与 DTS 解码显示顺序重排动画">
+<style>
+  @keyframes tokI {
+    0%, 5% { opacity: 0; transform: translate(0,0); }
+    8%, 11% { opacity: 1; transform: translate(0,0); }
+    15%, 19% { opacity: 1; transform: translate(81px, 97px); }
+    24%, 92% { opacity: 1; transform: translate(0px, 172px); }
+    97%, 100% { opacity: 0; transform: translate(0px, 172px); }
+  }
+  @keyframes tokP {
+    0%, 26% { opacity: 0; transform: translate(0,0); }
+    29%, 32% { opacity: 1; transform: translate(0,0); }
+    36%, 40% { opacity: 1; transform: translate(-9px, 97px); }
+    44% { opacity: 1; }
+    52% { opacity: 0.55; }
+    60% { opacity: 1; }
+    68% { opacity: 0.55; }
+    73%, 74% { opacity: 1; transform: translate(-9px, 97px); }
+    81%, 92% { opacity: 1; transform: translate(320px, 172px); }
+    97%, 100% { opacity: 0; transform: translate(320px, 172px); }
+  }
+  @keyframes tokB1 {
+    0%, 42% { opacity: 0; transform: translate(0,0); }
+    45%, 47% { opacity: 1; transform: translate(0,0); }
+    51%, 54% { opacity: 1; transform: translate(-99px, 97px); }
+    59%, 92% { opacity: 1; transform: translate(-160px, 172px); }
+    97%, 100% { opacity: 0; transform: translate(-160px, 172px); }
+  }
+  @keyframes tokB2 {
+    0%, 56% { opacity: 0; transform: translate(0,0); }
+    59%, 61% { opacity: 1; transform: translate(0,0); }
+    64%, 66% { opacity: 1; transform: translate(-189px, 97px); }
+    71%, 92% { opacity: 1; transform: translate(-160px, 172px); }
+    97%, 100% { opacity: 0; transform: translate(-160px, 172px); }
+  }
+  @keyframes waitLabel { 0%, 42% { opacity: 0; } 47%, 68% { opacity: 1; } 73%, 100% { opacity: 0; } }
+  @keyframes noteIn { 0%, 84% { opacity: 0; } 88%, 94% { opacity: 1; } 98%, 100% { opacity: 0; } }
+  .tok-i { animation: tokI 12s infinite; }
+  .tok-p { animation: tokP 12s infinite; }
+  .tok-b1 { animation: tokB1 12s infinite; }
+  .tok-b2 { animation: tokB2 12s infinite; }
+  .wait-label { animation: waitLabel 12s infinite; }
+  .note { animation: noteIn 12s infinite; }
+</style>
+  <rect width="720" height="330" fill="#fafafa" rx="8"/>
+  <text x="360" y="22" text-anchor="middle" font-size="15" font-weight="600" fill="#424242" font-family="system-ui,sans-serif">PTS 与 DTS：解码顺序 ≠ 显示顺序（IBBP 为例）</text>
+
+  <!-- 第一行：码流顺序 -->
+  <text x="34" y="50" font-size="10" fill="#9E9E9E" font-family="system-ui,sans-serif">① 码流顺序（按 DTS）</text>
+  <rect x="90" y="58" width="72" height="54" rx="5" fill="#FFEBEE" stroke="#F44336" stroke-width="1.5"/>
+  <text x="126" y="82" text-anchor="middle" font-size="15" font-weight="700" fill="#C62828" font-family="system-ui,sans-serif">I</text>
+  <text x="126" y="100" text-anchor="middle" font-size="8.5" fill="#C62828" font-family="monospace">pts=0 dts=0</text>
+  <rect x="250" y="58" width="72" height="54" rx="5" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
+  <text x="286" y="82" text-anchor="middle" font-size="15" font-weight="700" fill="#E65100" font-family="system-ui,sans-serif">P</text>
+  <text x="286" y="100" text-anchor="middle" font-size="8.5" fill="#E65100" font-family="monospace">pts=3 dts=1</text>
+  <rect x="410" y="58" width="72" height="54" rx="5" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1.5"/>
+  <text x="446" y="82" text-anchor="middle" font-size="15" font-weight="700" fill="#2E7D32" font-family="system-ui,sans-serif">B</text>
+  <text x="446" y="100" text-anchor="middle" font-size="8.5" fill="#2E7D32" font-family="monospace">pts=1 dts=2</text>
+  <rect x="570" y="58" width="72" height="54" rx="5" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1.5"/>
+  <text x="606" y="82" text-anchor="middle" font-size="15" font-weight="700" fill="#2E7D32" font-family="system-ui,sans-serif">B</text>
+  <text x="606" y="100" text-anchor="middle" font-size="8.5" fill="#2E7D32" font-family="monospace">pts=2 dts=3</text>
+
+  <!-- 引导箭头 -->
+  <path d="M 200 128 C 220 145, 240 150, 262 158" fill="none" stroke="#B0BEC5" stroke-width="1.2"/>
+  <path d="M 360 128 C 340 145, 320 150, 298 158" fill="none" stroke="#B0BEC5" stroke-width="1.2"/>
+  <path d="M 520 128 C 500 145, 480 150, 458 158" fill="none" stroke="#B0BEC5" stroke-width="1.2"/>
+  <path d="M 620 128 C 600 148, 560 152, 528 158" fill="none" stroke="#B0BEC5" stroke-width="1.2"/>
+  <path d="M 200 216 C 220 226, 230 228, 246 232" fill="none" stroke="#B0BEC5" stroke-width="1.2"/>
+  <path d="M 500 216 C 480 226, 470 228, 454 232" fill="none" stroke="#B0BEC5" stroke-width="1.2"/>
+
+  <!-- 重排序缓冲区 -->
+  <text x="34" y="180" font-size="10" fill="#9E9E9E" font-family="system-ui,sans-serif">② 解码器 +</text>
+  <text x="34" y="194" font-size="10" fill="#9E9E9E" font-family="system-ui,sans-serif">重排序缓冲区</text>
+  <rect x="170" y="158" width="380" height="46" rx="6" fill="#F3E5F5" fill-opacity="0.35" stroke="#9C27B0" stroke-width="1.2" stroke-dasharray="6,4"/>
+  <text class="wait-label" x="360" y="150" text-anchor="middle" font-size="9.5" font-weight="700" fill="#C62828" font-family="system-ui,sans-serif">P 解码完了但 pts=3 —— 得等两个 B 先显示</text>
+
+  <!-- 第三行：显示槽位 -->
+  <text x="34" y="252" font-size="10" fill="#9E9E9E" font-family="system-ui,sans-serif">③ 显示顺序（按 PTS）</text>
+  <rect x="90" y="230" width="72" height="54" rx="5" fill="none" stroke="#90A4AE" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="126" y="262" text-anchor="middle" font-size="9" fill="#90A4AE" font-family="monospace">槽位 pts=0</text>
+  <rect x="250" y="230" width="72" height="54" rx="5" fill="none" stroke="#90A4AE" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="286" y="262" text-anchor="middle" font-size="9" fill="#90A4AE" font-family="monospace">槽位 pts=1</text>
+  <rect x="410" y="230" width="72" height="54" rx="5" fill="none" stroke="#90A4AE" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="446" y="262" text-anchor="middle" font-size="9" fill="#90A4AE" font-family="monospace">槽位 pts=2</text>
+  <rect x="570" y="230" width="72" height="54" rx="5" fill="none" stroke="#90A4AE" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="606" y="262" text-anchor="middle" font-size="9" fill="#90A4AE" font-family="monospace">槽位 pts=3</text>
+
+  <!-- 帧 token -->
+  <g class="tok-i"><rect x="109" y="66" width="34" height="34" rx="4" fill="#F44336"/><text x="126" y="88" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">I</text></g>
+  <g class="tok-p"><rect x="269" y="66" width="34" height="34" rx="4" fill="#FF9800"/><text x="286" y="88" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">P</text></g>
+  <g class="tok-b1"><rect x="429" y="66" width="34" height="34" rx="4" fill="#4CAF50"/><text x="446" y="88" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">B</text></g>
+  <g class="tok-b2"><rect x="589" y="66" width="34" height="34" rx="4" fill="#4CAF50"/><text x="606" y="88" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">B</text></g>
+
+  <!-- 底部结论 -->
+  <g class="note">
+    <rect x="80" y="296" width="560" height="26" rx="5" fill="#E3F2FD" stroke="#2196F3" stroke-width="1"/>
+    <text x="360" y="313" text-anchor="middle" font-size="10.5" fill="#1565C0" font-family="system-ui,sans-serif">没有 B 帧时 DTS = PTS；有 B 帧就要先解码排在后面的 P —— 这就是实时链路常关 B 帧的原因</text>
+  </g>
+</svg>
+{{- end -}}

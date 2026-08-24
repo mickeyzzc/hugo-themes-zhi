@@ -1,0 +1,271 @@
+{{- /* Hybrid encode loop: predict -> residual -> transform -> quantize -> entropy, plus reconstruction feedback. */ -}}
+{{- $lang := .lang | default "zh-cn" -}}
+{{- if eq $lang "en" -}}
+<svg viewBox="0 0 720 440" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;margin:1.5em auto;display:block;" role="img" aria-label="Hybrid video encode loop animation">
+<style>
+  @keyframes dotTop {
+    0%, 3% { transform: translate(0px, 0px); opacity: 1; }
+    8%, 11% { transform: translate(114px, 0px); }
+    14%, 17% { transform: translate(228px, 0px); }
+    20%, 23% { transform: translate(342px, 0px); }
+    26%, 32% { transform: translate(456px, 0px); }
+    35%, 38% { transform: translate(570px, 0px); }
+    42% { transform: translate(570px, 96px); opacity: 1; }
+    46%, 48% { transform: translate(570px, 96px); opacity: 0; }
+    100% { opacity: 0; transform: translate(570px, 96px); }
+  }
+  @keyframes dotFb {
+    0%, 50% { opacity: 0; transform: translate(0px, 0px); }
+    53%, 56% { opacity: 1; transform: translate(0px, 0px); }
+    59%, 62% { transform: translate(-155px, 0px); }
+    65%, 68% { transform: translate(-295px, 0px); }
+    71%, 74% { transform: translate(-435px, 0px); }
+    82%, 88% { transform: translate(-435px, -236px); opacity: 1; }
+    93%, 100% { transform: translate(-435px, -236px); opacity: 0; }
+  }
+  @keyframes hl1 { 0%, 2% { opacity: 0; } 4%, 7% { opacity: 1; } 10%, 100% { opacity: 0; } }
+  @keyframes hl2 { 0%, 8% { opacity: 0; } 10%, 13% { opacity: 1; } 16%, 100% { opacity: 0; } }
+  @keyframes hl3 { 0%, 14% { opacity: 0; } 16%, 19% { opacity: 1; } 22%, 100% { opacity: 0; } }
+  @keyframes hl4 { 0%, 20% { opacity: 0; } 22%, 25% { opacity: 1; } 28%, 100% { opacity: 0; } }
+  @keyframes hl5 { 0%, 26% { opacity: 0; } 28%, 34% { opacity: 1; } 37%, 100% { opacity: 0; } }
+  @keyframes hl6 { 0%, 35% { opacity: 0; } 37%, 41% { opacity: 1; } 44%, 100% { opacity: 0; } }
+  @keyframes hlOut { 0%, 41% { opacity: 0; } 43%, 47% { opacity: 1; } 50%, 100% { opacity: 0; } }
+  @keyframes hlf1 { 0%, 52% { opacity: 0; } 54%, 58% { opacity: 1; } 61%, 100% { opacity: 0; } }
+  @keyframes hlf2 { 0%, 58% { opacity: 0; } 60%, 64% { opacity: 1; } 67%, 100% { opacity: 0; } }
+  @keyframes hlf3 { 0%, 64% { opacity: 0; } 66%, 70% { opacity: 1; } 73%, 100% { opacity: 0; } }
+  @keyframes hlf4 { 0%, 70% { opacity: 0; } 72%, 76% { opacity: 1; } 79%, 100% { opacity: 0; } }
+  @keyframes fbFlow { 0%, 74% { stroke-dashoffset: 24; } 88%, 96% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 0; } }
+  .dot-top { animation: dotTop 13s infinite; }
+  .dot-fb { animation: dotFb 13s infinite; }
+  .hl-1 { animation: hl1 13s infinite; } .hl-2 { animation: hl2 13s infinite; }
+  .hl-3 { animation: hl3 13s infinite; } .hl-4 { animation: hl4 13s infinite; }
+  .hl-5 { animation: hl5 13s infinite; } .hl-6 { animation: hl6 13s infinite; }
+  .hl-out { animation: hlOut 13s infinite; }
+  .hlf-1 { animation: hlf1 13s infinite; } .hlf-2 { animation: hlf2 13s infinite; }
+  .hlf-3 { animation: hlf3 13s infinite; } .hlf-4 { animation: hlf4 13s infinite; }
+  .fb-flow { stroke-dasharray: 6 6; animation: fbFlow 13s infinite; }
+</style>
+  <rect width="720" height="440" fill="#fafafa" rx="8"/>
+  <text x="360" y="22" text-anchor="middle" font-size="15" font-weight="600" fill="#424242" font-family="system-ui,sans-serif">Hybrid encode loop: predict → residual → transform → quantize → entropy, then reconstruct</text>
+
+  <defs>
+    <marker id="elArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#78909C"/>
+    </marker>
+    <marker id="elArrowG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4CAF50"/>
+    </marker>
+  </defs>
+
+  <!-- top row boxes -->
+  <rect x="44" y="64" width="86" height="52" rx="6" fill="#E3F2FD" stroke="#2196F3" stroke-width="1.5"/>
+  <text x="87" y="86" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1565C0" font-family="system-ui,sans-serif">current block</text>
+  <text x="87" y="102" text-anchor="middle" font-size="8.5" fill="#546E7A" font-family="system-ui,sans-serif">YUV pixels</text>
+  <rect x="158" y="64" width="86" height="52" rx="6" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
+  <text x="201" y="86" text-anchor="middle" font-size="10.5" font-weight="700" fill="#E65100" font-family="system-ui,sans-serif">prediction</text>
+  <text x="201" y="102" text-anchor="middle" font-size="8.5" fill="#546E7A" font-family="system-ui,sans-serif">intra / inter (MV)</text>
+  <rect x="272" y="64" width="86" height="52" rx="6" fill="#FCE4EC" stroke="#E91E63" stroke-width="1.5"/>
+  <text x="315" y="86" text-anchor="middle" font-size="10.5" font-weight="700" fill="#AD1457" font-family="system-ui,sans-serif">residual</text>
+  <text x="315" y="102" text-anchor="middle" font-size="8.5" fill="#546E7A" font-family="system-ui,sans-serif">current − prediction</text>
+  <rect x="386" y="64" width="86" height="52" rx="6" fill="#F3E5F5" stroke="#9C27B0" stroke-width="1.5"/>
+  <text x="429" y="86" text-anchor="middle" font-size="10.5" font-weight="700" fill="#6A1B9A" font-family="system-ui,sans-serif">transform</text>
+  <text x="429" y="102" text-anchor="middle" font-size="8.5" fill="#546E7A" font-family="system-ui,sans-serif">integer DCT</text>
+  <rect x="500" y="64" width="86" height="52" rx="6" fill="#FFEBEE" stroke="#F44336" stroke-width="2"/>
+  <text x="543" y="86" text-anchor="middle" font-size="10.5" font-weight="700" fill="#C62828" font-family="system-ui,sans-serif">quantize</text>
+  <text x="543" y="102" text-anchor="middle" font-size="8.5" fill="#C62828" font-family="system-ui,sans-serif">QP — the lossy step</text>
+  <rect x="614" y="64" width="86" height="52" rx="6" fill="#E0F2F1" stroke="#009688" stroke-width="1.5"/>
+  <text x="657" y="86" text-anchor="middle" font-size="10.5" font-weight="700" fill="#00695C" font-family="system-ui,sans-serif">entropy code</text>
+  <text x="657" y="102" text-anchor="middle" font-size="8.5" fill="#546E7A" font-family="system-ui,sans-serif">CABAC / CAVLC</text>
+
+  <!-- top arrows -->
+  <line x1="130" y1="90" x2="154" y2="90" stroke="#78909C" stroke-width="1.6" marker-end="url(#elArrow)"/>
+  <line x1="244" y1="90" x2="268" y2="90" stroke="#78909C" stroke-width="1.6" marker-end="url(#elArrow)"/>
+  <line x1="358" y1="90" x2="382" y2="90" stroke="#78909C" stroke-width="1.6" marker-end="url(#elArrow)"/>
+  <line x1="472" y1="90" x2="496" y2="90" stroke="#78909C" stroke-width="1.6" marker-end="url(#elArrow)"/>
+  <line x1="586" y1="90" x2="610" y2="90" stroke="#78909C" stroke-width="1.6" marker-end="url(#elArrow)"/>
+  <line x1="657" y1="116" x2="657" y2="166" stroke="#78909C" stroke-width="1.6" marker-end="url(#elArrow)"/>
+
+  <!-- bitstream output -->
+  <rect x="614" y="170" width="86" height="40" rx="6" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1.8"/>
+  <text x="657" y="194" text-anchor="middle" font-size="10.5" font-weight="700" fill="#2E7D32" font-family="system-ui,sans-serif">bitstream</text>
+
+  <!-- feedback arrows -->
+  <path d="M 543 116 C 543 210, 600 250, 628 294" fill="none" stroke="#78909C" stroke-width="1.6" marker-end="url(#elArrow)"/>
+  <path d="M 211 116 L 211 220 L 468 258 L 476 294" fill="none" stroke="#FF9800" stroke-width="1.4" stroke-dasharray="5,4" marker-end="url(#elArrow)"/>
+  <text x="300" y="238" font-size="8.5" fill="#E65100" font-family="system-ui,sans-serif">prediction joins the reconstruction</text>
+  <path class="fb-flow" d="M 191 294 L 191 124" fill="none" stroke="#4CAF50" stroke-width="1.8" marker-end="url(#elArrowG)"/>
+  <text x="118" y="200" font-size="8.5" fill="#2E7D32" font-family="system-ui,sans-serif">next frame refs</text>
+
+  <!-- feedback row boxes -->
+  <rect x="576" y="298" width="120" height="52" rx="6" fill="#F3E5F5" stroke="#9C27B0" stroke-width="1.5"/>
+  <text x="636" y="320" text-anchor="middle" font-size="10" font-weight="700" fill="#6A1B9A" font-family="system-ui,sans-serif">inverse quant +</text>
+  <text x="636" y="336" text-anchor="middle" font-size="10" font-weight="700" fill="#6A1B9A" font-family="system-ui,sans-serif">inverse transform</text>
+  <rect x="416" y="298" width="130" height="52" rx="6" fill="#FCE4EC" stroke="#E91E63" stroke-width="1.5"/>
+  <text x="481" y="320" text-anchor="middle" font-size="10" font-weight="700" fill="#AD1457" font-family="system-ui,sans-serif">reconstruct</text>
+  <text x="481" y="336" text-anchor="middle" font-size="8.5" fill="#546E7A" font-family="system-ui,sans-serif">prediction + residual′</text>
+  <rect x="286" y="298" width="110" height="52" rx="6" fill="#E3F2FD" stroke="#2196F3" stroke-width="1.5"/>
+  <text x="341" y="327" text-anchor="middle" font-size="10" font-weight="700" fill="#1565C0" font-family="system-ui,sans-serif">deblocking filter</text>
+  <rect x="146" y="298" width="110" height="52" rx="6" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1.5"/>
+  <text x="201" y="320" text-anchor="middle" font-size="10" font-weight="700" fill="#2E7D32" font-family="system-ui,sans-serif">reference</text>
+  <text x="201" y="336" text-anchor="middle" font-size="10" font-weight="700" fill="#2E7D32" font-family="system-ui,sans-serif">frame buffer</text>
+  <line x1="576" y1="324" x2="550" y2="324" stroke="#78909C" stroke-width="1.6" marker-end="url(#elArrow)"/>
+  <line x1="416" y1="324" x2="400" y2="324" stroke="#78909C" stroke-width="1.6" marker-end="url(#elArrow)"/>
+  <line x1="286" y1="324" x2="260" y2="324" stroke="#78909C" stroke-width="1.6" marker-end="url(#elArrow)"/>
+
+  <!-- stage highlight overlays -->
+  <rect class="hl-1" x="41" y="61" width="92" height="58" rx="7" fill="none" stroke="#2196F3" stroke-width="3"/>
+  <rect class="hl-2" x="155" y="61" width="92" height="58" rx="7" fill="none" stroke="#FF9800" stroke-width="3"/>
+  <rect class="hl-3" x="269" y="61" width="92" height="58" rx="7" fill="none" stroke="#E91E63" stroke-width="3"/>
+  <rect class="hl-4" x="383" y="61" width="92" height="58" rx="7" fill="none" stroke="#9C27B0" stroke-width="3"/>
+  <rect class="hl-5" x="497" y="61" width="92" height="58" rx="7" fill="none" stroke="#F44336" stroke-width="3.5"/>
+  <rect class="hl-6" x="611" y="61" width="92" height="58" rx="7" fill="none" stroke="#009688" stroke-width="3"/>
+  <rect class="hl-out" x="611" y="167" width="92" height="46" rx="7" fill="none" stroke="#4CAF50" stroke-width="3"/>
+  <rect class="hlf-1" x="573" y="295" width="126" height="58" rx="7" fill="none" stroke="#9C27B0" stroke-width="3"/>
+  <rect class="hlf-2" x="413" y="295" width="136" height="58" rx="7" fill="none" stroke="#E91E63" stroke-width="3"/>
+  <rect class="hlf-3" x="283" y="295" width="116" height="58" rx="7" fill="none" stroke="#2196F3" stroke-width="3"/>
+  <rect class="hlf-4" x="143" y="295" width="116" height="58" rx="7" fill="none" stroke="#4CAF50" stroke-width="3"/>
+
+  <!-- moving dots -->
+  <circle class="dot-top" cx="87" cy="90" r="7" fill="#2196F3" stroke="#fff" stroke-width="2"/>
+  <circle class="dot-fb" cx="636" cy="324" r="7" fill="#4CAF50" stroke="#fff" stroke-width="2"/>
+
+  <!-- bottom note -->
+  <rect x="60" y="384" width="600" height="42" rx="6" fill="#E3F2FD" stroke="#2196F3" stroke-width="1.2"/>
+  <text x="360" y="402" text-anchor="middle" font-size="10.5" fill="#1565C0" font-family="system-ui,sans-serif">The decoder runs the exact same lower loop (inverse quant → reconstruct → deblock → ref buffer) —</text>
+  <text x="360" y="419" text-anchor="middle" font-size="10.5" fill="#1565C0" font-family="system-ui,sans-serif">encoder and decoder stay in lockstep, so reference frames never drift apart</text>
+</svg>
+{{- else -}}
+<svg viewBox="0 0 720 440" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;margin:1.5em auto;display:block;" role="img" aria-label="混合编码环路动画">
+<style>
+  @keyframes dotTop {
+    0%, 3% { transform: translate(0px, 0px); opacity: 1; }
+    8%, 11% { transform: translate(114px, 0px); }
+    14%, 17% { transform: translate(228px, 0px); }
+    20%, 23% { transform: translate(342px, 0px); }
+    26%, 32% { transform: translate(456px, 0px); }
+    35%, 38% { transform: translate(570px, 0px); }
+    42% { transform: translate(570px, 96px); opacity: 1; }
+    46%, 48% { transform: translate(570px, 96px); opacity: 0; }
+    100% { opacity: 0; transform: translate(570px, 96px); }
+  }
+  @keyframes dotFb {
+    0%, 50% { opacity: 0; transform: translate(0px, 0px); }
+    53%, 56% { opacity: 1; transform: translate(0px, 0px); }
+    59%, 62% { transform: translate(-155px, 0px); }
+    65%, 68% { transform: translate(-295px, 0px); }
+    71%, 74% { transform: translate(-435px, 0px); }
+    82%, 88% { transform: translate(-435px, -236px); opacity: 1; }
+    93%, 100% { transform: translate(-435px, -236px); opacity: 0; }
+  }
+  @keyframes hl1 { 0%, 2% { opacity: 0; } 4%, 7% { opacity: 1; } 10%, 100% { opacity: 0; } }
+  @keyframes hl2 { 0%, 8% { opacity: 0; } 10%, 13% { opacity: 1; } 16%, 100% { opacity: 0; } }
+  @keyframes hl3 { 0%, 14% { opacity: 0; } 16%, 19% { opacity: 1; } 22%, 100% { opacity: 0; } }
+  @keyframes hl4 { 0%, 20% { opacity: 0; } 22%, 25% { opacity: 1; } 28%, 100% { opacity: 0; } }
+  @keyframes hl5 { 0%, 26% { opacity: 0; } 28%, 34% { opacity: 1; } 37%, 100% { opacity: 0; } }
+  @keyframes hl6 { 0%, 35% { opacity: 0; } 37%, 41% { opacity: 1; } 44%, 100% { opacity: 0; } }
+  @keyframes hlOut { 0%, 41% { opacity: 0; } 43%, 47% { opacity: 1; } 50%, 100% { opacity: 0; } }
+  @keyframes hlf1 { 0%, 52% { opacity: 0; } 54%, 58% { opacity: 1; } 61%, 100% { opacity: 0; } }
+  @keyframes hlf2 { 0%, 58% { opacity: 0; } 60%, 64% { opacity: 1; } 67%, 100% { opacity: 0; } }
+  @keyframes hlf3 { 0%, 64% { opacity: 0; } 66%, 70% { opacity: 1; } 73%, 100% { opacity: 0; } }
+  @keyframes hlf4 { 0%, 70% { opacity: 0; } 72%, 76% { opacity: 1; } 79%, 100% { opacity: 0; } }
+  @keyframes fbFlow { 0%, 74% { stroke-dashoffset: 24; } 88%, 96% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 0; } }
+  .dot-top { animation: dotTop 13s infinite; }
+  .dot-fb { animation: dotFb 13s infinite; }
+  .hl-1 { animation: hl1 13s infinite; } .hl-2 { animation: hl2 13s infinite; }
+  .hl-3 { animation: hl3 13s infinite; } .hl-4 { animation: hl4 13s infinite; }
+  .hl-5 { animation: hl5 13s infinite; } .hl-6 { animation: hl6 13s infinite; }
+  .hl-out { animation: hlOut 13s infinite; }
+  .hlf-1 { animation: hlf1 13s infinite; } .hlf-2 { animation: hlf2 13s infinite; }
+  .hlf-3 { animation: hlf3 13s infinite; } .hlf-4 { animation: hlf4 13s infinite; }
+  .fb-flow { stroke-dasharray: 6 6; animation: fbFlow 13s infinite; }
+</style>
+  <rect width="720" height="440" fill="#fafafa" rx="8"/>
+  <text x="360" y="22" text-anchor="middle" font-size="15" font-weight="600" fill="#424242" font-family="system-ui,sans-serif">混合编码环路：预测 → 残差 → 变换 → 量化 → 熵编码，再重构回参考帧</text>
+
+  <defs>
+    <marker id="elArrowZh" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#78909C"/>
+    </marker>
+    <marker id="elArrowGZh" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4CAF50"/>
+    </marker>
+  </defs>
+
+  <!-- 上排：主路径 -->
+  <rect x="44" y="64" width="86" height="52" rx="6" fill="#E3F2FD" stroke="#2196F3" stroke-width="1.5"/>
+  <text x="87" y="86" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1565C0" font-family="system-ui,sans-serif">当前块</text>
+  <text x="87" y="102" text-anchor="middle" font-size="8.5" fill="#546E7A" font-family="system-ui,sans-serif">YUV 像素</text>
+  <rect x="158" y="64" width="86" height="52" rx="6" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.5"/>
+  <text x="201" y="86" text-anchor="middle" font-size="10.5" font-weight="700" fill="#E65100" font-family="system-ui,sans-serif">预测</text>
+  <text x="201" y="102" text-anchor="middle" font-size="8.5" fill="#546E7A" font-family="system-ui,sans-serif">帧内 / 帧间(MV)</text>
+  <rect x="272" y="64" width="86" height="52" rx="6" fill="#FCE4EC" stroke="#E91E63" stroke-width="1.5"/>
+  <text x="315" y="86" text-anchor="middle" font-size="10.5" font-weight="700" fill="#AD1457" font-family="system-ui,sans-serif">残差</text>
+  <text x="315" y="102" text-anchor="middle" font-size="8.5" fill="#546E7A" font-family="system-ui,sans-serif">当前 − 预测</text>
+  <rect x="386" y="64" width="86" height="52" rx="6" fill="#F3E5F5" stroke="#9C27B0" stroke-width="1.5"/>
+  <text x="429" y="86" text-anchor="middle" font-size="10.5" font-weight="700" fill="#6A1B9A" font-family="system-ui,sans-serif">变换</text>
+  <text x="429" y="102" text-anchor="middle" font-size="8.5" fill="#546E7A" font-family="system-ui,sans-serif">整数 DCT</text>
+  <rect x="500" y="64" width="86" height="52" rx="6" fill="#FFEBEE" stroke="#F44336" stroke-width="2"/>
+  <text x="543" y="86" text-anchor="middle" font-size="10.5" font-weight="700" fill="#C62828" font-family="system-ui,sans-serif">量化</text>
+  <text x="543" y="102" text-anchor="middle" font-size="8.5" fill="#C62828" font-family="system-ui,sans-serif">QP —— 唯一有损步骤</text>
+  <rect x="614" y="64" width="86" height="52" rx="6" fill="#E0F2F1" stroke="#009688" stroke-width="1.5"/>
+  <text x="657" y="86" text-anchor="middle" font-size="10.5" font-weight="700" fill="#00695C" font-family="system-ui,sans-serif">熵编码</text>
+  <text x="657" y="102" text-anchor="middle" font-size="8.5" fill="#546E7A" font-family="system-ui,sans-serif">CABAC / CAVLC</text>
+
+  <!-- 上排箭头 -->
+  <line x1="130" y1="90" x2="154" y2="90" stroke="#78909C" stroke-width="1.6" marker-end="url(#elArrowZh)"/>
+  <line x1="244" y1="90" x2="268" y2="90" stroke="#78909C" stroke-width="1.6" marker-end="url(#elArrowZh)"/>
+  <line x1="358" y1="90" x2="382" y2="90" stroke="#78909C" stroke-width="1.6" marker-end="url(#elArrowZh)"/>
+  <line x1="472" y1="90" x2="496" y2="90" stroke="#78909C" stroke-width="1.6" marker-end="url(#elArrowZh)"/>
+  <line x1="586" y1="90" x2="610" y2="90" stroke="#78909C" stroke-width="1.6" marker-end="url(#elArrowZh)"/>
+  <line x1="657" y1="116" x2="657" y2="166" stroke="#78909C" stroke-width="1.6" marker-end="url(#elArrowZh)"/>
+
+  <!-- 码流输出 -->
+  <rect x="614" y="170" width="86" height="40" rx="6" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1.8"/>
+  <text x="657" y="194" text-anchor="middle" font-size="10.5" font-weight="700" fill="#2E7D32" font-family="system-ui,sans-serif">码流 (NALU)</text>
+
+  <!-- 反馈路径 -->
+  <path d="M 543 116 C 543 210, 600 250, 628 294" fill="none" stroke="#78909C" stroke-width="1.6" marker-end="url(#elArrowZh)"/>
+  <path d="M 211 116 L 211 220 L 468 258 L 476 294" fill="none" stroke="#FF9800" stroke-width="1.4" stroke-dasharray="5,4" marker-end="url(#elArrowZh)"/>
+  <text x="300" y="238" font-size="8.5" fill="#E65100" font-family="system-ui,sans-serif">预测值参与重构</text>
+  <path class="fb-flow" d="M 191 294 L 191 124" fill="none" stroke="#4CAF50" stroke-width="1.8" marker-end="url(#elArrowGZh)"/>
+  <text x="118" y="200" font-size="8.5" fill="#2E7D32" font-family="system-ui,sans-serif">供后续帧参考</text>
+
+  <!-- 下排：重构环路 -->
+  <rect x="576" y="298" width="120" height="52" rx="6" fill="#F3E5F5" stroke="#9C27B0" stroke-width="1.5"/>
+  <text x="636" y="320" text-anchor="middle" font-size="10" font-weight="700" fill="#6A1B9A" font-family="system-ui,sans-serif">反量化 +</text>
+  <text x="636" y="336" text-anchor="middle" font-size="10" font-weight="700" fill="#6A1B9A" font-family="system-ui,sans-serif">反变换</text>
+  <rect x="416" y="298" width="130" height="52" rx="6" fill="#FCE4EC" stroke="#E91E63" stroke-width="1.5"/>
+  <text x="481" y="320" text-anchor="middle" font-size="10" font-weight="700" fill="#AD1457" font-family="system-ui,sans-serif">重构</text>
+  <text x="481" y="336" text-anchor="middle" font-size="8.5" fill="#546E7A" font-family="system-ui,sans-serif">预测 + 残差′</text>
+  <rect x="286" y="298" width="110" height="52" rx="6" fill="#E3F2FD" stroke="#2196F3" stroke-width="1.5"/>
+  <text x="341" y="327" text-anchor="middle" font-size="10" font-weight="700" fill="#1565C0" font-family="system-ui,sans-serif">去块滤波</text>
+  <rect x="146" y="298" width="110" height="52" rx="6" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1.5"/>
+  <text x="201" y="320" text-anchor="middle" font-size="10" font-weight="700" fill="#2E7D32" font-family="system-ui,sans-serif">参考帧</text>
+  <text x="201" y="336" text-anchor="middle" font-size="10" font-weight="700" fill="#2E7D32" font-family="system-ui,sans-serif">缓存</text>
+  <line x1="576" y1="324" x2="550" y2="324" stroke="#78909C" stroke-width="1.6" marker-end="url(#elArrowZh)"/>
+  <line x1="416" y1="324" x2="400" y2="324" stroke="#78909C" stroke-width="1.6" marker-end="url(#elArrowZh)"/>
+  <line x1="286" y1="324" x2="260" y2="324" stroke="#78909C" stroke-width="1.6" marker-end="url(#elArrowZh)"/>
+
+  <!-- 阶段高亮 -->
+  <rect class="hl-1" x="41" y="61" width="92" height="58" rx="7" fill="none" stroke="#2196F3" stroke-width="3"/>
+  <rect class="hl-2" x="155" y="61" width="92" height="58" rx="7" fill="none" stroke="#FF9800" stroke-width="3"/>
+  <rect class="hl-3" x="269" y="61" width="92" height="58" rx="7" fill="none" stroke="#E91E63" stroke-width="3"/>
+  <rect class="hl-4" x="383" y="61" width="92" height="58" rx="7" fill="none" stroke="#9C27B0" stroke-width="3"/>
+  <rect class="hl-5" x="497" y="61" width="92" height="58" rx="7" fill="none" stroke="#F44336" stroke-width="3.5"/>
+  <rect class="hl-6" x="611" y="61" width="92" height="58" rx="7" fill="none" stroke="#009688" stroke-width="3"/>
+  <rect class="hl-out" x="611" y="167" width="92" height="46" rx="7" fill="none" stroke="#4CAF50" stroke-width="3"/>
+  <rect class="hlf-1" x="573" y="295" width="126" height="58" rx="7" fill="none" stroke="#9C27B0" stroke-width="3"/>
+  <rect class="hlf-2" x="413" y="295" width="136" height="58" rx="7" fill="none" stroke="#E91E63" stroke-width="3"/>
+  <rect class="hlf-3" x="283" y="295" width="116" height="58" rx="7" fill="none" stroke="#2196F3" stroke-width="3"/>
+  <rect class="hlf-4" x="143" y="295" width="116" height="58" rx="7" fill="none" stroke="#4CAF50" stroke-width="3"/>
+
+  <!-- 移动光点 -->
+  <circle class="dot-top" cx="87" cy="90" r="7" fill="#2196F3" stroke="#fff" stroke-width="2"/>
+  <circle class="dot-fb" cx="636" cy="324" r="7" fill="#4CAF50" stroke="#fff" stroke-width="2"/>
+
+  <!-- 底部结论 -->
+  <rect x="60" y="384" width="600" height="42" rx="6" fill="#E3F2FD" stroke="#2196F3" stroke-width="1.2"/>
+  <text x="360" y="402" text-anchor="middle" font-size="10.5" fill="#1565C0" font-family="system-ui,sans-serif">解码器跑的是同一条下半环路（反量化 → 重构 → 去块滤波 → 参考帧缓存），</text>
+  <text x="360" y="419" text-anchor="middle" font-size="10.5" fill="#1565C0" font-family="system-ui,sans-serif">编码端与解码端严格对称，两边的参考帧才不会漂移</text>
+</svg>
+{{- end -}}

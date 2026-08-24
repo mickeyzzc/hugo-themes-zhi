@@ -1,0 +1,230 @@
+{{- /* P-frame motion estimation: block search -> match -> MV + residual. Single source of truth. */ -}}
+{{- $lang := .lang | default "zh-cn" -}}
+{{- if eq $lang "en" -}}
+<svg viewBox="0 0 720 372" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;margin:1.5em auto;display:block;" role="img" aria-label="Motion estimation and compensation animation">
+<style>
+  @keyframes searchPath {
+    0%, 8% { transform: translate(0px, 0px); }
+    18% { transform: translate(32px, 0px); }
+    28% { transform: translate(64px, 0px); }
+    38% { transform: translate(64px, 32px); }
+    48%, 86% { transform: translate(32px, 32px); }
+    94%, 100% { transform: translate(0px, 0px); }
+  }
+  @keyframes sad1 { 0%, 11% { opacity: 0; } 14%, 92% { opacity: 1; } 97%, 100% { opacity: 0; } }
+  @keyframes sad2 { 0%, 21% { opacity: 0; } 24%, 92% { opacity: 1; } 97%, 100% { opacity: 0; } }
+  @keyframes sad3 { 0%, 31% { opacity: 0; } 34%, 92% { opacity: 1; } 97%, 100% { opacity: 0; } }
+  @keyframes sad4 { 0%, 41% { opacity: 0; } 44%, 92% { opacity: 1; } 97%, 100% { opacity: 0; } }
+  @keyframes sad5 { 0%, 50% { opacity: 0; } 54%, 92% { opacity: 1; } 97%, 100% { opacity: 0; } }
+  @keyframes matchGlow {
+    0%, 47% { opacity: 0; }
+    52%, 88% { opacity: 1; }
+    96%, 100% { opacity: 0; }
+  }
+  @keyframes mvReveal {
+    0%, 54% { opacity: 0; }
+    62%, 88% { opacity: 1; }
+    96%, 100% { opacity: 0; }
+  }
+  @keyframes chipIn {
+    0%, 60% { opacity: 0; transform: translateY(6px); }
+    68%, 88% { opacity: 1; transform: translateY(0); }
+    96%, 100% { opacity: 0; transform: translateY(6px); }
+  }
+  .search-blk { animation: searchPath 11s infinite; }
+  .sad-1 { animation: sad1 11s infinite; }
+  .sad-2 { animation: sad2 11s infinite; }
+  .sad-3 { animation: sad3 11s infinite; }
+  .sad-4 { animation: sad4 11s infinite; }
+  .sad-5 { animation: sad5 11s infinite; }
+  .match-glow { animation: matchGlow 11s infinite; }
+  .mv-layer { animation: mvReveal 11s infinite; }
+  .chip { animation: chipIn 11s infinite; }
+  .chip-2 { animation: chipIn 11s infinite; animation-delay: 0s; }
+</style>
+  <rect width="720" height="372" fill="#fafafa" rx="8"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#424242" font-family="system-ui,sans-serif">P-frame coding: search the reference frame, send only MV + residual</text>
+
+  <!-- Reference frame -->
+  <text x="180" y="52" text-anchor="middle" font-size="12" font-weight="600" fill="#1565C0" font-family="system-ui,sans-serif">Reference frame (previous decoded frame)</text>
+  <rect x="40" y="60" width="280" height="204" rx="6" fill="#f0f4fa" stroke="#90A4AE" stroke-width="1"/>
+  <rect x="40" y="150" width="280" height="2" fill="#CFD8DC"/>
+  <rect x="58" y="70" width="36" height="80" rx="2" fill="#ECEFF1" stroke="#B0BEC5"/>
+  <rect x="252" y="78" width="52" height="72" rx="2" fill="#ECEFF1" stroke="#B0BEC5"/>
+  <rect x="106" y="106" width="24" height="44" rx="2" fill="#ECEFF1" stroke="#B0BEC5"/>
+  <!-- search window -->
+  <rect x="106" y="150" width="140" height="104" fill="none" stroke="#2196F3" stroke-width="1.2" stroke-dasharray="5,4"/>
+  <text x="176" y="264" text-anchor="middle" font-size="9" fill="#1976D2" font-family="system-ui,sans-serif">search window</text>
+  <!-- object in reference frame at (150,190) -->
+  <rect x="150" y="190" width="48" height="40" rx="3" fill="#C8E6C9" stroke="#4CAF50" stroke-width="1.5"/>
+  <rect class="match-glow" x="146" y="186" width="56" height="48" rx="5" fill="none" stroke="#4CAF50" stroke-width="3"/>
+  <!-- candidate markers -->
+  <path d="M 138 158 h 8 M 142 154 v 8" stroke="#B0BEC5" stroke-width="1"/>
+  <path d="M 170 158 h 8 M 174 154 v 8" stroke="#B0BEC5" stroke-width="1"/>
+  <path d="M 202 158 h 8 M 206 154 v 8" stroke="#B0BEC5" stroke-width="1"/>
+  <path d="M 202 190 h 8 M 206 186 v 8" stroke="#B0BEC5" stroke-width="1"/>
+  <!-- SAD labels -->
+  <text class="sad-1" x="142" y="148" text-anchor="middle" font-size="9" fill="#78909C" font-family="monospace">SAD 812</text>
+  <text class="sad-2" x="174" y="148" text-anchor="middle" font-size="9" fill="#78909C" font-family="monospace">SAD 534</text>
+  <text class="sad-3" x="206" y="148" text-anchor="middle" font-size="9" fill="#78909C" font-family="monospace">SAD 691</text>
+  <text class="sad-4" x="238" y="182" text-anchor="middle" font-size="9" fill="#78909C" font-family="monospace">SAD 298</text>
+  <text class="sad-5" x="174" y="246" text-anchor="middle" font-size="9.5" font-weight="700" fill="#2E7D32" font-family="monospace">SAD 15 ✓</text>
+  <!-- moving search block (base = candidate 1 at 118,158) -->
+  <g class="search-blk">
+    <rect x="118" y="158" width="48" height="40" rx="2" fill="#FF9800" fill-opacity="0.35" stroke="#EF6C00" stroke-width="1.5"/>
+  </g>
+
+  <!-- Current frame -->
+  <text x="540" y="52" text-anchor="middle" font-size="12" font-weight="600" fill="#1565C0" font-family="system-ui,sans-serif">Current frame (being encoded)</text>
+  <rect x="400" y="60" width="280" height="204" rx="6" fill="#f0f4fa" stroke="#90A4AE" stroke-width="1"/>
+  <rect x="400" y="150" width="280" height="2" fill="#CFD8DC"/>
+  <rect x="418" y="70" width="36" height="80" rx="2" fill="#ECEFF1" stroke="#B0BEC5"/>
+  <rect x="612" y="78" width="52" height="72" rx="2" fill="#ECEFF1" stroke="#B0BEC5"/>
+  <rect x="466" y="106" width="24" height="44" rx="2" fill="#ECEFF1" stroke="#B0BEC5"/>
+  <!-- current block: object moved, drawn in current-frame panel coords -->
+  <rect x="560" y="174" width="48" height="40" rx="3" fill="#BBDEFB" stroke="#2196F3" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="584" y="166" text-anchor="middle" font-size="9" fill="#1976D2" font-family="system-ui,sans-serif">current block</text>
+  <!-- MV layer -->
+  <g class="mv-layer">
+    <rect x="504" y="190" width="48" height="40" rx="3" fill="none" stroke="#4CAF50" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <text x="528" y="248" text-anchor="middle" font-size="9" fill="#2E7D32" font-family="system-ui,sans-serif">match (copied from ref)</text>
+    <defs>
+      <marker id="mvArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#D32F2F"/>
+      </marker>
+    </defs>
+    <line x1="530" y1="210" x2="578" y2="196" stroke="#D32F2F" stroke-width="2.2" marker-end="url(#mvArrow)"/>
+    <text x="556" y="228" font-size="10" font-weight="700" fill="#D32F2F" font-family="monospace">MV (dx,dy)</text>
+  </g>
+
+  <!-- bottom chips -->
+  <g class="chip">
+    <rect x="52" y="292" width="196" height="56" rx="6" fill="#E3F2FD" stroke="#2196F3" stroke-width="1.2"/>
+    <text x="150" y="315" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1565C0" font-family="system-ui,sans-serif">Motion vector MV: a few bytes</text>
+    <text x="150" y="332" text-anchor="middle" font-size="9" fill="#546E7A" font-family="system-ui,sans-serif">just the displacement (dx, dy)</text>
+  </g>
+  <g class="chip">
+    <rect x="262" y="292" width="196" height="56" rx="6" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.2"/>
+    <text x="360" y="315" text-anchor="middle" font-size="10.5" font-weight="700" fill="#E65100" font-family="system-ui,sans-serif">Residual = current − match</text>
+    <text x="360" y="332" text-anchor="middle" font-size="9" fill="#546E7A" font-family="system-ui,sans-serif">mostly near zero</text>
+  </g>
+  <g class="chip">
+    <rect x="472" y="292" width="196" height="56" rx="6" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1.2"/>
+    <text x="570" y="315" text-anchor="middle" font-size="10.5" font-weight="700" fill="#2E7D32" font-family="system-ui,sans-serif">≈ 1/3–1/2 of an I-frame</text>
+    <text x="570" y="332" text-anchor="middle" font-size="9" fill="#546E7A" font-family="system-ui,sans-serif">same quality, per-frame size (content-dependent)</text>
+  </g>
+</svg>
+{{- else -}}
+<svg viewBox="0 0 720 372" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;margin:1.5em auto;display:block;" role="img" aria-label="运动估计与运动补偿动画">
+<style>
+  @keyframes searchPath {
+    0%, 8% { transform: translate(0px, 0px); }
+    18% { transform: translate(32px, 0px); }
+    28% { transform: translate(64px, 0px); }
+    38% { transform: translate(64px, 32px); }
+    48%, 86% { transform: translate(32px, 32px); }
+    94%, 100% { transform: translate(0px, 0px); }
+  }
+  @keyframes sad1 { 0%, 11% { opacity: 0; } 14%, 92% { opacity: 1; } 97%, 100% { opacity: 0; } }
+  @keyframes sad2 { 0%, 21% { opacity: 0; } 24%, 92% { opacity: 1; } 97%, 100% { opacity: 0; } }
+  @keyframes sad3 { 0%, 31% { opacity: 0; } 34%, 92% { opacity: 1; } 97%, 100% { opacity: 0; } }
+  @keyframes sad4 { 0%, 41% { opacity: 0; } 44%, 92% { opacity: 1; } 97%, 100% { opacity: 0; } }
+  @keyframes sad5 { 0%, 50% { opacity: 0; } 54%, 92% { opacity: 1; } 97%, 100% { opacity: 0; } }
+  @keyframes matchGlow {
+    0%, 47% { opacity: 0; }
+    52%, 88% { opacity: 1; }
+    96%, 100% { opacity: 0; }
+  }
+  @keyframes mvReveal {
+    0%, 54% { opacity: 0; }
+    62%, 88% { opacity: 1; }
+    96%, 100% { opacity: 0; }
+  }
+  @keyframes chipIn {
+    0%, 60% { opacity: 0; transform: translateY(6px); }
+    68%, 88% { opacity: 1; transform: translateY(0); }
+    96%, 100% { opacity: 0; transform: translateY(6px); }
+  }
+  .search-blk { animation: searchPath 11s infinite; }
+  .sad-1 { animation: sad1 11s infinite; }
+  .sad-2 { animation: sad2 11s infinite; }
+  .sad-3 { animation: sad3 11s infinite; }
+  .sad-4 { animation: sad4 11s infinite; }
+  .sad-5 { animation: sad5 11s infinite; }
+  .match-glow { animation: matchGlow 11s infinite; }
+  .mv-layer { animation: mvReveal 11s infinite; }
+  .chip { animation: chipIn 11s infinite; }
+</style>
+  <rect width="720" height="372" fill="#fafafa" rx="8"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#424242" font-family="system-ui,sans-serif">P 帧编码：在参考帧里搜索 → 只传 MV + 残差</text>
+
+  <!-- 参考帧 -->
+  <text x="180" y="52" text-anchor="middle" font-size="12" font-weight="600" fill="#1565C0" font-family="system-ui,sans-serif">参考帧（上一帧已解码）</text>
+  <rect x="40" y="60" width="280" height="204" rx="6" fill="#f0f4fa" stroke="#90A4AE" stroke-width="1"/>
+  <rect x="40" y="150" width="280" height="2" fill="#CFD8DC"/>
+  <rect x="58" y="70" width="36" height="80" rx="2" fill="#ECEFF1" stroke="#B0BEC5"/>
+  <rect x="252" y="78" width="52" height="72" rx="2" fill="#ECEFF1" stroke="#B0BEC5"/>
+  <rect x="106" y="106" width="24" height="44" rx="2" fill="#ECEFF1" stroke="#B0BEC5"/>
+  <!-- 搜索窗口 -->
+  <rect x="106" y="150" width="140" height="104" fill="none" stroke="#2196F3" stroke-width="1.2" stroke-dasharray="5,4"/>
+  <text x="176" y="264" text-anchor="middle" font-size="9" fill="#1976D2" font-family="system-ui,sans-serif">搜索窗口</text>
+  <!-- 参考帧中的物体 (150,190) -->
+  <rect x="150" y="190" width="48" height="40" rx="3" fill="#C8E6C9" stroke="#4CAF50" stroke-width="1.5"/>
+  <rect class="match-glow" x="146" y="186" width="56" height="48" rx="5" fill="none" stroke="#4CAF50" stroke-width="3"/>
+  <!-- 候选位置标记 -->
+  <path d="M 138 158 h 8 M 142 154 v 8" stroke="#B0BEC5" stroke-width="1"/>
+  <path d="M 170 158 h 8 M 174 154 v 8" stroke="#B0BEC5" stroke-width="1"/>
+  <path d="M 202 158 h 8 M 206 154 v 8" stroke="#B0BEC5" stroke-width="1"/>
+  <path d="M 202 190 h 8 M 206 186 v 8" stroke="#B0BEC5" stroke-width="1"/>
+  <!-- SAD 标签 -->
+  <text class="sad-1" x="142" y="148" text-anchor="middle" font-size="9" fill="#78909C" font-family="monospace">SAD 812</text>
+  <text class="sad-2" x="174" y="148" text-anchor="middle" font-size="9" fill="#78909C" font-family="monospace">SAD 534</text>
+  <text class="sad-3" x="206" y="148" text-anchor="middle" font-size="9" fill="#78909C" font-family="monospace">SAD 691</text>
+  <text class="sad-4" x="238" y="182" text-anchor="middle" font-size="9" fill="#78909C" font-family="monospace">SAD 298</text>
+  <text class="sad-5" x="174" y="246" text-anchor="middle" font-size="9.5" font-weight="700" fill="#2E7D32" font-family="monospace">SAD 15 ✓</text>
+  <!-- 移动的搜索块（基准 = 候选 1 位于 118,158） -->
+  <g class="search-blk">
+    <rect x="118" y="158" width="48" height="40" rx="2" fill="#FF9800" fill-opacity="0.35" stroke="#EF6C00" stroke-width="1.5"/>
+  </g>
+
+  <!-- 当前帧 -->
+  <text x="540" y="52" text-anchor="middle" font-size="12" font-weight="600" fill="#1565C0" font-family="system-ui,sans-serif">当前帧（正在编码）</text>
+  <rect x="400" y="60" width="280" height="204" rx="6" fill="#f0f4fa" stroke="#90A4AE" stroke-width="1"/>
+  <rect x="400" y="150" width="280" height="2" fill="#CFD8DC"/>
+  <rect x="418" y="70" width="36" height="80" rx="2" fill="#ECEFF1" stroke="#B0BEC5"/>
+  <rect x="612" y="78" width="52" height="72" rx="2" fill="#ECEFF1" stroke="#B0BEC5"/>
+  <rect x="466" y="106" width="24" height="44" rx="2" fill="#ECEFF1" stroke="#B0BEC5"/>
+  <!-- 当前块：物体移到当前帧面板坐标系 -->
+  <rect x="560" y="174" width="48" height="40" rx="3" fill="#BBDEFB" stroke="#2196F3" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="584" y="166" text-anchor="middle" font-size="9" fill="#1976D2" font-family="system-ui,sans-serif">当前块</text>
+  <!-- MV 图层 -->
+  <g class="mv-layer">
+    <rect x="504" y="190" width="48" height="40" rx="3" fill="none" stroke="#4CAF50" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <text x="528" y="248" text-anchor="middle" font-size="9" fill="#2E7D32" font-family="system-ui,sans-serif">匹配块（参考帧复制来）</text>
+    <defs>
+      <marker id="mvArrowZh" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#D32F2F"/>
+      </marker>
+    </defs>
+    <line x1="530" y1="210" x2="578" y2="196" stroke="#D32F2F" stroke-width="2.2" marker-end="url(#mvArrowZh)"/>
+    <text x="556" y="228" font-size="10" font-weight="700" fill="#D32F2F" font-family="monospace">MV (dx,dy)</text>
+  </g>
+
+  <!-- 底部结论 -->
+  <g class="chip">
+    <rect x="52" y="292" width="196" height="56" rx="6" fill="#E3F2FD" stroke="#2196F3" stroke-width="1.2"/>
+    <text x="150" y="315" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1565C0" font-family="system-ui,sans-serif">运动矢量 MV：几个字节</text>
+    <text x="150" y="332" text-anchor="middle" font-size="9" fill="#546E7A" font-family="system-ui,sans-serif">只记录位移 (dx, dy)</text>
+  </g>
+  <g class="chip">
+    <rect x="262" y="292" width="196" height="56" rx="6" fill="#FFF3E0" stroke="#FF9800" stroke-width="1.2"/>
+    <text x="360" y="315" text-anchor="middle" font-size="10.5" font-weight="700" fill="#E65100" font-family="system-ui,sans-serif">残差 = 当前块 − 匹配块</text>
+    <text x="360" y="332" text-anchor="middle" font-size="9" fill="#546E7A" font-family="system-ui,sans-serif">大部分数值接近 0</text>
+  </g>
+  <g class="chip">
+    <rect x="472" y="292" width="196" height="56" rx="6" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1.2"/>
+    <text x="570" y="315" text-anchor="middle" font-size="10.5" font-weight="700" fill="#2E7D32" font-family="system-ui,sans-serif">≈ I 帧大小的 1/3–1/2</text>
+    <text x="570" y="332" text-anchor="middle" font-size="9" fill="#546E7A" font-family="system-ui,sans-serif">同画质下单帧体积（随内容浮动）</text>
+  </g>
+</svg>
+{{- end -}}
