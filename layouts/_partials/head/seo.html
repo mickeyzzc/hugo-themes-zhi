@@ -65,7 +65,7 @@
 {{- range $translations -}}
 <link rel="alternate" hreflang="{{ replace .Language.Lang "zh-cn" "zh-CN" }}" href="{{ .Permalink }}" />
 {{- end -}}
-{{- with where $translations "Language.Lang" site.Sites.Default.Language.Lang -}}
+{{- with where $translations "Language.Lang" hugo.Sites.Default.Language.Lang -}}
 <link rel="alternate" hreflang="x-default" href="{{ (index . 0).Permalink }}" />
 {{- end -}}
 {{- end -}}
