@@ -174,3 +174,6 @@
 
 [ttsSpeed]
   other = "Speed"
+
+[archivedNotice]
+  other = "Written {{ .Date }} and moved to the archive. Time-sensitive details (versions, prices, comparison results) may be outdated — prefer up-to-date sources."

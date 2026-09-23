@@ -4,6 +4,12 @@
       <h1 class="post-title">{{ .Title }}</h1>
       {{ partial "post/meta.html" . }}
     </header>
+    {{ if eq .Section "archives" }}
+    <aside class="archive-notice" role="note">
+      <span class="archive-notice__icon">📦</span>
+      <p>{{ i18n "archivedNotice" (dict "Date" (.Date | time.Format "2006-01")) }}</p>
+    </aside>
+    {{ end }}
     {{ $audioUrl := printf "%stts.mp3" .RelPermalink }}
     {{ $audioFile := printf "static%s" $audioUrl }}
     {{ $ttsEnabled := default true .Site.Params.features.tts }}
