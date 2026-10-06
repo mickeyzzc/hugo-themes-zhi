@@ -1,4 +1,65 @@
-{{- /* robots.txt — allow all crawlers and declare sitemap location */ -}}
+{{- /* robots.txt — search engines allowed, AI crawlers disallowed.
+       传统搜索引擎全放行；AI 训练/采集爬虫全部拒绝。
+       robots.txt 是声明式约定，违规爬虫（如 Bytespider）可能无视。
+       用户主动抓取类（ChatGPT-User / Perplexity-User）不在黑名单，
+       视为读者行为，不拦。 */ -}}
+# ===== AI crawlers: disallowed / AI 爬虫黑名单 =====
+
+# OpenAI: training + ChatGPT search index
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+Disallow: /
+
+# Anthropic
+User-agent: ClaudeBot
+User-agent: Claude-Web
+User-agent: anthropic-ai
+Disallow: /
+
+# Google: training + non-Search crawlers (Googlebot untouched)
+User-agent: Google-Extended
+User-agent: GoogleOther
+Disallow: /
+
+# Apple: training (Applebot search still allowed)
+User-agent: Applebot-Extended
+Disallow: /
+
+# Common Crawl
+User-agent: CCBot
+Disallow: /
+
+# ByteDance / ByteDance 字节跳动
+User-agent: Bytespider
+Disallow: /
+
+# Meta / Facebook
+User-agent: FacebookBot
+User-agent: Meta-ExternalAgent
+Disallow: /
+
+# Amazon
+User-agent: Amazonbot
+Disallow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Disallow: /
+
+# Misc AI harvesters / 其他 AI 采集
+User-agent: YouBot
+User-agent: omgili
+User-agent: omgilibot
+User-agent: Diffbot
+User-agent: cohere-ai
+User-agent: ImagesiftBot
+User-agent: Timpibot
+User-agent: PanguBot
+User-agent: AI2Bot
+User-agent: Ai2Bot-Dolma
+Disallow: /
+
+# ===== Search engines and everything else / 搜索引擎与其余爬虫 =====
 User-agent: *
 Allow: /
 
