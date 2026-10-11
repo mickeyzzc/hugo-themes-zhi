@@ -15,7 +15,7 @@
       {{ range .Pages }}
       <div class="timeline__item">
         <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format ":date_long" }}</time>
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_long" }}</time>
       </div>
       {{ end }}
       {{ end }}
