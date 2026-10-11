@@ -11,7 +11,7 @@
       {{ range $p.Pages.GroupByDate "2006" }}
       <h2 class="timeline__year">{{ .Key }}</h2>
       {{ range .Pages.GroupByDate "01" }}
-      <h3 class="timeline__month">{{ .Key }}月</h3>
+      <h3 class="timeline__month">{{ (printf "2006-%s-01" .Key) | time.AsTime | time.Format "January" }}</h3>
       {{ range .Pages }}
       <div class="timeline__item">
         <a href="{{ .RelPermalink }}">{{ .Title }}</a>
